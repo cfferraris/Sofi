@@ -1,0 +1,1030 @@
+/* ========================================
+   TIPOGRAFÍAS LOCALES
+   ======================================== */
+
+/* Belgian Aesthetic - Tipografía Principal */
+@font-face {
+    font-family: 'Belgian Aesthetic';
+    src: url('../assets/tipografias/Belgan-Aesthetic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Fahkwang - Tipografía Secundaria */
+@font-face {
+    font-family: 'Fahkwang';
+    src: url('../assets/tipografias/Fahkwang-Bold.ttf') format('truetype'),
+         url('../assets/tipografias/Fahkwang-BoldItalic.ttf') format('truetype'),
+         url('../assets/tipografias/Fahkwang-ExtraLIght.ttf') format('truetype'),
+         url('../assets/tipografias/Fahkwang-ExtraLightItalic.ttf') format('truetype'),
+         url('../assets/tipografias/Fahkwang-Italic.ttf') format('truetype'),
+         url('../assets/tipografias/Fahkwang-Light.ttf') format('truetype'),
+         url('../assets/tipografias/Fahkwang-LightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fahkwang';
+    src: url('../assets/tipografias/Fahkwang-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fahkwang';
+    src: url('../assets/tipografias/Fahkwang-Medium.ttf') format('truetype'),
+         url('../assets/tipografias/Fahkwang-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fahkwang';
+    src:  url('../assets/tipografias/Fahkwang-SemiBold.ttf') format('truetype'),
+          url('../assets/tipografias/Fahkwang-SemiBoldItalic.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ========================================
+   VARIABLES CSS - Paleta Cromática
+   ======================================== */
+:root {
+    --profundo: #054954;
+    --oceano: #24436a;
+    --agua: #94d1d8;
+    --arena: #e9decb;
+    --tiza: #efefed;
+    
+    /* Tipografías */
+    --font-principal: 'Belgian Aesthetic', Georgia, serif;
+    --font-secundaria: 'Fahkwang', sans-serif;
+    
+    /* Espaciados */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 6rem;
+    
+    /* Transiciones */
+    --transition-smooth: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.3s ease;
+}
+
+/* ========================================
+   RESET Y ESTILOS BASE
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-secundaria);
+    color: var(--profundo);
+    background-color: var(--arena);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-principal);
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: var(--spacing-md);
+}
+
+h2 {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    margin-bottom: var(--spacing-md);
+}
+
+h3 {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    margin-bottom: var(--spacing-sm);
+}
+
+p {
+    font-size: clamp(1rem, 2vw, 1.125rem);
+    font-weight: 300;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+/* ========================================
+   HERO SECTION
+   ======================================== */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* Fondo con imagen */
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/img/fondos/Pat_01_04.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: waveMove 20s ease-in-out infinite;
+    z-index: 1;
+}
+
+/* Capa de overlay suave opcional para mejorar legibilidad del logo */
+.hero-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(239, 239, 237, 0.1);
+    pointer-events: none;
+}
+
+@keyframes waveMove {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Logo principal */
+.logo-container {
+    position: relative;
+    z-index: 10;
+    opacity: 0;
+    transform: scale(0.8);
+    animation: logoFadeIn 1.5s ease-out 0.5s forwards;
+}
+
+@keyframes logoFadeIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.main-logo {
+    max-width: 400px;
+    width: 80vw;
+    height: auto;
+    filter: drop-shadow(0 10px 40px rgba(5, 73, 84, 0.15));
+    transition: var(--transition-smooth);
+}
+
+/* Animación de transición del logo */
+.logo-container.transitioning {
+    animation: logoToCorner 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes logoToCorner {
+    to {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        transform: scale(0.25);
+        z-index: 1000;
+    }
+}
+
+.main-logo.morphing {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+/* ========================================
+   NAVBAR
+   ======================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--arena);
+    backdrop-filter: blur(5px);
+    padding: var(--spacing-sm) 0;
+    z-index: 999;
+    border-bottom: 1px solid var(--tiza);
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: var(--transition-smooth);
+}
+
+.navbar.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+}
+
+/* Logo isotipo en navbar */
+.navbar-logo {
+    flex-shrink: 0;
+    opacity: 0;
+    transform: scale(0);
+    transition: var(--transition-smooth);
+}
+
+.navbar.visible .navbar-logo {
+    opacity: 1;
+    transform: scale(1);
+    transition-delay: 0.3s;
+}
+
+.isotipo {
+    height: 50px;
+    width: auto;
+}
+
+/* Menú hamburguesa */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 1001;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background-color: var(--profundo);
+    transition: var(--transition-fast);
+    border-radius: 2px;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Menú de navegación */
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: var(--spacing-md);
+    margin: 0;
+    flex: 1;
+    justify-content: center;
+}
+
+.nav-link {
+    font-family: var(--font-secundaria);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--oceano);
+    position: relative;
+    padding: 0.5rem 0;
+    transition: var(--transition-fast);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 1px;
+    background: var(--agua);
+    transition: var(--transition-fast);
+    transform: translateX(-50%);
+}
+
+.nav-link:hover {
+    color: var(--profundo);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Redes sociales */
+.social-links {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+}
+
+.social-links a {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    transition: var(--transition-fast);
+    border-radius: 50%;
+    padding: 4px;
+}
+
+.social-links a:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    background: var(--agua);
+}
+
+.social-links img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Ocultar redes sociales mobile en desktop */
+.nav-social-mobile {
+    display: none;
+    list-style: none;
+}
+
+.social-links-mobile {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+}
+
+.social-links-mobile a {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    transition: var(--transition-fast);
+    border-radius: 50%;
+    padding: 4px;
+}
+
+.social-links-mobile a:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    background: var(--agua);
+}
+
+.social-links-mobile img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+/* ========================================
+   CONTENIDO PRINCIPAL
+   ======================================== */
+.main-content {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: var(--transition-smooth);
+}
+
+.main-content.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Sección de introducción */
+.intro-section {
+    position: relative;
+    padding: var(--spacing-xl) 0;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Fondo con imagen */
+.intro-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/img/fondos/Pat_01_04.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: -2;
+}
+
+/* Overlay para legibilidad del texto */
+.intro-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, 
+        rgba(239, 239, 237, 0.85) 0%, 
+        rgba(233, 222, 203, 0.75) 100%
+    );
+    z-index: -1;
+}
+
+.intro-text {
+    max-width: 800px;
+    margin: 0 auto var(--spacing-md);
+    color: var(--oceano);
+    position: relative;
+    z-index: 1;
+}
+
+.intro-section h1 {
+    position: relative;
+    z-index: 1;
+}
+/* Secciones generales */
+section {
+    padding: var(--spacing-lg) 0;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--oceano);
+    font-weight: 300;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* ========================================
+   LISTAS CON ESTILOS
+   ======================================== */
+
+/* Lista con iconos/viñetas personalizadas */
+.icon-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--spacing-md) auto;
+    max-width: 800px;
+    text-align: left;
+}
+
+.icon-list li {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--oceano);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.icon-list li::before {
+    content: '◦';
+    position: absolute;
+    left: 0;
+    color: var(--agua);
+    font-size: 1.8rem;
+    line-height: 1.2;
+    font-weight: bold;
+}
+
+/* Lista con checks */
+.check-list {
+    list-style: none;
+    padding: 0;
+    margin: var(--spacing-md) auto;
+    max-width: 800px;
+    text-align: left;
+}
+
+.check-list li {
+    position: relative;
+    padding-left: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--oceano);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.check-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--profundo);
+    font-size: 1.4rem;
+    font-weight: bold;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: var(--agua);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+/* Texto de cierre de sección */
+.section-close {
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--profundo);
+    margin: var(--spacing-md) auto;
+    max-width: 800px;
+    text-align: center;
+    line-height: 1.7;
+}
+
+/* ========================================
+   BOTONES
+   ======================================== */
+
+.btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    font-family: var(--font-secundaria);
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    margin-top: var(--spacing-sm);
+}
+
+/* Botón primario */
+.btn.primary {
+    background: var(--profundo);
+    color: var(--tiza);
+    box-shadow: 0 4px 15px rgba(5, 73, 84, 0.2);
+}
+
+.btn.primary:hover {
+    background: var(--oceano);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(5, 73, 84, 0.3);
+}
+
+.btn.primary:active {
+    transform: translateY(0);
+}
+
+/* Botón link/secundario */
+.btn.link {
+    background: transparent;
+    color: var(--oceano);
+    border: 2px solid var(--agua);
+    padding: 0.75rem 1.75rem;
+}
+
+.btn.link:hover {
+    background: var(--agua);
+    color: var(--profundo);
+    border-color: var(--agua);
+    transform: translateY(-2px);
+}
+
+/* Botón grande */
+.btn.large {
+    padding: 1.125rem 2.5rem;
+    font-size: 1.15rem;
+}
+
+/* ========================================
+   AJUSTES DE SECCIONES ESPECÍFICAS
+   ======================================== */
+
+/* Intro Section - ajustes para nuevo contenido */
+.intro-section h2 {
+    text-align: center;
+    color: var(--profundo);
+    margin-bottom: var(--spacing-md);
+}
+
+.intro-section .btn {
+    display: block;
+    margin: var(--spacing-md) auto 0;
+    max-width: fit-content;
+}
+
+/* Services Section - ajustes para botones en cards */
+.service-card .btn {
+    margin-top: var(--spacing-md);
+    width: 100%;
+}
+
+/* Mapadres Section - ajustes para nueva estructura */
+.mapadres-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.mapadres-content .check-list {
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: 20px;
+    margin-bottom: var(--spacing-md);
+    box-shadow: 0 4px 20px rgba(36, 67, 106, 0.08);
+    border: 1px solid rgba(148, 209, 216, 0.2);
+}
+
+.mapadres-content .mapadres-card {
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Resources Section - centrado de contenido */
+.resources-section h2 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.resources-section p {
+    margin-bottom: var(--spacing-md);
+    color: var(--oceano);
+}
+
+.resources-section .btn {
+    margin: 0 auto;
+}
+
+/* Appointments Section - ajustes de espaciado */
+.appointments-section {
+    padding: var(--spacing-xl) 0;
+}
+
+.appointments-section h2 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.appointments-section p {
+    font-size: 1.125rem;
+    color: var(--oceano);
+    margin-bottom: var(--spacing-md);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.appointments-section .btn {
+    margin: 0 auto var(--spacing-sm);
+}
+
+.appointments-section small {
+    display: block;
+    margin-top: var(--spacing-sm);
+    color: var(--oceano);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* Footer - mejor espaciado */
+.footer p {
+    margin-bottom: var(--spacing-xs);
+}
+
+.footer p:last-child {
+    margin-bottom: 0;
+    margin-top: var(--spacing-sm);
+    opacity: 0.8;
+}
+
+/* Grid de servicios */
+.services-section {
+    background: var(--tiza);
+}
+
+.services-section h2 {
+    text-align: center;
+    color: var(--profundo);
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.service-card {
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(5, 73, 84, 0.08);
+    transition: var(--transition-fast);
+    border: 1px solid rgba(148, 209, 216, 0.2);
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 30px rgba(5, 73, 84, 0.15);
+}
+
+.service-card h3 {
+    color: var(--profundo);
+    margin-bottom: var(--spacing-sm);
+}
+
+.service-card p {
+    color: var(--oceano);
+    font-weight: 300;
+}
+
+/* Sección Mapadres */
+.mapadres-section {
+    background: linear-gradient(180deg, var(--tiza) 0%, rgba(148, 209, 216, 0.15) 100%);
+}
+
+.mapadres-section h2 {
+    text-align: center;
+    color: var(--profundo);
+}
+
+.mapadres-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.mapadres-intro {
+    text-align: center;
+    color: var(--oceano);
+    font-size: 1.125rem;
+    margin-bottom: var(--spacing-lg);
+    font-weight: 300;
+    line-height: 1.8;
+}
+
+.mapadres-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.mapadres-card {
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(36, 67, 106, 0.08);
+    transition: var(--transition-fast);
+    border: 1px solid rgba(148, 209, 216, 0.2);
+}
+
+.mapadres-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 30px rgba(36, 67, 106, 0.15);
+}
+
+.mapadres-card h3 {
+    color: var(--profundo);
+    margin-bottom: var(--spacing-sm);
+}
+
+.mapadres-card p {
+    color: var(--oceano);
+    font-weight: 300;
+}
+
+/* Otras secciones */
+.resources-section,
+.appointments-section,
+.contact-section {
+    text-align: center;
+}
+
+.resources-section {
+    background: rgba(233, 222, 203, 0.3);
+}
+
+.appointments-section {
+    background: var(--tiza);
+}
+
+.contact-section {
+    background: linear-gradient(180deg, var(--tiza) 0%, var(--arena) 100%);
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.footer {
+    background: var(--profundo);
+    color: var(--tiza);
+    padding: var(--spacing-md) 0;
+    text-align: center;
+}
+
+.footer p {
+    font-size: 0.9rem;
+    font-weight: 300;
+}
+
+/* ========================================
+   RESPONSIVE - TABLET
+   ======================================== */
+@media (max-width: 1024px) {
+    .main-logo {
+        max-width: 320px;
+    }
+    
+    .isotipo {
+        height: 45px;
+    }
+    
+    .nav-menu {
+        gap: var(--spacing-sm);
+    }
+    
+    section {
+        padding: var(--spacing-md) 0;
+    }
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+   ======================================== */
+@media (max-width: 768px) {
+    .main-logo {
+        max-width: 260px;
+    }
+    
+    .navbar-container {
+        position: relative;
+    }
+    
+    /* Logo a la izquierda */
+    .navbar-logo {
+        order: 1;
+    }
+    
+    /* Hamburguesa a la derecha */
+    .menu-toggle {
+        display: flex;
+        order: 2;
+    }
+    
+    /* OCULTAR redes sociales desktop en mobile */
+    .navbar-container > .social-links {
+        display: none;
+    }
+    
+    /* MOSTRAR redes sociales mobile */
+    .nav-social-mobile {
+        display: block;
+        margin-top: var(--spacing-md);
+        padding-top: var(--spacing-md);
+        border-top: 1px solid rgba(148, 209, 216, 0.3);
+    }
+    
+    /* Redes sociales alineadas a la derecha */
+    .social-links-mobile {
+        justify-content: flex-end;
+    }
+    
+    /* Menú desplegable */
+    .nav-menu {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: rgba(233, 222, 203, 0.98);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        padding: var(--spacing-md);
+        gap: 0;
+        transform: translateX(-100%);
+        transition: var(--transition-smooth);
+        border-bottom: 1px solid rgba(148, 209, 216, 0.3);
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        align-items: stretch;
+    }
+    
+    .nav-menu.active {
+        transform: translateX(0);
+    }
+    
+    /* Items del menú alineados a la izquierda */
+    .nav-menu > li:not(.nav-social-mobile) {
+        text-align: left;
+        border-bottom: 1px solid rgba(148, 209, 216, 0.1);
+    }
+    
+    .nav-link {
+        display: block;
+        text-align: left;
+        padding: var(--spacing-sm);
+        font-size: 1.1rem;
+    }
+    
+    .nav-link::after {
+        display: none;
+    }
+    
+    /* Ajuste de fondo fijo en mobile */
+    .intro-section::before {
+        background-attachment: scroll;
+    }
+    
+    .services-grid,
+    .mapadres-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .intro-section,
+    section {
+        padding: var(--spacing-md) 0;
+    }
+    
+    :root {
+        --spacing-lg: 3rem;
+        --spacing-xl: 4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-logo {
+        max-width: 220px;
+    }
+    
+    .isotipo {
+        height: 40px;
+    }
+    
+    .container {
+        padding: 0 var(--spacing-sm);
+    }
+@media (max-width: 768px) {
+    /* ... código existente ... */
+    
+    /* Ajustes de listas en mobile */
+    .icon-list li,
+    .check-list li {
+        font-size: 1rem;
+    }
+    
+    /* Botones en mobile */
+    .btn {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .btn.large {
+        padding: 1rem 2rem;
+        font-size: 1.05rem;
+    }
+    
+    /* Mapadres grid en mobile */
+    .mapadres-grid {
+        grid-template-columns: 1fr;
+    }
+}
+}
