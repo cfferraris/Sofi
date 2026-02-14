@@ -154,4 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = 'auto';
     }, 1500);
 
+    // ========================================
+    // INICIALIZAR LUCIDE ICONS
+    // ========================================
+    lucide.createIcons();
 });
