@@ -3,95 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Piel de Mar - Cuidado natural y sereno para tu piel. Experiencias de bienestar que conectan con la naturaleza, la calma y el equilibrio.">
-    <meta name="keywords" content="cuidado de piel, tratamientos naturales, bienestar, spa, armonía, serenidad">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="Piel de Mar - Acompañamiento profesional en estimulación temprana, neurodesarrollo infantil y crianza respetuosa. Orientación para familias en Buenos Aires y de forma virtual.">
+    <meta name="keywords" content="estimulación temprana, neurodesarrollo infantil, crianza respetuosa, acompañamiento familiar, regulación emocional, desarrollo infantil">
     <meta name="author" content="Piel de Mar">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://www.pieldemar.com/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Piel de Mar - Cuidado Natural y Sereno">
-    <meta property="og:description" content="Experiencias de bienestar que conectan con la naturaleza">
-    <meta property="og:image" content="assets/img/logos/Isotipo2/Azul.png">
+    <meta property="og:url" content="https://www.pieldemar.com/">
+    <meta property="og:site_name" content="Piel de Mar">
+    <meta property="og:title" content="Piel de Mar - Estimulación temprana y acompañamiento familiar">
+    <meta property="og:description" content="Acompañamiento profesional en estimulación temprana, neurodesarrollo y crianza respetuosa. Orientación para familias, con mirada integral y respeto por los tiempos de cada niño.">
+    <meta property="og:image" content="https://www.pieldemar.com/assets/img/logos/Isotipo2/Azul.png">
     <meta property="og:locale" content="es_AR">
-    <title>Piel de Mar - Cuidado Natural y Sereno</title>
 
-     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Piel de Mar - Estimulación temprana y acompañamiento familiar">
+    <meta name="twitter:description" content="Acompañamiento profesional en estimulación temprana, neurodesarrollo y crianza respetuosa.">
+    <meta name="twitter:image" content="https://www.pieldemar.com/assets/img/logos/Isotipo2/Azul.png">
+
+    <title>Piel de Mar - Estimulación Temprana y Acompañamiento Familiar</title>
+
+    <!-- Schema.org - Negocio local -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HealthAndBeautyBusiness",
+        "name": "Piel de Mar",
+        "description": "Acompañamiento profesional en estimulación temprana, neurodesarrollo infantil y crianza respetuosa.",
+        "url": "https://www.pieldemar.com",
+        "logo": "https://www.pieldemar.com/assets/img/logos/Isotipo2/Azul.png",
+        "sameAs": [
+            "https://www.instagram.com/pieldemar",
+            "https://www.youtube.com/@pieldemar",
+            "https://www.facebook.com/pieldemar"
+        ],
+        "serviceType": [
+            "Estimulación temprana",
+            "Neurodesarrollo infantil",
+            "Acompañamiento emocional",
+            "Acompañamiento familiar"
+        ]
+    }
+    </script>
+
+    <!-- Lucide Icons - con defer para no bloquear renderizado -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+
     <!-- CSS -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    
+
     <!-- HERO SECTION - Pantalla inicial -->
-    <section id="hero" class="hero">
+    <section id="hero" class="hero" aria-label="Pantalla de inicio Piel de Mar">
         <div class="hero-background"></div>
         <div class="logo-container">
-            <img src="assets/img/logos/LogoPrincipal/Tiza.png" alt="Piel de Mar-Logo" id="mainLogo" class="main-logo">
+            <img 
+                src="assets/img/logos/LogoPrincipal/Tiza.png" 
+                alt="Piel de Mar - Logo principal" 
+                id="mainLogo" 
+                class="main-logo"
+                width="400"
+                height="200"
+            >
         </div>
     </section>
 
     <!-- NAVBAR - Oculta inicialmente -->
-    <nav id="navbar" class="navbar">
+    <nav id="navbar" class="navbar" aria-label="Navegación principal">
         <div class="navbar-container">
+
             <!-- Logo isotipo -->
             <div class="navbar-logo">
-                <img src="assets/img/logos/Isotipo2/Azul.png" alt="Piel de Mar" class="isotipo">
+                <a href="#piel-de-mar" aria-label="Ir al inicio">
+                    <img 
+                        src="assets/img/logos/Isotipo2/Azul.png" 
+                        alt="Piel de Mar" 
+                        class="isotipo"
+                        width="50"
+                        height="50"
+                    >
+                </a>
             </div>
 
             <!-- Menú hamburguesa para mobile -->
-            <button class="menu-toggle" id="menuToggle" aria-label="Menú">
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="navMenu">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
 
             <!-- Enlaces de navegación -->
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#piel-de-mar" class="nav-link">Piel de Mar</a></li>
-                <li><a href="#tu-hijo-y-vos" class="nav-link">Tu hij@ y vos</a></li>
-                <li><a href="#servicios" class="nav-link">Servicios</a></li>
-                <li><a href="#recursos" class="nav-link">Recursos</a></li>
-                <li><a href="#turnos" class="nav-link">Turnos</a></li>
-                <li><a href="#contacto" class="nav-link">Contacto</a></li>
+            <ul class="nav-menu" id="navMenu" role="menubar">
+                <li role="none"><a href="#piel-de-mar" class="nav-link" role="menuitem">Piel de Mar</a></li>
+                <li role="none"><a href="#tu-hijo-y-vos" class="nav-link" role="menuitem">Tu hij@ y vos</a></li>
+                <li role="none"><a href="#servicios" class="nav-link" role="menuitem">Servicios</a></li>
+                <li role="none"><a href="#recursos" class="nav-link" role="menuitem">Recursos</a></li>
+                <li role="none"><a href="#turnos" class="nav-link" role="menuitem">Turnos</a></li>
+                <li role="none"><a href="#contacto" class="nav-link" role="menuitem">Contacto</a></li>
+
                 <!-- Redes sociales SOLO PARA MOBILE -->
-                <li class="nav-social-mobile">
+                <li class="nav-social-mobile" role="none">
                     <div class="social-links-mobile">
-                        <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
-                            <img src="assets/icons/facebook.svg" alt="Facebook">
+                        <a href="https://facebook.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Facebook">
+                            <img src="assets/icons/facebook.svg" alt="" width="28" height="28" aria-hidden="true">
                         </a>
-                        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
-                            <img src="assets/icons/instagram.svg" alt="Instagram">
+                        <a href="https://instagram.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Instagram">
+                            <img src="assets/icons/instagram.svg" alt="" width="28" height="28" aria-hidden="true">
                         </a>
-                        <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube">
-                            <img src="assets/icons/youtube.svg" alt="YouTube">
+                        <a href="https://youtube.com/@pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Suscribite en YouTube">
+                            <img src="assets/icons/youtube.svg" alt="" width="28" height="28" aria-hidden="true">
                         </a>
-                        <a href="https://twitch.tv" target="_blank" rel="noopener" aria-label="Twitch">
-                            <img src="assets/icons/twitch.svg" alt="Twitch">
+                        <a href="https://twitch.tv/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Twitch">
+                            <img src="assets/icons/twitch.svg" alt="" width="28" height="28" aria-hidden="true">
                         </a>
-                        <a href="https://x.com" target="_blank" rel="noopener" aria-label="X">
-                            <img src="assets/icons/x.svg" alt="X">
+                        <a href="https://x.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en X">
+                            <img src="assets/icons/x.svg" alt="" width="28" height="28" aria-hidden="true">
                         </a>
                     </div>
                 </li>
             </ul>
 
-            <!-- Redes sociales -->
-            <div class="social-links">
-                <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
-                    <img src="assets/icons/facebook.svg" alt="Facebook">
+            <!-- Redes sociales DESKTOP -->
+            <div class="social-links" aria-label="Redes sociales">
+                <a href="https://facebook.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Facebook">
+                    <img src="assets/icons/facebook.svg" alt="" width="28" height="28" aria-hidden="true">
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
-                    <img src="assets/icons/instagram.svg" alt="Instagram">
+                <a href="https://instagram.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Instagram">
+                    <img src="assets/icons/instagram.svg" alt="" width="28" height="28" aria-hidden="true">
                 </a>
-                <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube">
-                    <img src="assets/icons/youtube.svg" alt="YouTube">
+                <a href="https://youtube.com/@pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Suscribite en YouTube">
+                    <img src="assets/icons/youtube.svg" alt="" width="28" height="28" aria-hidden="true">
                 </a>
-                <a href="https://twitch.tv" target="_blank" rel="noopener" aria-label="Twitch">
-                    <img src="assets/icons/twitch.svg" alt="Twitch">
+                <a href="https://twitch.tv/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Twitch">
+                    <img src="assets/icons/twitch.svg" alt="" width="28" height="28" aria-hidden="true">
                 </a>
-                <a href="https://x.com" target="_blank" rel="noopener" aria-label="X">
-                    <img src="assets/icons/x.svg" alt="X">
+                <a href="https://x.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en X">
+                    <img src="assets/icons/x.svg" alt="" width="28" height="28" aria-hidden="true">
                 </a>
             </div>
         </div>
@@ -99,294 +152,343 @@
 
     <!-- CONTENIDO PRINCIPAL -->
     <main id="mainContent" class="main-content">
-        
-        <!-- Sección de introducción -->
-        <section id="piel-de-mar" class="intro-section">
+
+        <!-- Sección Piel de Mar -->
+        <section id="piel-de-mar" class="intro-section" aria-labelledby="intro-heading">
             <div class="container">
-               <h2>Tal vez estás notando que…</h2>
-               <ul class="icon-list">
-                 <li>Tu hijo se sobreestimula fácilmente ante ciertos estímulos</li>
-                 <li>Le cuesta regular sus emociones o adaptarse a cambios</li>
-                 <li>Sentís que algo en su desarrollo te genera dudas</li>
-                 <li>No sabés si lo que observás es parte de su edad o necesita acompañamiento</li>
-                 <li>Querés ayudarlo, pero no sabés por dónde empezar</li>
+                <h1 id="intro-heading">Tal vez estás notando que…</h1>
+                <ul class="icon-list">
+                    <li>Tu hijo se sobreestimula fácilmente ante ciertos estímulos</li>
+                    <li>Le cuesta regular sus emociones o adaptarse a cambios</li>
+                    <li>Sentís que algo en su desarrollo te genera dudas</li>
+                    <li>No sabés si lo que observás es parte de su edad o necesita acompañamiento</li>
+                    <li>Querés ayudarlo, pero no sabés por dónde empezar</li>
                 </ul>
-              <p class="section-close">Buscar orientación a tiempo puede generar cambios significativos en el bienestar de tu hijo y en la tranquilidad de toda la familia.</p>
-              <button class="btn primary">Quiero orientación profesional</button>
+                <p class="section-close">Buscar orientación a tiempo puede generar cambios significativos en el bienestar de tu hijo y en la tranquilidad de toda la familia.</p>
+                <a href="#turnos" class="btn primary">Quiero orientación profesional</a>
             </div>
         </section>
+
         <!-- Sección Tu hij@ y vos -->
-        <section id="tu-hijo-y-vos" class="tu-hijo-y-vos-section">
+        <section id="tu-hijo-y-vos" class="tu-hijo-y-vos-section" aria-labelledby="tu-hijo-heading">
             <div class="container">
-                <h2>Tu hij@ y vos</h2>
+                <h2 id="tu-hijo-heading">Tu hij@ y vos</h2>
                 <p class="section-subtitle">Una guía para acompañarte en el cuidado y bienestar de tu familia</p>
-                
+
                 <div class="tu-hijo-y-vos-content">
                     <ul class="check-list">
-                      <li>Mirada integral del niño y su entorno</li>
-                      <li>Trabajo respetuoso, sin forzar procesos</li>
-                      <li>Espacio de escucha para madres y padres</li>
-                      <li>Orientaciones claras y aplicables en casa</li>
-                    </ul>    
+                        <li>Mirada integral del niño y su entorno</li>
+                        <li>Trabajo respetuoso, sin forzar procesos</li>
+                        <li>Espacio de escucha para madres y padres</li>
+                        <li>Orientaciones claras y aplicables en casa</li>
+                    </ul>
                     <article class="tu-hijo-y-vos-card">
-                      <h3>Momentos de conexión</h3>
-                      <p>Rutinas y rituales para crear vínculos profundos con tus hijos</p>
+                        <h3>Momentos de conexión</h3>
+                        <p>Rutinas y rituales para crear vínculos profundos con tus hijos</p>
                     </article>
-                        <article class="tu-hijo-y-vos-card">
-                            <h3>Bienestar familiar</h3>
-                            <p>Herramientas para cultivar la armonía y el equilibrio en casa</p>
-                        </article>
-                    </div>
+                    <article class="tu-hijo-y-vos-card">
+                        <h3>Bienestar familiar</h3>
+                        <p>Herramientas para cultivar la armonía y el equilibrio en casa</p>
+                    </article>
                 </div>
             </div>
         </section>
+
         <!-- Sección Diferencial -->
-        <section id="diferencial" class="diferencial-section">
+        <section id="diferencial" class="diferencial-section" aria-labelledby="diferencial-heading">
             <div class="container">
-                <h2>¿Por qué elegir Piel de Mar?</h2>
+                <h2 id="diferencial-heading">¿Por qué elegir Piel de Mar?</h2>
                 <p class="section-subtitle">Un enfoque diferente que marca la diferencia</p>
-                
-                <div class="comparativa-table">
-                    <div class="table-header">
-                        <div class="header-cell empty"></div>
-                        <div class="header-cell otros">
-                            <span>Otros centros</span>
-                        </div>
-                        <div class="header-cell piel-de-mar">
+
+                <div class="comparativa-table" role="table" aria-label="Comparativa entre Piel de Mar y otros centros">
+                    <div class="table-header" role="row">
+                        <div class="header-cell empty" role="columnheader"></div>
+                        <div class="header-cell otros" role="columnheader"><span>Otros centros</span></div>
+                        <div class="header-cell piel-de-mar" role="columnheader">
                             <span>Piel de Mar</span>
-                            <i data-lucide="waves"></i>
+                            <i data-lucide="waves" aria-hidden="true"></i>
                         </div>
                     </div>
-                    
-                    <div class="table-row">
-                        <div class="row-label">Enfoque del tratamiento</div>
-                        <div class="row-cell otros">
-                            <i data-lucide="x" class="icon-no"></i>
+
+                    <div class="table-row" role="row">
+                        <div class="row-label" role="rowheader">Enfoque del tratamiento</div>
+                        <div class="row-cell otros" role="cell">
+                            <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
                             <span>Protocolos estandarizados</span>
                         </div>
-                        <div class="row-cell piel-de-mar">
-                            <i data-lucide="check" class="icon-yes"></i>
+                        <div class="row-cell piel-de-mar" role="cell">
+                            <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
                             <span>Personalizado según cada niño</span>
                         </div>
                     </div>
-                    
-                    <div class="table-row">
-                        <div class="row-label">Respeto por los tiempos</div>
-                        <div class="row-cell otros">
-                            <i data-lucide="x" class="icon-no"></i>
+
+                    <div class="table-row" role="row">
+                        <div class="row-label" role="rowheader">Respeto por los tiempos</div>
+                        <div class="row-cell otros" role="cell">
+                            <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
                             <span>Sesiones con objetivos fijos</span>
                         </div>
-                        <div class="row-cell piel-de-mar">
-                            <i data-lucide="check" class="icon-yes"></i>
+                        <div class="row-cell piel-de-mar" role="cell">
+                            <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
                             <span>Sin forzar procesos naturales</span>
                         </div>
                     </div>
-                    
-                    <div class="table-row">
-                        <div class="row-label">Acompañamiento familiar</div>
-                        <div class="row-cell otros">
-                            <i data-lucide="x" class="icon-no"></i>
+
+                    <div class="table-row" role="row">
+                        <div class="row-label" role="rowheader">Acompañamiento familiar</div>
+                        <div class="row-cell otros" role="cell">
+                            <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
                             <span>Solo trabajan con el niño</span>
                         </div>
-                        <div class="row-cell piel-de-mar">
-                            <i data-lucide="check" class="icon-yes"></i>
+                        <div class="row-cell piel-de-mar" role="cell">
+                            <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
                             <span>Incluimos y escuchamos a los padres</span>
                         </div>
                     </div>
-                    
-                    <div class="table-row">
-                        <div class="row-label">Mirada del desarrollo</div>
-                        <div class="row-cell otros">
-                            <i data-lucide="x" class="icon-no"></i>
+
+                    <div class="table-row" role="row">
+                        <div class="row-label" role="rowheader">Mirada del desarrollo</div>
+                        <div class="row-cell otros" role="cell">
+                            <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
                             <span>Enfoque fragmentado por áreas</span>
                         </div>
-                        <div class="row-cell piel-de-mar">
-                            <i data-lucide="check" class="icon-yes"></i>
+                        <div class="row-cell piel-de-mar" role="cell">
+                            <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
                             <span>Visión integral del niño y su entorno</span>
                         </div>
                     </div>
-                    
-                    <div class="table-row">
-                        <div class="row-label">Herramientas para el hogar</div>
-                        <div class="row-cell otros">
-                            <i data-lucide="x" class="icon-no"></i>
+
+                    <div class="table-row" role="row">
+                        <div class="row-label" role="rowheader">Herramientas para el hogar</div>
+                        <div class="row-cell otros" role="cell">
+                            <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
                             <span>Solo sesiones en consultorio</span>
                         </div>
-                        <div class="row-cell piel-de-mar">
-                            <i data-lucide="check" class="icon-yes"></i>
+                        <div class="row-cell piel-de-mar" role="cell">
+                            <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
                             <span>Orientación aplicable en casa</span>
                         </div>
                     </div>
-                    
-                    <div class="table-row">
-                        <div class="row-label">Comunicación</div>
-                        <div class="row-cell otros">
-                            <i data-lucide="x" class="icon-no"></i>
+
+                    <div class="table-row" role="row">
+                        <div class="row-label" role="rowheader">Comunicación</div>
+                        <div class="row-cell otros" role="cell">
+                            <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
                             <span>Informes técnicos impersonales</span>
                         </div>
-                        <div class="row-cell piel-de-mar">
-                            <i data-lucide="check" class="icon-yes"></i>
+                        <div class="row-cell piel-de-mar" role="cell">
+                            <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
                             <span>Diálogo cercano y comprensible</span>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="diferencial-cta">
                     <p>Descubrí un acompañamiento que respeta y potencia el desarrollo natural de tu hijo</p>
-                    <button class="btn primary">Quiero conocer más</button>
+                    <a href="#turnos" class="btn primary">Quiero conocer más</a>
                 </div>
             </div>
         </section>
+
         <!-- Sección Servicios -->
-        <section id="servicios" class="service-section">
+        <section id="servicios" class="service-section" aria-labelledby="servicios-heading">
             <div class="container">
-                <h2>Descubrí como acompañamos cada etapa</h2>
-                
+                <h2 id="servicios-heading">Descubrí cómo acompañamos cada etapa</h2>
+
                 <div class="service-grid">
                     <article class="service-card">
-                        <div class="service-icon">
+                        <div class="service-icon" aria-hidden="true">
                             <i data-lucide="heart-handshake"></i>
                         </div>
                         <h3>Estimulación temprana</h3>
                         <p>Potenciamos el desarrollo integral de tu hijo con actividades adaptadas a su edad.</p>
-                        <button class="btn link">Quiero saber más</button>
+                        <a href="#turnos" class="btn link">Quiero saber más</a>
                     </article>
-                    
+
                     <article class="service-card">
-                        <div class="service-icon">
+                        <div class="service-icon" aria-hidden="true">
                             <i data-lucide="sparkles"></i>
                         </div>
                         <h3>Acompañamiento emocional</h3>
                         <p>Brindamos herramientas para acompañar al niño en su regulación emocional.</p>
-                        <button class="btn link">Quiero saber más</button>
+                        <a href="#turnos" class="btn link">Quiero saber más</a>
                     </article>
-                    
+
                     <article class="service-card">
-                        <div class="service-icon">
+                        <div class="service-icon" aria-hidden="true">
                             <i data-lucide="brain"></i>
                         </div>
                         <h3>Neurodesarrollo infantil</h3>
                         <p>Identificamos señales de alerta e intervenimos tempranamente.</p>
-                        <button class="btn link">Quiero saber más</button>
+                        <a href="#turnos" class="btn link">Quiero saber más</a>
                     </article>
-                    
+
                     <article class="service-card">
-                        <div class="service-icon">
+                        <div class="service-icon" aria-hidden="true">
                             <i data-lucide="users"></i>
                         </div>
                         <h3>Acompañamiento Familiar</h3>
-                        <p>Orientamos y protegemos una crianza consciente con sus vínculos</p>
-                        <button class="btn link">Quiero saber más</button>
-                    </article>
-                </div>
-            </div>
-        </section> 
-        <!-- Sección Testimonios -->
-        <section id="testimonios" class="testimonios-section">
-            <div class="container">
-                <h2>Familias que confiaron en nosotros</h2>
-                <p class="section-subtitle">Experiencias reales de quienes ya recorrieron este camino</p>
-                
-                <div class="testimonios-grid">
-                    <article class="testimonio-card">
-                        <blockquote>
-                            <p>"Llegamos con muchas dudas y angustia. El acompañamiento fue fundamental para entender qué le pasaba a nuestro hijo y cómo ayudarlo. Hoy vemos cambios reales."</p>
-                        </blockquote>
-                        <div class="testimonio-author">
-                            <div class="testimonio-author-info">
-                                <strong>María G.</strong>
-                                <span>Madre de Tomás, 3 años</span>
-                            </div>
-                            <div class="testimonio-quote">
-                                <i data-lucide="quote"></i>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <article class="testimonio-card">
-                        <blockquote>
-                            <p>"No solo trabajaron con nuestra hija, nos dieron herramientas para aplicar en casa. Sentimos que somos parte activa de su desarrollo."</p>
-                        </blockquote>
-                        <div class="testimonio-author">
-                            <div class="testimonio-author-info">
-                                <strong>Lucía y Martín</strong>
-                                <span>Padres de Emma, 5 años</span>
-                            </div>
-                            <div class="testimonio-quote">
-                                <i data-lucide="quote"></i>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <article class="testimonio-card">
-                        <blockquote>
-                            <p>"La diferencia está en el trato humano y en que realmente escuchan nuestras preocupaciones. No nos sentimos juzgados, sino acompañados."</p>
-                        </blockquote>
-                        <div class="testimonio-author">
-                            <div class="testimonio-author-info">
-                                <strong>Carolina R.</strong>
-                                <span>Madre de Lucas, 4 años</span>
-                            </div>
-                            <div class="testimonio-quote">
-                                <i data-lucide="quote"></i>
-                            </div>
-                        </div>
+                        <p>Orientamos y acompañamos una crianza consciente y respetuosa de los vínculos.</p>
+                        <a href="#turnos" class="btn link">Quiero saber más</a>
                     </article>
                 </div>
             </div>
         </section>
-        <!-- Sección Recursos -->
-         <!-- Sección Recursos -->
-        <section id="recursos" class="resources-section">
+
+        <!-- Sección Testimonios -->
+        <section id="testimonios" class="testimonios-section" aria-labelledby="testimonios-heading">
             <div class="container">
-                <h2>Recursos profesionales desarrollados por nuestros equipo</h2>
-                <p class="section-subtitle">Contenido basado en ciencia diseñado para brindarte información que podés aplicar hoy.</p>
+                <h2 id="testimonios-heading" class="sr-only">Testimonios de familias</h2>
+
+                <div class="carousel-wrapper" role="region" aria-label="Testimonios de familias" aria-live="polite">
+
+                    <button class="carousel-btn prev" id="prevBtn" aria-label="Testimonio anterior">
+                        <i data-lucide="chevron-left" aria-hidden="true"></i>
+                    </button>
+
+                    <div class="carousel-track-container">
+                        <div class="carousel-track" id="carouselTrack">
+
+                            <article class="testimonio-card">
+                                <blockquote>
+                                    <p>"Llegamos con muchas dudas y angustia. El acompañamiento fue fundamental para entender qué le pasaba a nuestro hijo y cómo ayudarlo. Hoy vemos cambios reales."</p>
+                                </blockquote>
+                                <div class="testimonio-author">
+                                    <div class="testimonio-author-info">
+                                        <strong>María G.</strong>
+                                        <span>Madre de Tomás, 3 años</span>
+                                    </div>
+                                    <div class="testimonio-quote" aria-hidden="true">
+                                        <i data-lucide="quote"></i>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="testimonio-card">
+                                <blockquote>
+                                    <p>"No solo trabajaron con nuestra hija, nos dieron herramientas para aplicar en casa. Sentimos que somos parte activa de su desarrollo."</p>
+                                </blockquote>
+                                <div class="testimonio-author">
+                                    <div class="testimonio-author-info">
+                                        <strong>Lucía y Martín</strong>
+                                        <span>Padres de Emma, 5 años</span>
+                                    </div>
+                                    <div class="testimonio-quote" aria-hidden="true">
+                                        <i data-lucide="quote"></i>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="testimonio-card">
+                                <blockquote>
+                                    <p>"La diferencia está en el trato humano y en que realmente escuchan nuestras preocupaciones. No nos sentimos juzgados, sino acompañados."</p>
+                                </blockquote>
+                                <div class="testimonio-author">
+                                    <div class="testimonio-author-info">
+                                        <strong>Carolina R.</strong>
+                                        <span>Madre de Lucas, 4 años</span>
+                                    </div>
+                                    <div class="testimonio-quote" aria-hidden="true">
+                                        <i data-lucide="quote"></i>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="testimonio-card">
+                                <blockquote>
+                                    <p>"Encontré en Piel de Mar un espacio donde me escucharon sin juzgarme. Las orientaciones fueron claras y pudimos aplicarlas enseguida en casa."</p>
+                                </blockquote>
+                                <div class="testimonio-author">
+                                    <div class="testimonio-author-info">
+                                        <strong>Valentina M.</strong>
+                                        <span>Madre de Sofía, 2 años</span>
+                                    </div>
+                                    <div class="testimonio-quote" aria-hidden="true">
+                                        <i data-lucide="quote"></i>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <article class="testimonio-card">
+                                <blockquote>
+                                    <p>"Lo que más valoro es que trabajan con toda la familia. No solo con el niño. Eso hace una diferencia enorme en los resultados."</p>
+                                </blockquote>
+                                <div class="testimonio-author">
+                                    <div class="testimonio-author-info">
+                                        <strong>Roberto y Ana</strong>
+                                        <span>Padres de Mateo, 4 años</span>
+                                    </div>
+                                    <div class="testimonio-quote" aria-hidden="true">
+                                        <i data-lucide="quote"></i>
+                                    </div>
+                                </div>
+                            </article>
+
+                        </div>
+                    </div>
+
+                    <button class="carousel-btn next" id="nextBtn" aria-label="Testimonio siguiente">
+                        <i data-lucide="chevron-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Navegación de testimonios"></div>
+            </div>
+        </section>
+
+        <!-- Sección Recursos -->
+        <section id="recursos" class="resources-section" aria-labelledby="recursos-heading">
+            <div class="container">
+                <h2 id="recursos-heading">Recursos profesionales para acompañar el desarrollo</h2>
+                <p class="section-subtitle">Contenido basado en evidencia, diseñado para brindarte información que podés aplicar hoy.</p>
+
                 <div class="resources-cards-container">
+
                     <!-- Tarjeta 1: Temáticas -->
                     <article class="resources-main-card">
                         <div class="card-options">
-                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&sort=dd&shelf_id=1" target="_blank" class="resource-option">
-                                <div class="option-icon">
+                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&sort=dd&shelf_id=1" target="_blank" rel="noopener noreferrer" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="sprout"></i>
                                 </div>
                                 <div class="option-content">
                                     <strong>Desarrollo infantil</strong>
                                     <span>Hitos del desarrollo, señales de alerta y acompañamiento por etapa</span>
                                 </div>
-                                <i data-lucide="arrow-right" class="option-arrow"></i>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
 
-                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&sort=dd&shelf_id=2" target="_blank" class="resource-option">
-                                <div class="option-icon">
+                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&sort=dd&shelf_id=2" target="_blank" rel="noopener noreferrer" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="heart"></i>
                                 </div>
                                 <div class="option-content">
                                     <strong>Crianza respetuosa</strong>
                                     <span>Herramientas para criar desde el respeto y la empatía</span>
                                 </div>
-                                <i data-lucide="arrow-right" class="option-arrow"></i>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
 
-                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&sort=dd&shelf_id=3" target="_blank" class="resource-option">
-                                <div class="option-icon">
+                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&sort=dd&shelf_id=3" target="_blank" rel="noopener noreferrer" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="brain-circuit"></i>
                                 </div>
                                 <div class="option-content">
                                     <strong>Regulación emocional</strong>
                                     <span>Estrategias para ayudar a gestionar emociones</span>
                                 </div>
-                                <i data-lucide="arrow-right" class="option-arrow"></i>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
 
-                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&sort=dd&shelf_id=4" target="_blank" class="resource-option">
-                                <div class="option-icon">
+                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&sort=dd&shelf_id=4" target="_blank" rel="noopener noreferrer" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="puzzle"></i>
                                 </div>
                                 <div class="option-content">
                                     <strong>Juego y Estimulación</strong>
                                     <span>Actividades y juegos para estimular sin sobreexigir</span>
                                 </div>
-                                <i data-lucide="arrow-right" class="option-arrow"></i>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
                         </div>
                     </article>
@@ -394,80 +496,91 @@
                     <!-- Tarjeta 2: Tipos de recursos -->
                     <article class="resources-main-card">
                         <div class="card-options">
-                            <a href="https://www.youtube.com/@pieldemar" target="_blank" class="resource-option">
-                                <div class="option-icon">
+                            <a href="https://www.youtube.com/@pieldemar" target="_blank" rel="noopener noreferrer" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="youtube"></i>
                                 </div>
                                 <div class="option-content">
                                     <strong>Videos educativos</strong>
                                     <span>Tutoriales y explicaciones en nuestro canal de YouTube</span>
                                 </div>
-                                <i data-lucide="arrow-right" class="option-arrow"></i>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
 
                             <a href="#blog" class="resource-option">
-                                <div class="option-icon">
+                                <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="book-open"></i>
                                 </div>
                                 <div class="option-content">
                                     <strong>Artículos y bibliografía</strong>
                                     <span>Ensayos basados en evidencia y bibliografía recomendada</span>
                                 </div>
-                                <i data-lucide="arrow-right" class="option-arrow"></i>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
 
                             <a href="#descargas" class="resource-option">
-                                <div class="option-icon">
+                                <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="download"></i>
                                 </div>
                                 <div class="option-content">
                                     <strong>Guías descargables</strong>
                                     <span>PDFs, plantillas y herramientas listas para usar</span>
                                 </div>
-                                <i data-lucide="arrow-right" class="option-arrow"></i>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
 
                             <a href="#tips" class="resource-option">
-                                <div class="option-icon">
+                                <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="lightbulb"></i>
                                 </div>
                                 <div class="option-content">
                                     <strong>Tips prácticos</strong>
                                     <span>Consejos rápidos para aplicar en el día a día</span>
                                 </div>
-                                <i data-lucide="arrow-right" class="option-arrow"></i>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
                         </div>
                     </article>
                 </div>
             </div>
         </section>
+
         <!-- Sección Turnos -->
-        <section id="turnos" class="appointments-section">
-              <h2>No tenés que atravesar esto sola/o</h2>
-              <p>Un primer espacio de orientación puede brindarte claridad y tranquilidad.</p>
-              <button class="btn primary large">Quiero coordinar una consulta</button>
-              <small>Las consultas pueden ser virtuales desde cualquier lugar</small>
-        </section>
-        <!-- Sección Contacto -->
-        <section id="contacto" class="contact-section">
+        <section id="turnos" class="appointments-section" aria-labelledby="turnos-heading">
             <div class="container">
-                <h2>Conectemos</h2>
+                <h2 id="turnos-heading">No tenés que atravesar esto sola/o</h2>
+                <p>Un primer espacio de orientación puede brindarte claridad y tranquilidad.</p>
+                <a href="https://wa.me/549XXXXXXXXXX" target="_blank" rel="noopener noreferrer" class="btn primary large">Quiero coordinar una consulta</a>
+                <small>Las consultas pueden ser virtuales desde cualquier lugar</small>
+            </div>
+        </section>
+
+        <!-- Sección Contacto -->
+        <section id="contacto" class="contact-section" aria-labelledby="contacto-heading">
+            <div class="container">
+                <h2 id="contacto-heading">Conectemos</h2>
                 <p class="section-subtitle">Estamos acá para escucharte</p>
             </div>
         </section>
+
     </main>
 
     <!-- FOOTER -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
-          <p>Contacto | WhatsApp | Redes sociales</p>
-          <p>Aviso legal | Política de privacidad</p>
-            <p>&copy; 2024 Piel de Mar. Todos los derechos reservados.</p>
+            <p>Contacto | WhatsApp | Redes sociales</p>
+            <p>Aviso legal | Política de privacidad</p>
+            <p>&copy; <span id="currentYear"></span> Piel de Mar. Todos los derechos reservados.</p>
         </div>
     </footer>
 
     <!-- JavaScript -->
     <script src="js/main.js"></script>
+
+    <!-- Año dinámico en footer -->
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+
 </body>
 </html>
