@@ -548,10 +548,107 @@
         <!-- Sección Turnos -->
         <section id="turnos" class="appointments-section" aria-labelledby="turnos-heading">
             <div class="container">
-                <h2 id="turnos-heading">No tenés que atravesar esto sola/o</h2>
-                <p>Un primer espacio de orientación puede brindarte claridad y tranquilidad.</p>
-                <a href="https://wa.me/549XXXXXXXXXX" target="_blank" rel="noopener noreferrer" class="btn primary large">Quiero coordinar una consulta</a>
-                <small>Las consultas pueden ser virtuales desde cualquier lugar</small>
+                <h2 id="turnos-heading">Reservá tu consulta</h2>
+                <p class="appointments-intro">Elegí el día y horario que mejor se adapte a tu agenda</p>
+
+                <div class="appointments-container">
+                    
+                    <!-- Columna izquierda: Calendario -->
+                    <div class="calendar-wrapper">
+                        <div class="calendar-header">
+                            <button id="prevMonth" class="calendar-nav" aria-label="Mes anterior">
+                                <i data-lucide="chevron-left"></i>
+                            </button>
+                            <h3 id="currentMonth" class="calendar-month"></h3>
+                            <button id="nextMonth" class="calendar-nav" aria-label="Mes siguiente">
+                                <i data-lucide="chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid" role="grid">
+                            <!-- Días de la semana -->
+                            <div class="calendar-weekdays" role="row">
+                                <div role="columnheader">Lun</div>
+                                <div role="columnheader">Mar</div>
+                                <div role="columnheader">Mié</div>
+                                <div role="columnheader">Jue</div>
+                                <div role="columnheader">Vie</div>
+                                <div role="columnheader">Sáb</div>
+                                <div role="columnheader">Dom</div>
+                            </div>
+                            <!-- Los días se generan dinámicamente con JS -->
+                            <div class="calendar-days" id="calendarDays" role="rowgroup"></div>
+                        </div>
+                    </div>
+
+                    <!-- Columna derecha: Horarios y Formulario -->
+                    <div class="appointments-right">
+                        
+                        <!-- Selector de horarios (oculto hasta seleccionar fecha) -->
+                        <div class="time-selector" id="timeSelector" style="display: none;">
+                            <h4>Horarios disponibles</h4>
+                            <p class="selected-date-display" id="selectedDateDisplay"></p>
+                            <div class="time-slots" id="timeSlots"></div>
+                        </div>
+
+                        <!-- Formulario de reserva (oculto hasta seleccionar horario) -->
+                        <div class="appointment-form" id="appointmentForm" style="display: none;">
+                            <h4>Completá tus datos</h4>
+                            <p class="form-subtitle">Para confirmar tu turno necesitamos algunos datos</p>
+                            
+                            <form id="reservationForm">
+                                <div class="form-group">
+                                    <label for="patientName">Nombre completo <span class="required">*</span></label>
+                                    <input type="text" id="patientName" name="patientName" required placeholder="Ej: María González">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="patientEmail">Email <span class="required">*</span></label>
+                                    <input type="email" id="patientEmail" name="patientEmail" required placeholder="tu@email.com">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="patientPhone">Teléfono <span class="required">*</span></label>
+                                    <input type="tel" id="patientPhone" name="patientPhone" required placeholder="+54 9 11 1234-5678">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="childName">Nombre del niño/a</label>
+                                    <input type="text" id="childName" name="childName" placeholder="Opcional">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="childAge">Edad del niño/a</label>
+                                    <input type="text" id="childAge" name="childAge" placeholder="Ej: 3 años">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="consultReason">Motivo de la consulta</label>
+                                    <textarea id="consultReason" name="consultReason" rows="3" placeholder="Opcional: Contanos brevemente por qué buscás orientación"></textarea>
+                                </div>
+
+                                <div class="appointment-summary" id="appointmentSummary">
+                                    <i data-lucide="calendar"></i>
+                                    <span id="summaryText"></span>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="button" class="btn link" id="cancelBtn">Cancelar</button>
+                                    <button type="submit" class="btn primary">Confirmar turno</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Estado inicial: placeholder -->
+                        <div class="appointments-placeholder" id="appointmentsPlaceholder">
+                            <i data-lucide="calendar-check"></i>
+                            <p>Seleccioná una fecha en el calendario para ver los horarios disponibles</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <small class="appointments-note">Las consultas pueden ser presenciales o virtuales</small>
             </div>
         </section>
 
@@ -559,10 +656,90 @@
         <section id="contacto" class="contact-section" aria-labelledby="contacto-heading">
             <div class="container">
                 <h2 id="contacto-heading">Conectemos</h2>
-                <p class="section-subtitle">Estamos acá para escucharte</p>
+                <p class="section-subtitle">Estamos acá para escucharte y acompañarte</p>
+
+                <div class="contact-container">
+                    
+                    <!-- Columna izquierda: Mapa -->
+                    <div class="contact-map">
+                        <div id="map" class="map-container"></div>
+                        <div class="map-placeholder" id="mapPlaceholder">
+                            <i data-lucide="map-pin"></i>
+                            <p>Cullen 1619, Esperanza<br>Santa Fe, Argentina</p>
+                            <small>El mapa se cargará cuando esté disponible</small>
+                        </div>
+                    </div>
+
+                    <!-- Columna derecha: Información de contacto -->
+                    <div class="contact-info">
+                        
+                        <!-- Dirección -->
+                        <div class="contact-card">
+                            <div class="contact-icon">
+                                <i data-lucide="map-pin"></i>
+                            </div>
+                            <div class="contact-content">
+                                <h3>Dirección</h3>
+                                <p>Cullen 1619<br>Esperanza, Santa Fe</p>
+                                <a href="https://www.google.com/maps/dir/?api=1&destination=Cullen+1619,+Esperanza,+Santa+Fe,+Argentina" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer" 
+                                   class="contact-link">
+                                    Cómo llegar
+                                    <i data-lucide="external-link"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="contact-card">
+                            <div class="contact-icon">
+                                <i data-lucide="mail"></i>
+                            </div>
+                            <div class="contact-content">
+                                <h3>Email</h3>
+                                <p>Envianos tu consulta por correo</p>
+                                <a href="mailto:contacto@pieldemar.com" class="contact-link">
+                                    contacto@pieldemar.com
+                                    <i data-lucide="external-link"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- WhatsApp -->
+                        <div class="contact-card">
+                            <div class="contact-icon whatsapp">
+                                <i data-lucide="message-circle"></i>
+                            </div>
+                            <div class="contact-content">
+                                <h3>WhatsApp</h3>
+                                <p>Escribinos para agendar tu consulta</p>
+                                <a href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20información%20sobre%20los%20servicios%20de%20Piel%20de%20Mar" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer" 
+                                   class="contact-link whatsapp-link">
+                                    +54 9 3425 004018
+                                    <i data-lucide="external-link"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Horarios -->
+                        <div class="contact-card">
+                            <div class="contact-icon">
+                                <i data-lucide="clock"></i>
+                            </div>
+                            <div class="contact-content">
+                                <h3>Horarios</h3>
+                                <p>Lunes a Viernes<br>9:00 a 18:00 hs</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
         </section>
-
     </main>
 
     <!-- FOOTER -->
