@@ -901,25 +901,25 @@ section {
 }
 .carousel-track {
     display: flex;
-    gap: 0;
+    gap: var(--spacing-xs);
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
 }
 
 /* Tarjetas de testimonio */
 .testimonio-card {
-    flex: 0 0 33%;
-    min-width: 33%;
+    flex: 0 0 calc(33.3333% - var(--spacing-xs) * 2 / 3);
+    min-width: calc(33.3333% - var(--spacing-xs) * 2 / 3);
     background: white;
     padding: var(--spacing-xs);
     border-radius: 16px;
-    border: 1px solid rgba(148, 209, 216, 0.3);
-    box-shadow: 0 2px 12px rgba(5, 73, 84, 0.06);
+    border: 1px solid var(--oceano);
+    box-shadow: 0 2px 12px var(--profundo);
     transition: var(--transition-fast);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    margin: 0 var(--spacing-xs);
+    margin: 0;
 }
 
 .testimonio-card:hover {
@@ -1144,33 +1144,346 @@ section {
 }
 
 /* ========================================
-   SECCIÓN TURNOS
+   SECCIÓN TURNOS - CALENDARIO Y FORMULARIO
    ======================================== */
 .appointments-section {
     background: var(--tiza);
     text-align: center;
+    padding: var(--spacing-xl) 0;
 }
 .appointments-section h2 {
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
 }
-.appointments-section p {
+.appointments-intro {
     font-size: 1.125rem;
     color: var(--oceano);
-    margin-bottom: var(--spacing-md);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-bottom: var(--spacing-lg);
+    font-weight: 300;
 }
-.appointments-section .btn {
-    margin: 0 auto var(--spacing-sm);
-}
-.appointments-section small {
+.appointments-note {
     display: block;
-    margin-top: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
     color: var(--oceano);
     font-size: 0.9rem;
     font-style: italic;
 }
+
+/* Container principal dividido en 2 columnas */
+.appointments-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+/* ========================================
+   CALENDARIO - COLUMNA IZQUIERDA
+   ======================================== */
+.calendar-wrapper {
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
+    border: 1px solid rgba(148, 209, 216, 0.2);
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid rgba(148, 209, 216, 0.2);
+}
+
+.calendar-month {
+    font-size: 1.3rem;
+    color: var(--profundo);
+    margin: 0;
+    font-family: var(--font-principal);
+}
+
+.calendar-nav {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: var(--tiza);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+.calendar-nav:hover:not(:disabled) {
+    background: var(--agua);
+    transform: scale(1.1);
+}
+.calendar-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+.calendar-nav i {
+    width: 20px;
+    height: 20px;
+    color: var(--profundo);
+}
+
+/* Grid del calendario */
+.calendar-grid {
+    display: block;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.calendar-weekdays div {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--oceano);
+    padding: 0.5rem 0;
+    text-transform: uppercase;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+/* Días individuales */
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--profundo);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    border: 1px solid transparent;
+    background: var(--tiza);
+}
+
+.calendar-day:hover:not(.disabled):not(.empty) {
+    background: var(--agua);
+    border-color: var(--agua);
+    transform: scale(1.05);
+}
+
+.calendar-day.disabled {
+    color: rgba(36, 67, 106, 0.3);
+    cursor: not-allowed;
+    background: transparent;
+}
+
+.calendar-day.empty {
+    cursor: default;
+    visibility: hidden;
+}
+
+.calendar-day.today {
+    border-color: var(--oceano);
+    font-weight: 600;
+}
+
+.calendar-day.selected {
+    background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
+    color: var(--tiza);
+    border-color: var(--profundo);
+    font-weight: 600;
+}
+
+/* ========================================
+   COLUMNA DERECHA - HORARIOS Y FORM
+   ======================================== */
+.appointments-right {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Placeholder inicial */
+.appointments-placeholder {
+    background: white;
+    padding: var(--spacing-xl);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
+    border: 1px solid rgba(148, 209, 216, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 400px;
+}
+.appointments-placeholder i {
+    width: 64px;
+    height: 64px;
+    color: var(--agua);
+    margin-bottom: var(--spacing-md);
+}
+.appointments-placeholder p {
+    color: var(--oceano);
+    font-size: 1.05rem;
+    max-width: 300px;
+}
+
+/* Selector de horarios */
+.time-selector {
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
+    border: 1px solid rgba(148, 209, 216, 0.2);
+}
+.time-selector h4 {
+    font-family: var(--font-principal);
+    color: var(--profundo);
+    margin-bottom: var(--spacing-xs);
+}
+.selected-date-display {
+    color: var(--oceano);
+    font-size: 0.95rem;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid rgba(148, 209, 216, 0.2);
+}
+
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.time-slot {
+    padding: 0.75rem;
+    border: 1px solid rgba(148, 209, 216, 0.3);
+    border-radius: 10px;
+    background: var(--tiza);
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--profundo);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+.time-slot:hover:not(.taken) {
+    background: var(--agua);
+    border-color: var(--agua);
+    transform: scale(1.05);
+}
+.time-slot.taken {
+    background: rgba(200, 200, 200, 0.2);
+    color: rgba(36, 67, 106, 0.4);
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+.time-slot.selected {
+    background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
+    color: var(--tiza);
+    border-color: var(--profundo);
+}
+
+/* ========================================
+   FORMULARIO DE RESERVA
+   ======================================== */
+.appointment-form {
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
+    border: 1px solid rgba(148, 209, 216, 0.2);
+}
+.appointment-form h4 {
+    font-family: var(--font-principal);
+    color: var(--profundo);
+    margin-bottom: var(--spacing-xs);
+}
+.form-subtitle {
+    color: var(--oceano);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-sm);
+}
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--profundo);
+    margin-bottom: 0.4rem;
+}
+.form-group .required {
+    color: #c44;
+}
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid rgba(148, 209, 216, 0.3);
+    border-radius: 10px;
+    font-family: var(--font-secundaria);
+    font-size: 0.95rem;
+    color: var(--profundo);
+    transition: var(--transition-fast);
+    background: var(--tiza);
+}
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--agua);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(148, 209, 216, 0.1);
+}
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Resumen del turno */
+.appointment-summary {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: linear-gradient(135deg, rgba(148, 209, 216, 0.1) 0%, rgba(148, 209, 216, 0.05) 100%);
+    border-radius: 10px;
+    margin: var(--spacing-md) 0;
+    border: 1px solid rgba(148, 209, 216, 0.3);
+}
+.appointment-summary i {
+    width: 24px;
+    height: 24px;
+    color: var(--profundo);
+    flex-shrink: 0;
+}
+.appointment-summary span {
+    font-size: 0.95rem;
+    color: var(--profundo);
+    font-weight: 500;
+}
+
+/* Botones del formulario */
+.form-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+.form-actions .btn {
+    flex: 1;
+    margin: 0;
+}
+
 
 /* ========================================
    SECCIÓN CONTACTO
@@ -1384,6 +1697,40 @@ section {
         min-width: 100%;
         margin: 0;
     }
+    .appointments-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .calendar-wrapper {
+        padding: var(--spacing-sm);
+    }
+    
+    .calendar-month {
+        font-size: 1.1rem;
+    }
+    
+    .calendar-weekdays div {
+        font-size: 0.7rem;
+        padding: 0.3rem 0;
+    }
+    
+    .calendar-day {
+        font-size: 0.85rem;
+    }
+    
+    .time-slots {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .appointments-placeholder {
+        min-height: 300px;
+        padding: var(--spacing-md);
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+
 }
 
 /* ========================================
@@ -1401,3 +1748,232 @@ section {
     }
 }
 
+/* ========================================
+   SECCIÓN CONTACTO
+   ======================================== */
+.contact-section {
+    background: linear-gradient(180deg, var(--tiza) 0%, var(--arena) 100%);
+    padding: var(--spacing-xl) 0;
+}
+.contact-section h2 {
+    text-align: center;
+    color: var(--profundo);
+    margin-bottom: var(--spacing-xs);
+}
+.contact-section .section-subtitle {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Container dividido en 2 columnas */
+.contact-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ========================================
+   MAPA - COLUMNA IZQUIERDA
+   ======================================== */
+.contact-map {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
+    border: 1px solid rgba(148, 209, 216, 0.2);
+    min-height: 500px;
+}
+
+.map-container {
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+}
+
+/* Placeholder del mapa (mientras no está la API) */
+.map-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-lg);
+    background: linear-gradient(135deg, 
+        rgba(148, 209, 216, 0.1) 0%, 
+        rgba(233, 222, 203, 0.3) 100%
+    );
+}
+.map-placeholder i {
+    width: 64px;
+    height: 64px;
+    color: var(--profundo);
+    margin-bottom: var(--spacing-md);
+}
+.map-placeholder p {
+    font-size: 1.15rem;
+    color: var(--profundo);
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.6;
+}
+.map-placeholder small {
+    color: var(--oceano);
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+/* Ocultar placeholder cuando el mapa carga */
+.map-container.loaded + .map-placeholder {
+    display: none;
+}
+
+/* ========================================
+   INFO DE CONTACTO - COLUMNA DERECHA
+   ======================================== */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.contact-card {
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(5, 73, 84, 0.08);
+    border: 1px solid rgba(148, 209, 216, 0.2);
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+    transition: var(--transition-fast);
+}
+.contact-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(5, 73, 84, 0.12);
+}
+
+.contact-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--agua) 0%, rgba(148, 209, 216, 0.6) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: var(--transition-fast);
+}
+.contact-card:hover .contact-icon {
+    transform: scale(1.1) rotate(5deg);
+    background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
+}
+.contact-icon i {
+    width: 24px;
+    height: 24px;
+    color: var(--profundo);
+    transition: var(--transition-fast);
+}
+.contact-card:hover .contact-icon i {
+    color: var(--tiza);
+}
+
+/* Ícono de WhatsApp con color especial */
+.contact-icon.whatsapp {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+}
+.contact-icon.whatsapp i {
+    color: white;
+}
+.contact-card:hover .contact-icon.whatsapp {
+    background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+}
+
+.contact-content {
+    flex: 1;
+}
+.contact-content h3 {
+    font-family: var(--font-principal);
+    color: var(--profundo);
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-xs);
+}
+.contact-content p {
+    color: var(--oceano);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-xs);
+}
+
+.contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--profundo);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition-fast);
+    margin-top: var(--spacing-xs);
+}
+.contact-link:hover {
+    color: var(--oceano);
+    gap: 0.75rem;
+}
+.contact-link i {
+    width: 16px;
+    height: 16px;
+    transition: var(--transition-fast);
+}
+
+/* Link de WhatsApp con color especial */
+.whatsapp-link {
+    color: #25D366;
+    font-weight: 600;
+}
+.whatsapp-link:hover {
+    color: #128C7E;
+}
+
+/* ========================================
+   RESPONSIVE CONTACTO
+   ======================================== */
+@media (max-width: 768px) {
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-map {
+        min-height: 350px;
+        order: 2;
+    }
+    
+    .map-container {
+        min-height: 350px;
+    }
+    
+    .contact-info {
+        order: 1;
+    }
+    
+    .contact-card {
+        padding: var(--spacing-sm);
+    }
+    
+    .contact-icon {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .contact-icon i {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .contact-content h3 {
+        font-size: 1.1rem;
+    }
+}
