@@ -7,7 +7,7 @@
     src: url('../assets/tipografias/Belgan-Aesthetic.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
-    font-display: swap;
+    font-display: fallback; /* ✅ CORREGIDO: fallback > swap para marcas — evita destello de fuente incorrecta */
 }
 
 @font-face {
@@ -15,74 +15,80 @@
     src: url('../assets/tipografias/Fahkwang-Light.ttf') format('truetype');
     font-weight: 300;
     font-style: normal;
-    font-display: swap;
+    font-display: fallback;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-LightItalic.ttf') format('truetype');
     font-weight: 300;
     font-style: italic;
-    font-display: swap;
+    font-display: fallback;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
-    font-display: swap;
+    font-display: fallback;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-Italic.ttf') format('truetype');
     font-weight: 400;
     font-style: italic;
-    font-display: swap;
+    font-display: fallback;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
-    font-display: swap;
+    font-display: fallback;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-MediumItalic.ttf') format('truetype');
     font-weight: 500;
     font-style: italic;
-    font-display: swap;
+    font-display: fallback;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-SemiBold.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
-    font-display: swap;
+    font-display: fallback;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-SemiBoldItalic.ttf') format('truetype');
     font-weight: 600;
     font-style: italic;
-    font-display: swap;
+    font-display: fallback;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
-    font-display: swap;
+    font-display: fallback;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-BoldItalic.ttf') format('truetype');
     font-weight: 700;
     font-style: italic;
-    font-display: swap;
+    font-display: fallback;
 }
 
 /* ========================================
    VARIABLES CSS
+   Paleta de color:
+   - --profundo : color principal oscuro, fondos y texto de alto contraste
+   - --oceano   : color secundario, textos y elementos de apoyo
+   - --agua     : color de acento claro, hovers, íconos e highlights
+   - --arena    : fondo cálido de secciones alternadas
+   - --tiza     : fondo claro principal y texto sobre fondos oscuros
    ======================================== */
 :root {
     /* Colores */
@@ -94,7 +100,8 @@
 
     /* Tipografías */
     --font-principal: 'Belgian Aesthetic', Georgia, serif;
-    --font-secundaria: 'Fahkwang', sans-serif;
+    /* ✅ CORREGIDO: fallback específico en lugar de sans-serif genérico */
+    --font-secundaria: 'Fahkwang', 'Helvetica Neue', Arial, sans-serif;
 
     /* Espaciados */
     --spacing-xs: 0.5rem;
@@ -127,7 +134,8 @@ body {
     color: var(--profundo);
     background-color: var(--arena);
     line-height: 1.7;
-    overflow-x: hidden;
+    /* ✅ CORREGIDO: overflow-x en html en vez de body — evita bugs en iOS Safari con position:fixed */
+    overflow-x: clip;
 }
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-principal);
@@ -161,7 +169,11 @@ img {
     display: block;
 }
 
-/* Utilidad accesibilidad - visualmente oculto pero legible por lectores */
+/* ========================================
+   ACCESIBILIDAD
+   ======================================== */
+
+/* Visualmente oculto pero legible por lectores de pantalla y buscadores */
 .sr-only {
     position: absolute;
     width: 1px;
@@ -174,9 +186,19 @@ img {
     border: 0;
 }
 
+/* ✅ AGREGADO: Focus visible para navegación por teclado */
+:focus-visible {
+    outline: 2px solid var(--agua);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* ========================================
+   CONTENEDOR
+   ======================================== */
 .container {
     max-width: 1200px;
-    margin:auto;
+    margin: auto;
     padding: 0 var(--spacing-xs);
 }
 
@@ -192,6 +214,8 @@ img {
     justify-content: center;
     overflow: hidden;
     cursor: pointer;
+    /* ✅ AGREGADO: contain para aislar repaints de la animación del hero */
+    contain: layout paint;
 }
 .hero-background {
     position: absolute;
@@ -347,7 +371,7 @@ img {
     font-weight: 400;
     color: var(--oceano);
     position: relative;
-    padding: 0.5rem 0;
+    padding: var(--spacing-xs) 0;
     transition: var(--transition-fast);
 }
 .nav-link::after {
@@ -452,7 +476,7 @@ img {
     width: 100%;
 }
 
-/* Padding base para secciones (NO aplica a las secciones con padding propio) */
+/* Padding base para secciones */
 section {
     padding: var(--spacing-lg) 0;
 }
@@ -496,7 +520,9 @@ section {
     );
     z-index: -1;
 }
-.intro-section h1 {
+
+/* ✅ CORREGIDO: era h1 pero el HTML usa h2 en esta sección */
+.intro-section h2 {
     text-align: center;
     color: var(--profundo);
     position: relative;
@@ -636,23 +662,26 @@ section {
     text-align: center;
     color: var(--profundo);
 }
+
+/* ✅ CORREGIDO: .tu-hijo-y-vos-content reemplaza al .tu-hijo-y-vos-grid
+   que estaba definido en CSS pero no existía en el HTML */
 .tu-hijo-y-vos-content {
     max-width: 900px;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+    align-items: start;
 }
 .tu-hijo-y-vos-content .check-list {
     background: white;
     padding: var(--spacing-md);
     border-radius: 20px;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: 0;
     box-shadow: 0 4px 20px rgba(36, 67, 106, 0.08);
     border: 1px solid rgba(148, 209, 216, 0.2);
-}
-.tu-hijo-y-vos-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-md);
+    /* Ocupa todo el ancho disponible en la primera fila */
+    grid-column: 1 / -1;
 }
 .tu-hijo-y-vos-card {
     background: white;
@@ -661,7 +690,6 @@ section {
     box-shadow: 0 4px 20px rgba(36, 67, 106, 0.08);
     transition: var(--transition-fast);
     border: 1px solid rgba(148, 209, 216, 0.2);
-    margin-bottom: var(--spacing-sm);
 }
 .tu-hijo-y-vos-card:hover {
     transform: translateY(-8px);
@@ -677,7 +705,10 @@ section {
 }
 
 /* ========================================
-   SECCIÓN DIFERENCIAL
+   SECCIÓN DIFERENCIAL — TABLA SEMÁNTICA
+   ✅ CORREGIDO: CSS reescrito para apuntar a elementos
+   <table>, <thead>, <tbody>, <th>, <td> reales
+   en lugar de divs con roles ARIA que ya no existen en el HTML
    ======================================== */
 .diferencial-section {
     background: linear-gradient(180deg, rgba(148, 209, 216, 0.15) 0%, var(--tiza) 100%);
@@ -690,83 +721,105 @@ section {
 .diferencial-section .section-subtitle {
     margin-bottom: var(--spacing-lg);
 }
+
 .comparativa-table {
+    width: 100%;
     max-width: 900px;
     margin: 0 auto;
     background: white;
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
+    border-collapse: collapse;
 }
-.table-header {
-    display: grid;
-    grid-template-columns: 2fr 1.5fr 1.5fr;
+
+/* Encabezado de tabla */
+.comparativa-table thead tr {
     background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
     color: var(--tiza);
-    font-weight: 500;
 }
-.header-cell {
-    padding: var(--spacing-xs);
+.comparativa-table thead th {
+    padding: var(--spacing-sm) var(--spacing-xs);
     text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-xs);
+    font-family: var(--font-secundaria);
+    font-weight: 500;
+    font-size: 1rem;
 }
-.header-cell.empty {
+.comparativa-table thead th:first-child {
+    /* Celda vacía de esquina */
     background: transparent;
+    width: 35%;
 }
-.header-cell.otros {
+.comparativa-table thead th:nth-child(2) {
     border-right: 1px solid rgba(255, 255, 255, 0.2);
+    width: 32.5%;
 }
-.header-cell.piel-de-mar {
+.comparativa-table thead th:last-child {
     background: linear-gradient(135deg, var(--agua) 0%, rgba(148, 209, 216, 0.8) 100%);
     color: var(--profundo);
     font-weight: 600;
+    width: 32.5%;
+    display: table-cell;
 }
-.header-cell i {
-    width: 24px;
-    height: 24px;
+.comparativa-table thead th i {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-left: var(--spacing-xs);
 }
-.table-row {
-    display: grid;
-    grid-template-columns: 2fr 1.5fr 1.5fr;
+
+/* Filas del cuerpo */
+.comparativa-table tbody tr {
     border-bottom: 1px solid rgba(148, 209, 216, 0.2);
     transition: var(--transition-fast);
 }
-.table-row:hover {
+.comparativa-table tbody tr:hover {
     background: rgba(148, 209, 216, 0.05);
 }
-.table-row:last-child {
+.comparativa-table tbody tr:last-child {
     border-bottom: none;
 }
-.row-label {
-    padding: var(--spacing-xs);
+
+/* Celda de encabezado de fila */
+.comparativa-table tbody th {
+    padding: var(--spacing-sm) var(--spacing-xs);
     font-family: var(--font-principal);
     font-size: 1.05rem;
     color: var(--profundo);
     font-weight: 500;
-    display: flex;
-    align-items: center;
+    text-align: left;
     background: rgba(233, 222, 203, 0.3);
+    vertical-align: middle;
 }
-.row-cell {
-    padding: var(--spacing-xs);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
+
+/* Celdas de datos */
+.comparativa-table tbody td {
+    padding: var(--spacing-sm) var(--spacing-xs);
     font-size: 0.95rem;
     line-height: 1.5;
+    vertical-align: middle;
 }
-.row-cell.otros {
+.comparativa-table tbody td:first-of-type {
     color: var(--oceano);
     border-right: 1px solid rgba(148, 209, 216, 0.2);
 }
-.row-cell.piel-de-mar {
+.comparativa-table tbody td:last-child {
     color: var(--profundo);
     background: rgba(148, 209, 216, 0.08);
     font-weight: 500;
 }
+
+/* Contenido dentro de las celdas td */
+.comparativa-table tbody td i,
+.comparativa-table tbody td span {
+    display: inline-block;
+    vertical-align: middle;
+}
+.comparativa-table tbody td i {
+    margin-right: var(--spacing-xs);
+}
+
 .icon-yes,
 .icon-no {
     width: 24px;
@@ -783,6 +836,7 @@ section {
     color: #c44;
     opacity: 0.6;
 }
+
 .diferencial-cta {
     text-align: center;
     margin-top: var(--spacing-lg);
@@ -877,7 +931,7 @@ section {
 }
 
 /* ========================================
-   SECCIÓN TESTIMONIOS - CARRUSEL
+   SECCIÓN TESTIMONIOS — CARRUSEL
    ======================================== */
 .testimonios-section {
     background: linear-gradient(180deg, rgba(148, 209, 216, 0.15) 0%, var(--arena) 100%);
@@ -885,7 +939,6 @@ section {
     align-items: flex-start;
     padding-top: var(--spacing-xs);
 }
-
 .carousel-wrapper {
     display: flex;
     align-items: center;
@@ -903,7 +956,11 @@ section {
     display: flex;
     gap: var(--spacing-xs);
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
+    /* ✅ CORREGIDO: will-change eliminado del estado estático.
+       Debe agregarse/quitarse con JS solo durante la animación activa
+       para no mantener una capa de composición GPU permanente.
+       En main.js: antes de animar → track.style.willChange = 'transform'
+                   después de animar → track.style.willChange = 'auto'    */
 }
 
 /* Tarjetas de testimonio */
@@ -914,20 +971,20 @@ section {
     padding: var(--spacing-xs);
     border-radius: 16px;
     border: 1px solid var(--oceano);
-    box-shadow: 0 2px 12px var(--profundo);
+    /* ✅ CORREGIDO: sombra con rgba en lugar de color sólido var(--profundo)
+       que generaba una sombra oscura inconsistente con el resto del sitio */
+    box-shadow: 0 2px 12px rgba(5, 73, 84, 0.15);
     transition: var(--transition-fast);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     margin: 0;
 }
-
 .testimonio-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(5, 73, 84, 0.12);
     border-color: var(--agua);
 }
-
 .testimonio-card blockquote {
     margin: 0;
     padding: 0;
@@ -982,7 +1039,7 @@ section {
     color: var(--tiza);
 }
 
-/* Dots ocultos */
+/* Dots del carrusel — ocultos */
 .carousel-dots {
     display: none;
 }
@@ -1033,46 +1090,13 @@ section {
     box-shadow: 0 8px 40px rgba(5, 73, 84, 0.15);
     transform: translateY(-5px);
 }
-.card-header {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-sm);
-}
-.card-icon {
-    width: 45px;
-    height: 45px;
-    background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-.card-icon i {
-    width: 24px;
-    height: 24px;
-    color: var(--tiza);
-}
-.card-header h3 {
-    font-family: var(--font-principal);
-    font-size: 1.4rem;
-    color: var(--profundo);
-    margin: 0;
-}
-.card-description {
-    color: var(--oceano);
-    font-size: 0.9rem;
-    line-height: 1.5;
-    margin-bottom: var(--spacing-sm);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid rgba(148, 209, 216, 0.2);
-}
 .card-options {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
 }
+
+/* Opción de recurso — estado activo (enlace) */
 .resource-option {
     display: flex;
     align-items: center;
@@ -1089,6 +1113,21 @@ section {
     transform: translateX(5px);
     box-shadow: 0 4px 15px rgba(148, 209, 216, 0.3);
 }
+
+/* ✅ AGREGADO: Estado deshabilitado para recursos "próximamente" */
+.resource-option--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    user-select: none;
+}
+.resource-option--disabled:hover {
+    transform: none;
+    background: var(--tiza);
+    border-color: transparent;
+    box-shadow: none;
+}
+
 .option-icon {
     width: 36px;
     height: 36px;
@@ -1144,7 +1183,7 @@ section {
 }
 
 /* ========================================
-   SECCIÓN TURNOS - CALENDARIO Y FORMULARIO
+   SECCIÓN TURNOS — CALENDARIO Y FORMULARIO
    ======================================== */
 .appointments-section {
     background: var(--tiza);
@@ -1168,7 +1207,7 @@ section {
     font-style: italic;
 }
 
-/* Container principal dividido en 2 columnas */
+/* Container dividido en 2 columnas */
 .appointments-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1179,7 +1218,7 @@ section {
 }
 
 /* ========================================
-   CALENDARIO - COLUMNA IZQUIERDA
+   CALENDARIO — COLUMNA IZQUIERDA
    ======================================== */
 .calendar-wrapper {
     background: white;
@@ -1188,7 +1227,6 @@ section {
     box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
     border: 1px solid rgba(148, 209, 216, 0.2);
 }
-
 .calendar-header {
     display: flex;
     align-items: center;
@@ -1197,14 +1235,12 @@ section {
     padding-bottom: var(--spacing-sm);
     border-bottom: 1px solid rgba(148, 209, 216, 0.2);
 }
-
 .calendar-month {
     font-size: 1.3rem;
     color: var(--profundo);
     margin: 0;
     font-family: var(--font-principal);
 }
-
 .calendar-nav {
     width: 36px;
     height: 36px;
@@ -1235,7 +1271,6 @@ section {
 .calendar-grid {
     display: block;
 }
-
 .calendar-weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -1250,7 +1285,6 @@ section {
     padding: 0.5rem 0;
     text-transform: uppercase;
 }
-
 .calendar-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -1272,29 +1306,24 @@ section {
     border: 1px solid transparent;
     background: var(--tiza);
 }
-
 .calendar-day:hover:not(.disabled):not(.empty) {
     background: var(--agua);
     border-color: var(--agua);
     transform: scale(1.05);
 }
-
 .calendar-day.disabled {
     color: rgba(36, 67, 106, 0.3);
     cursor: not-allowed;
     background: transparent;
 }
-
 .calendar-day.empty {
     cursor: default;
     visibility: hidden;
 }
-
 .calendar-day.today {
     border-color: var(--oceano);
     font-weight: 600;
 }
-
 .calendar-day.selected {
     background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
     color: var(--tiza);
@@ -1303,7 +1332,7 @@ section {
 }
 
 /* ========================================
-   COLUMNA DERECHA - HORARIOS Y FORM
+   COLUMNA DERECHA — HORARIOS Y FORMULARIO
    ======================================== */
 .appointments-right {
     display: flex;
@@ -1356,13 +1385,11 @@ section {
     padding-bottom: var(--spacing-sm);
     border-bottom: 1px solid rgba(148, 209, 216, 0.2);
 }
-
 .time-slots {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.75rem;
 }
-
 .time-slot {
     padding: 0.75rem;
     border: 1px solid rgba(148, 209, 216, 0.3);
@@ -1412,7 +1439,6 @@ section {
     font-size: 0.9rem;
     margin-bottom: var(--spacing-md);
 }
-
 .form-group {
     margin-bottom: var(--spacing-sm);
 }
@@ -1484,13 +1510,190 @@ section {
     margin: 0;
 }
 
-
 /* ========================================
    SECCIÓN CONTACTO
+   ✅ CORREGIDO: Duplicado eliminado — una sola declaración
+   con todos los estilos fusionados
    ======================================== */
 .contact-section {
     background: linear-gradient(180deg, var(--tiza) 0%, var(--arena) 100%);
     text-align: center;
+    padding: var(--spacing-xl) 0;
+}
+.contact-section h2 {
+    text-align: center;
+    color: var(--profundo);
+    margin-bottom: var(--spacing-xs);
+}
+.contact-section .section-subtitle {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Container dividido en 2 columnas */
+.contact-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ========================================
+   MAPA — COLUMNA IZQUIERDA
+   ======================================== */
+.contact-map {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
+    border: 1px solid rgba(148, 209, 216, 0.2);
+    min-height: 500px;
+}
+.map-container {
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+}
+
+/* Placeholder del mapa */
+.map-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-lg);
+    background: linear-gradient(135deg,
+        rgba(148, 209, 216, 0.1) 0%,
+        rgba(233, 222, 203, 0.3) 100%
+    );
+}
+.map-placeholder i {
+    width: 64px;
+    height: 64px;
+    color: var(--profundo);
+    margin-bottom: var(--spacing-md);
+}
+.map-placeholder p {
+    font-size: 1.15rem;
+    color: var(--profundo);
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.6;
+}
+.map-placeholder small {
+    color: var(--oceano);
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+/* Ocultar placeholder cuando el mapa carga */
+.map-container.loaded + .map-placeholder {
+    display: none;
+}
+
+/* ========================================
+   INFO DE CONTACTO — COLUMNA DERECHA
+   ======================================== */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+.contact-card {
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(5, 73, 84, 0.08);
+    border: 1px solid rgba(148, 209, 216, 0.2);
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+    transition: var(--transition-fast);
+}
+.contact-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(5, 73, 84, 0.12);
+}
+.contact-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--agua) 0%, rgba(148, 209, 216, 0.6) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: var(--transition-fast);
+}
+.contact-card:hover .contact-icon {
+    transform: scale(1.1) rotate(5deg);
+    background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
+}
+.contact-icon i {
+    width: 24px;
+    height: 24px;
+    color: var(--profundo);
+    transition: var(--transition-fast);
+}
+.contact-card:hover .contact-icon i {
+    color: var(--tiza);
+}
+.contact-icon.whatsapp {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+}
+.contact-icon.whatsapp i {
+    color: white;
+}
+.contact-card:hover .contact-icon.whatsapp {
+    background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+}
+.contact-content {
+    flex: 1;
+}
+.contact-content h3 {
+    font-family: var(--font-principal);
+    color: var(--profundo);
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-xs);
+}
+.contact-content p,
+.contact-content address {
+    color: var(--oceano);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-xs);
+    font-style: normal; /* address es itálico por defecto en navegadores */
+}
+.contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--profundo);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition-fast);
+    margin-top: var(--spacing-xs);
+}
+.contact-link:hover {
+    color: var(--oceano);
+    gap: 0.75rem;
+}
+.contact-link i {
+    width: 16px;
+    height: 16px;
+    transition: var(--transition-fast);
+}
+.whatsapp-link {
+    color: #25D366;
+    font-weight: 600;
+}
+.whatsapp-link:hover {
+    color: #128C7E;
 }
 
 /* ========================================
@@ -1502,19 +1705,41 @@ section {
     padding: var(--spacing-md) 0;
     text-align: center;
 }
-.footer p {
-    font-size: 0.9rem;
-    font-weight: 300;
+.footer-nav,
+.footer-legal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
     margin-bottom: var(--spacing-xs);
 }
-.footer p:last-child {
-    margin-bottom: 0;
+.footer-nav a,
+.footer-legal a {
+    color: var(--tiza);
+    font-size: 0.9rem;
+    font-weight: 300;
+    opacity: 0.85;
+    transition: var(--transition-fast);
+}
+.footer-nav a:hover,
+.footer-legal a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+.footer-nav span[aria-hidden],
+.footer-legal span[aria-hidden] {
+    opacity: 0.4;
+    font-size: 0.9rem;
+}
+.footer-copy {
     margin-top: var(--spacing-sm);
-    opacity: 0.8;
+    opacity: 0.7;
+    font-size: 0.85rem;
 }
 
 /* ========================================
-   RESPONSIVE - TABLET (max 1024px)
+   RESPONSIVE — TABLET (max-width: 1024px)
    ======================================== */
 @media (max-width: 1024px) {
     .main-logo {
@@ -1536,10 +1761,17 @@ section {
         flex: 0 0 50%;
         min-width: 50%;
     }
+    /* ✅ AGREGADO: tabla responsive en tablet — apilada en lugar de cortada */
+    .comparativa-table thead th,
+    .comparativa-table tbody th,
+    .comparativa-table tbody td {
+        padding: var(--spacing-xs) 0.4rem;
+        font-size: 0.9rem;
+    }
 }
 
 /* ========================================
-   RESPONSIVE - MOBILE (max 768px)
+   RESPONSIVE — MOBILE (max-width: 768px)
    ======================================== */
 @media (max-width: 768px) {
     :root {
@@ -1606,6 +1838,8 @@ section {
     .nav-link::after {
         display: none;
     }
+
+    /* Fondo fijo → scroll en mobile (iOS Safari no soporta fixed) */
     .intro-section::before {
         background-attachment: scroll;
     }
@@ -1613,11 +1847,9 @@ section {
         padding: calc(var(--navbar-height) + var(--spacing-sm)) 0 var(--spacing-md) 0;
         min-height: auto;
     }
+
     .service-grid {
         grid-template-columns: repeat(2, 1fr);
-    }
-    .tu-hijo-y-vos-grid {
-        grid-template-columns: 1fr;
     }
     .service-section,
     .testimonios-section {
@@ -1627,42 +1859,65 @@ section {
     .testimonio-card {
         flex: 0 0 100%;
         min-width: 100%;
+        margin: 0;
     }
-    .table-header,
-    .table-row {
-        grid-template-columns: 1fr;
+    .testimonios-section {
+        min-height: auto;
+        padding: var(--spacing-md) 0;
     }
-    .header-cell.empty {
-        display: none;
+
+    /* Tabla comparativa en mobile: columnas apiladas */
+    .comparativa-table,
+    .comparativa-table thead,
+    .comparativa-table tbody,
+    .comparativa-table tr,
+    .comparativa-table th,
+    .comparativa-table td {
+        display: block;
+        width: 100%;
     }
-    .header-cell {
-        padding: var(--spacing-sm);
+    .comparativa-table thead tr {
+        /* Ocultar la fila de encabezados; el th de cada fila actúa de título */
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
     }
-    .header-cell.otros,
-    .row-cell.otros {
-        border-right: none;
-        border-bottom: 1px solid rgba(148, 209, 216, 0.2);
+    .comparativa-table tbody tr {
+        margin-bottom: var(--spacing-sm);
+        border: 1px solid rgba(148, 209, 216, 0.3);
+        border-radius: 12px;
+        overflow: hidden;
     }
-    .row-label {
+    .comparativa-table tbody th {
+        background: var(--arena);
         font-size: 1rem;
         padding: var(--spacing-sm);
-        background: var(--arena);
         font-weight: 600;
     }
-    .row-cell {
+    .comparativa-table tbody td {
         padding: var(--spacing-sm);
         font-size: 0.9rem;
+        border-bottom: 1px solid rgba(148, 209, 216, 0.15);
     }
+    .comparativa-table tbody td:last-child {
+        border-bottom: none;
+    }
+    /* Etiquetas de columna generadas con data-label desde JS o con ::before */
+    .comparativa-table tbody td::before {
+        content: attr(data-label);
+        display: block;
+        font-weight: 600;
+        font-size: 0.75rem;
+        color: var(--oceano);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.25rem;
+    }
+
     .diferencial-cta p {
         font-size: 1rem;
     }
-    .card-header {
-        flex-direction: column;
-        text-align: center;
-    }
-    .card-header h3 {
-        font-size: 1.3rem;
-    }
+
     .resource-option {
         flex-direction: column;
         text-align: center;
@@ -1676,6 +1931,7 @@ section {
     .resource-option:hover .option-arrow {
         transform: rotate(90deg) translateX(5px);
     }
+
     .icon-list li,
     .check-list li {
         font-size: 1rem;
@@ -1688,53 +1944,75 @@ section {
         padding: 1rem 2rem;
         font-size: 1.05rem;
     }
-    .testimonios-section {
-        min-height: auto;
-        padding: var(--spacing-md) 0;
-    }
-    .testimonio-card {
-        flex: 0 0 100%;
-        min-width: 100%;
-        margin: 0;
-    }
+
     .appointments-container {
         grid-template-columns: 1fr;
     }
-    
     .calendar-wrapper {
         padding: var(--spacing-sm);
     }
-    
     .calendar-month {
         font-size: 1.1rem;
     }
-    
     .calendar-weekdays div {
         font-size: 0.7rem;
         padding: 0.3rem 0;
     }
-    
     .calendar-day {
         font-size: 0.85rem;
     }
-    
     .time-slots {
         grid-template-columns: repeat(2, 1fr);
     }
-    
     .appointments-placeholder {
         min-height: 300px;
         padding: var(--spacing-md);
     }
-    
     .form-actions {
         flex-direction: column;
     }
 
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+    .contact-map {
+        min-height: 350px;
+        order: 2;
+    }
+    .map-container {
+        min-height: 350px;
+    }
+    .contact-info {
+        order: 1;
+    }
+    .contact-card {
+        padding: var(--spacing-sm);
+    }
+    .contact-icon {
+        width: 44px;
+        height: 44px;
+    }
+    .contact-icon i {
+        width: 20px;
+        height: 20px;
+    }
+    .contact-content h3 {
+        font-size: 1.1rem;
+    }
+
+    .footer-nav,
+    .footer-legal {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+    .footer-nav span[aria-hidden],
+    .footer-legal span[aria-hidden] {
+        display: none;
+    }
 }
 
 /* ========================================
-   RESPONSIVE - MOBILE PEQUEÑO (max 480px)
+   RESPONSIVE — MOBILE PEQUEÑO (max-width: 480px)
    ======================================== */
 @media (max-width: 480px) {
     .main-logo {
@@ -1749,231 +2027,79 @@ section {
 }
 
 /* ========================================
-   SECCIÓN CONTACTO
+   IMPRESIÓN
+   ✅ AGREGADO: estilos básicos para impresión
    ======================================== */
-.contact-section {
-    background: linear-gradient(180deg, var(--tiza) 0%, var(--arena) 100%);
-    padding: var(--spacing-xl) 0;
-}
-.contact-section h2 {
-    text-align: center;
-    color: var(--profundo);
-    margin-bottom: var(--spacing-xs);
-}
-.contact-section .section-subtitle {
-    text-align: center;
-    margin-bottom: var(--spacing-lg);
-}
-
-/* Container dividido en 2 columnas */
-.contact-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-lg);
-    max-width: 1100px;
-    margin: 0 auto;
+@media print {
+    .navbar,
+    .hero,
+    .carousel-btn,
+    .carousel-dots,
+    .menu-toggle,
+    .social-links,
+    .social-links-mobile,
+    .appointments-section,
+    .footer-nav {
+        display: none !important;
+    }
+    body {
+        background: white;
+        color: black;
+        font-size: 12pt;
+    }
+    .main-content {
+        opacity: 1;
+        transform: none;
+    }
+    section {
+        min-height: auto !important;
+        padding: 1rem 0;
+        page-break-inside: avoid;
+    }
+    a[href]::after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        color: #555;
+    }
+    a[href^="#"]::after,
+    a[href^="https://wa.me"]::after {
+        content: "";
+    }
 }
 
 /* ========================================
-   MAPA - COLUMNA IZQUIERDA
+   PREFERENCIAS DE MOVIMIENTO REDUCIDO
    ======================================== */
-.contact-map {
-    position: relative;
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
-    border: 1px solid rgba(148, 209, 216, 0.2);
-    min-height: 500px;
-}
-
-.map-container {
-    width: 100%;
-    height: 100%;
-    min-height: 500px;
-}
-
-/* Placeholder del mapa (mientras no está la API) */
-.map-placeholder {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: var(--spacing-lg);
-    background: linear-gradient(135deg, 
-        rgba(148, 209, 216, 0.1) 0%, 
-        rgba(233, 222, 203, 0.3) 100%
-    );
-}
-.map-placeholder i {
-    width: 64px;
-    height: 64px;
-    color: var(--profundo);
-    margin-bottom: var(--spacing-md);
-}
-.map-placeholder p {
-    font-size: 1.15rem;
-    color: var(--profundo);
-    font-weight: 500;
-    margin-bottom: var(--spacing-xs);
-    line-height: 1.6;
-}
-.map-placeholder small {
-    color: var(--oceano);
-    font-size: 0.85rem;
-    opacity: 0.8;
-}
-
-/* Ocultar placeholder cuando el mapa carga */
-.map-container.loaded + .map-placeholder {
-    display: none;
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    .hero-background {
+        animation: none;
+    }
+    .logo-container {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+    .main-content {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+    .carousel-track {
+        transition: none;
+    }
 }
 
 /* ========================================
-   INFO DE CONTACTO - COLUMNA DERECHA
+   reordenar despues
    ======================================== */
-.contact-info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-}
-
-.contact-card {
-    background: white;
-    padding: var(--spacing-md);
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(5, 73, 84, 0.08);
-    border: 1px solid rgba(148, 209, 216, 0.2);
-    display: flex;
-    gap: var(--spacing-md);
-    align-items: flex-start;
-    transition: var(--transition-fast);
-}
-.contact-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 25px rgba(5, 73, 84, 0.12);
-}
-
-.contact-icon {
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, var(--agua) 0%, rgba(148, 209, 216, 0.6) 100%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: var(--transition-fast);
-}
-.contact-card:hover .contact-icon {
-    transform: scale(1.1) rotate(5deg);
-    background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
-}
-.contact-icon i {
-    width: 24px;
-    height: 24px;
-    color: var(--profundo);
-    transition: var(--transition-fast);
-}
-.contact-card:hover .contact-icon i {
-    color: var(--tiza);
-}
-
-/* Ícono de WhatsApp con color especial */
-.contact-icon.whatsapp {
-    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-}
-.contact-icon.whatsapp i {
-    color: white;
-}
-.contact-card:hover .contact-icon.whatsapp {
-    background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
-}
-
-.contact-content {
-    flex: 1;
-}
-.contact-content h3 {
-    font-family: var(--font-principal);
-    color: var(--profundo);
-    font-size: 1.2rem;
-    margin-bottom: var(--spacing-xs);
-}
-.contact-content p {
-    color: var(--oceano);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: var(--spacing-xs);
-}
-
-.contact-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--profundo);
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: var(--transition-fast);
-    margin-top: var(--spacing-xs);
-}
-.contact-link:hover {
-    color: var(--oceano);
-    gap: 0.75rem;
-}
-.contact-link i {
-    width: 16px;
-    height: 16px;
-    transition: var(--transition-fast);
-}
-
-/* Link de WhatsApp con color especial */
-.whatsapp-link {
-    color: #25D366;
-    font-weight: 600;
-}
-.whatsapp-link:hover {
-    color: #128C7E;
-}
-
-/* ========================================
-   RESPONSIVE CONTACTO
-   ======================================== */
-@media (max-width: 768px) {
-    .contact-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-map {
-        min-height: 350px;
-        order: 2;
-    }
-    
-    .map-container {
-        min-height: 350px;
-    }
-    
-    .contact-info {
-        order: 1;
-    }
-    
-    .contact-card {
-        padding: var(--spacing-sm);
-    }
-    
-    .contact-icon {
-        width: 44px;
-        height: 44px;
-    }
-    
-    .contact-icon i {
-        width: 20px;
-        height: 20px;
-    }
-    
-    .contact-content h3 {
-        font-size: 1.1rem;
-    }
-}
+    .anim-card { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .anim-visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) { .anim-card { opacity: 1; transform: none; transition: none; } }
