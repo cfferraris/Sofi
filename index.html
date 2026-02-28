@@ -4,29 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
-    <meta name="description" content="Piel de Mar - Acompañamiento profesional en estimulación temprana, neurodesarrollo infantil y crianza respetuosa. Orientación para familias en Buenos Aires y de forma virtual.">
-    <meta name="keywords" content="estimulación temprana, neurodesarrollo infantil, crianza respetuosa, acompañamiento familiar, regulación emocional, desarrollo infantil">
+    <meta name="description" content="Piel de Mar - Acompañamiento profesional en estimulación temprana, neurodesarrollo infantil y crianza respetuosa. Orientación para familias en Esperanza, Santa Fe y de forma virtual.">
+    <meta name="keywords" content="estimulación temprana, neurodesarrollo infantil, crianza respetuosa, acompañamiento familiar, regulación emocional, desarrollo infantil, Esperanza Santa Fe">
     <meta name="author" content="Piel de Mar">
+    <meta name="theme-color" content="#4a5568">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' https://unpkg.com;
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data: https:;
+        font-src 'self';
+        connect-src 'self';
+        frame-src https://www.youtube.com https://www.google.com;
+        upgrade-insecure-requests;
+    ">
+
+    <link rel="alternate" hreflang="es-ar" href="https://www.pieldemar.com/">
 
     <!-- Canonical -->
     <link rel="canonical" href="https://www.pieldemar.com/">
+
+    <!-- Favicon -->
+    <link rel="icon" href="assets/img/logos/Isotipo2/Azul.png" type="image/png">
+    <link rel="apple-touch-icon" href="assets/img/logos/Isotipo2/Azul.png">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.pieldemar.com/">
     <meta property="og:site_name" content="Piel de Mar">
-    <meta property="og:title" content="Piel de Mar - Estimulación temprana y acompañamiento familiar">
-    <meta property="og:description" content="Acompañamiento profesional en estimulación temprana, neurodesarrollo y crianza respetuosa. Orientación para familias, con mirada integral y respeto por los tiempos de cada niño.">
+    <meta property="og:title" content="Piel de Mar | Estimulación Temprana · Esperanza, Santa Fe">
+    <meta property="og:description" content="Acompañamiento profesional en estimulación temprana, neurodesarrollo y crianza respetuosa. Orientación para familias en Esperanza, Santa Fe y de forma virtual.">
     <meta property="og:image" content="https://www.pieldemar.com/assets/img/logos/Isotipo2/Azul.png">
+    <!-- ✅ AGREGADO: dimensiones de imagen OG para previsualizadores -->
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
     <meta property="og:locale" content="es_AR">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Piel de Mar - Estimulación temprana y acompañamiento familiar">
-    <meta name="twitter:description" content="Acompañamiento profesional en estimulación temprana, neurodesarrollo y crianza respetuosa.">
+    <meta name="twitter:title" content="Piel de Mar | Estimulación Temprana · Esperanza, Santa Fe">
+    <meta name="twitter:description" content="Acompañamiento profesional en estimulación temprana, neurodesarrollo y crianza respetuosa en Esperanza, Santa Fe y de forma virtual.">
     <meta name="twitter:image" content="https://www.pieldemar.com/assets/img/logos/Isotipo2/Azul.png">
 
-    <title>Piel de Mar - Estimulación Temprana y Acompañamiento Familiar</title>
+    <!-- Título ajustado a ~60 caracteres para evitar truncado en Google -->
+
+    <title>Piel de Mar | Estimulación Temprana · Acompañando familias</title>
 
     <!-- Schema.org - Negocio local -->
     <script type="application/ld+json">
@@ -37,23 +60,47 @@
         "description": "Acompañamiento profesional en estimulación temprana, neurodesarrollo infantil y crianza respetuosa.",
         "url": "https://www.pieldemar.com",
         "logo": "https://www.pieldemar.com/assets/img/logos/Isotipo2/Azul.png",
+        "@id": "https://www.pieldemar.com/#negocio",
         "sameAs": [
             "https://www.instagram.com/pieldemar",
             "https://www.youtube.com/@pieldemar",
-            "https://www.facebook.com/pieldemar"
+            "https://www.facebook.com/pieldemar",
+            "https://www.twitch.tv/pieldemar",
+            "https://x.com/pieldemar"
         ],
         "serviceType": [
             "Estimulación temprana",
             "Neurodesarrollo infantil",
             "Acompañamiento emocional",
             "Acompañamiento familiar"
-        ]
+        ],
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Cullen 1619",
+            "addressLocality": "Esperanza",
+            "addressRegion": "Santa Fe",
+            "addressCountry": "AR"
+        },
+        "telephone": "+5493425004018",
+        "email": "contacto@pieldemar.com",
+        "openingHours": "Mo-Fr 09:00-18:00",
+        "hasMap": "https://www.google.com/maps/dir/?api=1&destination=Cullen+1619,+Esperanza,+Santa+Fe,+Argentina"
     }
     </script>
 
-    <!-- Lucide Icons - con defer para no bloquear renderizado -->
-    <script src="https://unpkg.com/lucide@latest" defer></script>
-
+    <!--Lucide con versión fija (no @latest) y URL correcta al archivo UMD.
+        IMPORTANTE: El hash SRI debe calcularse con:
+        curl -s https://unpkg.com/lucide@0.263.1/dist/umd/lucide.min.js | openssl dgst -sha384 -binary | openssl base64 -A
+        y reemplazar el valor de integrity antes de subir a producción.  -->
+    <!--<script 
+    src="https://unpkg.com/lucide@0.263.1/dist/umd/lucide.min.js"
+    integrity="sha384-cmdVzp/LNswnLRGK6j6+cMUsn7jTxO+fX9W5jw6A+4iaSvhkiSdj8/B9nJyBgtKQ"
+    crossorigin="anonymous"
+    defer>
+    </script>-->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" 
+    defer>
+    </script>
     <!-- CSS -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -63,13 +110,15 @@
     <section id="hero" class="hero" aria-label="Pantalla de inicio Piel de Mar">
         <div class="hero-background"></div>
         <div class="logo-container">
-            <img 
-                src="assets/img/logos/LogoPrincipal/Tiza.png" 
-                alt="Piel de Mar - Logo principal" 
-                id="mainLogo" 
+            <h1 class="sr-only">Piel de Mar — Estimulación Temprana y Acompañamiento Familiar en Esperanza, Santa Fe</h1>
+            <img
+                src="assets/img/logos/LogoPrincipal/Tiza.png"
+                alt="Piel de Mar - Logo principal"
+                id="mainLogo"
                 class="main-logo"
                 width="400"
                 height="200"
+                fetchpriority="high"
             >
         </div>
     </section>
@@ -81,23 +130,21 @@
             <!-- Logo isotipo -->
             <div class="navbar-logo">
                 <a href="#piel-de-mar" aria-label="Ir al inicio">
-                    <img 
-                        src="assets/img/logos/Isotipo2/Azul.png" 
-                        alt="Piel de Mar" 
+                    <img
+                        src="assets/img/logos/Isotipo2/Azul.png"
+                        alt="Piel de Mar"
                         class="isotipo"
                         width="50"
                         height="50"
                     >
                 </a>
             </div>
-
             <!-- Menú hamburguesa para mobile -->
             <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="navMenu">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
-
             <!-- Enlaces de navegación -->
             <ul class="nav-menu" id="navMenu" role="menubar">
                 <li role="none"><a href="#piel-de-mar" class="nav-link" role="menuitem">Piel de Mar</a></li>
@@ -111,40 +158,39 @@
                 <li class="nav-social-mobile" role="none">
                     <div class="social-links-mobile">
                         <a href="https://facebook.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Facebook">
-                            <img src="assets/icons/facebook.svg" alt="" width="28" height="28" aria-hidden="true">
+                            <img src="assets/icons/facebook.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
                         </a>
                         <a href="https://instagram.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Instagram">
-                            <img src="assets/icons/instagram.svg" alt="" width="28" height="28" aria-hidden="true">
+                            <img src="assets/icons/instagram.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
                         </a>
                         <a href="https://youtube.com/@pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Suscribite en YouTube">
-                            <img src="assets/icons/youtube.svg" alt="" width="28" height="28" aria-hidden="true">
+                            <img src="assets/icons/youtube.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
                         </a>
                         <a href="https://twitch.tv/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Twitch">
-                            <img src="assets/icons/twitch.svg" alt="" width="28" height="28" aria-hidden="true">
+                            <img src="assets/icons/twitch.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
                         </a>
                         <a href="https://x.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en X">
-                            <img src="assets/icons/x.svg" alt="" width="28" height="28" aria-hidden="true">
+                            <img src="assets/icons/x.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
                         </a>
                     </div>
                 </li>
             </ul>
-
             <!-- Redes sociales DESKTOP -->
             <div class="social-links" aria-label="Redes sociales">
                 <a href="https://facebook.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Facebook">
-                    <img src="assets/icons/facebook.svg" alt="" width="28" height="28" aria-hidden="true">
+                    <img src="assets/icons/facebook.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
                 </a>
                 <a href="https://instagram.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Instagram">
-                    <img src="assets/icons/instagram.svg" alt="" width="28" height="28" aria-hidden="true">
+                    <img src="assets/icons/instagram.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
                 </a>
                 <a href="https://youtube.com/@pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Suscribite en YouTube">
-                    <img src="assets/icons/youtube.svg" alt="" width="28" height="28" aria-hidden="true">
+                    <img src="assets/icons/youtube.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
                 </a>
                 <a href="https://twitch.tv/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Twitch">
-                    <img src="assets/icons/twitch.svg" alt="" width="28" height="28" aria-hidden="true">
+                    <img src="assets/icons/twitch.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
                 </a>
                 <a href="https://x.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en X">
-                    <img src="assets/icons/x.svg" alt="" width="28" height="28" aria-hidden="true">
+                    <img src="assets/icons/x.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
                 </a>
             </div>
         </div>
@@ -156,7 +202,7 @@
         <!-- Sección Piel de Mar -->
         <section id="piel-de-mar" class="intro-section" aria-labelledby="intro-heading">
             <div class="container">
-                <h1 id="intro-heading">Tal vez estás notando que…</h1>
+                <h2 id="intro-heading">Tal vez estás notando que…</h2>
                 <ul class="icon-list">
                     <li>Tu hijo se sobreestimula fácilmente ante ciertos estímulos</li>
                     <li>Le cuesta regular sus emociones o adaptarse a cambios</li>
@@ -168,7 +214,6 @@
                 <a href="#turnos" class="btn primary">Quiero orientación profesional</a>
             </div>
         </section>
-
         <!-- Sección Tu hij@ y vos -->
         <section id="tu-hijo-y-vos" class="tu-hijo-y-vos-section" aria-labelledby="tu-hijo-heading">
             <div class="container">
@@ -193,95 +238,92 @@
                 </div>
             </div>
         </section>
-
         <!-- Sección Diferencial -->
         <section id="diferencial" class="diferencial-section" aria-labelledby="diferencial-heading">
             <div class="container">
                 <h2 id="diferencial-heading">¿Por qué elegir Piel de Mar?</h2>
                 <p class="section-subtitle">Un enfoque diferente que marca la diferencia</p>
 
-                <div class="comparativa-table" role="table" aria-label="Comparativa entre Piel de Mar y otros centros">
-                    <div class="table-header" role="row">
-                        <div class="header-cell empty" role="columnheader"></div>
-                        <div class="header-cell otros" role="columnheader"><span>Otros centros</span></div>
-                        <div class="header-cell piel-de-mar" role="columnheader">
-                            <span>Piel de Mar</span>
-                            <i data-lucide="waves" aria-hidden="true"></i>
-                        </div>
-                    </div>
-
-                    <div class="table-row" role="row">
-                        <div class="row-label" role="rowheader">Enfoque del tratamiento</div>
-                        <div class="row-cell otros" role="cell">
-                            <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
-                            <span>Protocolos estandarizados</span>
-                        </div>
-                        <div class="row-cell piel-de-mar" role="cell">
-                            <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
-                            <span>Personalizado según cada niño</span>
-                        </div>
-                    </div>
-
-                    <div class="table-row" role="row">
-                        <div class="row-label" role="rowheader">Respeto por los tiempos</div>
-                        <div class="row-cell otros" role="cell">
-                            <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
-                            <span>Sesiones con objetivos fijos</span>
-                        </div>
-                        <div class="row-cell piel-de-mar" role="cell">
-                            <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
-                            <span>Sin forzar procesos naturales</span>
-                        </div>
-                    </div>
-
-                    <div class="table-row" role="row">
-                        <div class="row-label" role="rowheader">Acompañamiento familiar</div>
-                        <div class="row-cell otros" role="cell">
-                            <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
-                            <span>Solo trabajan con el niño</span>
-                        </div>
-                        <div class="row-cell piel-de-mar" role="cell">
-                            <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
-                            <span>Incluimos y escuchamos a los padres</span>
-                        </div>
-                    </div>
-
-                    <div class="table-row" role="row">
-                        <div class="row-label" role="rowheader">Mirada del desarrollo</div>
-                        <div class="row-cell otros" role="cell">
-                            <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
-                            <span>Enfoque fragmentado por áreas</span>
-                        </div>
-                        <div class="row-cell piel-de-mar" role="cell">
-                            <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
-                            <span>Visión integral del niño y su entorno</span>
-                        </div>
-                    </div>
-
-                    <div class="table-row" role="row">
-                        <div class="row-label" role="rowheader">Herramientas para el hogar</div>
-                        <div class="row-cell otros" role="cell">
-                            <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
-                            <span>Solo sesiones en consultorio</span>
-                        </div>
-                        <div class="row-cell piel-de-mar" role="cell">
-                            <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
-                            <span>Orientación aplicable en casa</span>
-                        </div>
-                    </div>
-
-                    <div class="table-row" role="row">
-                        <div class="row-label" role="rowheader">Comunicación</div>
-                        <div class="row-cell otros" role="cell">
-                            <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
-                            <span>Informes técnicos impersonales</span>
-                        </div>
-                        <div class="row-cell piel-de-mar" role="cell">
-                            <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
-                            <span>Diálogo cercano y comprensible</span>
-                        </div>
-                    </div>
-                </div>
+                <table class="comparativa-table" aria-label="Comparativa entre Piel de Mar y otros centros">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Otros centros</th>
+                            <th scope="col">
+                                Piel de Mar
+                                <i data-lucide="waves" aria-hidden="true"></i>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Enfoque del tratamiento</th>
+                            <td>
+                                <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
+                                <span>Protocolos estandarizados</span>
+                            </td>
+                            <td>
+                                <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
+                                <span>Personalizado según cada niño</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Respeto por los tiempos</th>
+                            <td>
+                                <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
+                                <span>Sesiones con objetivos fijos</span>
+                            </td>
+                            <td>
+                                <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
+                                <span>Sin forzar procesos naturales</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Acompañamiento familiar</th>
+                            <td>
+                                <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
+                                <span>Solo trabajan con el niño</span>
+                            </td>
+                            <td>
+                                <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
+                                <span>Incluimos y escuchamos a los padres</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Mirada del desarrollo</th>
+                            <td>
+                                <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
+                                <span>Enfoque fragmentado por áreas</span>
+                            </td>
+                            <td>
+                                <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
+                                <span>Visión integral del niño y su entorno</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Herramientas para el hogar</th>
+                            <td>
+                                <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
+                                <span>Solo sesiones en consultorio</span>
+                            </td>
+                            <td>
+                                <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
+                                <span>Orientación aplicable en casa</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Comunicación</th>
+                            <td>
+                                <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
+                                <span>Informes técnicos impersonales</span>
+                            </td>
+                            <td>
+                                <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
+                                <span>Diálogo cercano y comprensible</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <div class="diferencial-cta">
                     <p>Descubrí un acompañamiento que respeta y potencia el desarrollo natural de tu hijo</p>
@@ -289,7 +331,6 @@
                 </div>
             </div>
         </section>
-
         <!-- Sección Servicios -->
         <section id="servicios" class="service-section" aria-labelledby="servicios-heading">
             <div class="container">
@@ -334,13 +375,12 @@
                 </div>
             </div>
         </section>
-
         <!-- Sección Testimonios -->
         <section id="testimonios" class="testimonios-section" aria-labelledby="testimonios-heading">
             <div class="container">
                 <h2 id="testimonios-heading" class="sr-only">Testimonios de familias</h2>
 
-                <div class="carousel-wrapper" role="region" aria-label="Testimonios de familias" aria-live="polite">
+                <div class="carousel-wrapper" role="region" aria-label="Testimonios de familias">
 
                     <button class="carousel-btn prev" id="prevBtn" aria-label="Testimonio anterior">
                         <i data-lucide="chevron-left" aria-hidden="true"></i>
@@ -432,10 +472,11 @@
                     </button>
                 </div>
 
+                <!-- ✅ CORREGIDO: aria-live solo en el anuncio de posición, no en todo el carrusel -->
+                <p class="sr-only" id="carouselStatus" aria-live="polite" aria-atomic="true"></p>
                 <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Navegación de testimonios"></div>
             </div>
         </section>
-
         <!-- Sección Recursos -->
         <section id="recursos" class="resources-section" aria-labelledby="recursos-heading">
             <div class="container">
@@ -447,7 +488,7 @@
                     <!-- Tarjeta 1: Temáticas -->
                     <article class="resources-main-card">
                         <div class="card-options">
-                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&sort=dd&shelf_id=1" target="_blank" rel="noopener noreferrer" class="resource-option">
+                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&amp;sort=dd&amp;shelf_id=1" target="_blank" rel="noopener noreferrer" class="resource-option">
                                 <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="sprout"></i>
                                 </div>
@@ -458,7 +499,7 @@
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
 
-                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&sort=dd&shelf_id=2" target="_blank" rel="noopener noreferrer" class="resource-option">
+                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&amp;sort=dd&amp;shelf_id=2" target="_blank" rel="noopener noreferrer" class="resource-option">
                                 <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="heart"></i>
                                 </div>
@@ -469,7 +510,7 @@
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
 
-                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&sort=dd&shelf_id=3" target="_blank" rel="noopener noreferrer" class="resource-option">
+                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&amp;sort=dd&amp;shelf_id=3" target="_blank" rel="noopener noreferrer" class="resource-option">
                                 <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="brain-circuit"></i>
                                 </div>
@@ -480,7 +521,7 @@
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
 
-                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&sort=dd&shelf_id=4" target="_blank" rel="noopener noreferrer" class="resource-option">
+                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&amp;sort=dd&amp;shelf_id=4" target="_blank" rel="noopener noreferrer" class="resource-option">
                                 <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="puzzle"></i>
                                 </div>
@@ -507,44 +548,48 @@
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
 
-                            <a href="#blog" class="resource-option">
+                            <!--
+                                ✅ CORREGIDO: Secciones inexistentes marcadas como "próximamente"
+                                con aria-disabled para no romper navegación ni engañar a buscadores.
+                                Reemplazar href="#" por el link real cuando las secciones existan.
+                            -->
+                            <span class="resource-option resource-option--disabled" aria-disabled="true" title="Próximamente">
                                 <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="book-open"></i>
                                 </div>
                                 <div class="option-content">
                                     <strong>Artículos y bibliografía</strong>
-                                    <span>Ensayos basados en evidencia y bibliografía recomendada</span>
+                                    <span>Ensayos basados en evidencia y bibliografía recomendada <em>(próximamente)</em></span>
                                 </div>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
-                            </a>
+                            </span>
 
-                            <a href="#descargas" class="resource-option">
+                            <span class="resource-option resource-option--disabled" aria-disabled="true" title="Próximamente">
                                 <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="download"></i>
                                 </div>
                                 <div class="option-content">
                                     <strong>Guías descargables</strong>
-                                    <span>PDFs, plantillas y herramientas listas para usar</span>
+                                    <span>PDFs, plantillas y herramientas listas para usar <em>(próximamente)</em></span>
                                 </div>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
-                            </a>
+                            </span>
 
-                            <a href="#tips" class="resource-option">
+                            <span class="resource-option resource-option--disabled" aria-disabled="true" title="Próximamente">
                                 <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="lightbulb"></i>
                                 </div>
                                 <div class="option-content">
                                     <strong>Tips prácticos</strong>
-                                    <span>Consejos rápidos para aplicar en el día a día</span>
+                                    <span>Consejos rápidos para aplicar en el día a día <em>(próximamente)</em></span>
                                 </div>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
-                            </a>
+                            </span>
                         </div>
                     </article>
                 </div>
             </div>
         </section>
-
         <!-- Sección Turnos -->
         <section id="turnos" class="appointments-section" aria-labelledby="turnos-heading">
             <div class="container">
@@ -552,28 +597,28 @@
                 <p class="appointments-intro">Elegí el día y horario que mejor se adapte a tu agenda</p>
 
                 <div class="appointments-container">
-                    
+
                     <!-- Columna izquierda: Calendario -->
                     <div class="calendar-wrapper">
                         <div class="calendar-header">
                             <button id="prevMonth" class="calendar-nav" aria-label="Mes anterior">
-                                <i data-lucide="chevron-left"></i>
+                                <i data-lucide="chevron-left" aria-hidden="true"></i>
                             </button>
                             <h3 id="currentMonth" class="calendar-month"></h3>
                             <button id="nextMonth" class="calendar-nav" aria-label="Mes siguiente">
-                                <i data-lucide="chevron-right"></i>
+                                <i data-lucide="chevron-right" aria-hidden="true"></i>
                             </button>
                         </div>
-                        <div class="calendar-grid" id="calendarGrid" role="grid">
+                        <div class="calendar-grid" id="calendarGrid" role="grid" aria-label="Calendario de turnos">
                             <!-- Días de la semana -->
                             <div class="calendar-weekdays" role="row">
-                                <div role="columnheader">Lun</div>
-                                <div role="columnheader">Mar</div>
-                                <div role="columnheader">Mié</div>
-                                <div role="columnheader">Jue</div>
-                                <div role="columnheader">Vie</div>
-                                <div role="columnheader">Sáb</div>
-                                <div role="columnheader">Dom</div>
+                                <div role="columnheader" abbr="Lunes">Lun</div>
+                                <div role="columnheader" abbr="Martes">Mar</div>
+                                <div role="columnheader" abbr="Miércoles">Mié</div>
+                                <div role="columnheader" abbr="Jueves">Jue</div>
+                                <div role="columnheader" abbr="Viernes">Vie</div>
+                                <div role="columnheader" abbr="Sábado">Sáb</div>
+                                <div role="columnheader" abbr="Domingo">Dom</div>
                             </div>
                             <!-- Los días se generan dinámicamente con JS -->
                             <div class="calendar-days" id="calendarDays" role="rowgroup"></div>
@@ -582,9 +627,9 @@
 
                     <!-- Columna derecha: Horarios y Formulario -->
                     <div class="appointments-right">
-                        
+
                         <!-- Selector de horarios (oculto hasta seleccionar fecha) -->
-                        <div class="time-selector" id="timeSelector" style="display: none;">
+                        <div class="time-selector" id="timeSelector" style="display: none;" aria-live="polite">
                             <h4>Horarios disponibles</h4>
                             <p class="selected-date-display" id="selectedDateDisplay"></p>
                             <div class="time-slots" id="timeSlots"></div>
@@ -594,31 +639,44 @@
                         <div class="appointment-form" id="appointmentForm" style="display: none;">
                             <h4>Completá tus datos</h4>
                             <p class="form-subtitle">Para confirmar tu turno necesitamos algunos datos</p>
-                            
-                            <form id="reservationForm">
-                                <div class="form-group">
-                                    <label for="patientName">Nombre completo <span class="required">*</span></label>
-                                    <input type="text" id="patientName" name="patientName" required placeholder="Ej: María González">
+
+                            <!--
+                                ✅ AGREGADO: autocomplete en campos para mejorar UX.
+                                ✅ AGREGADO: novalidate en form para manejar validación desde JS
+                                con mensajes en español en lugar de los mensajes nativos del browser.
+                                ✅ AGREGADO: honeypot anti-spam oculto (campo "_gotcha").
+                            -->
+                            <form id="reservationForm" novalidate>
+
+                                <!-- Honeypot anti-spam: oculto visualmente, los bots lo completan -->
+                                <div class="form-group" style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
+                                    <label for="_gotcha">No completar este campo</label>
+                                    <input type="text" id="_gotcha" name="_gotcha" tabindex="-1" autocomplete="off">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="patientEmail">Email <span class="required">*</span></label>
-                                    <input type="email" id="patientEmail" name="patientEmail" required placeholder="tu@email.com">
+                                    <label for="patientName">Nombre completo <span class="required" aria-label="requerido">*</span></label>
+                                    <input type="text" id="patientName" name="patientName" required placeholder="Ej: María González" autocomplete="name" aria-required="true">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="patientPhone">Teléfono <span class="required">*</span></label>
-                                    <input type="tel" id="patientPhone" name="patientPhone" required placeholder="+54 9 11 1234-5678">
+                                    <label for="patientEmail">Email <span class="required" aria-label="requerido">*</span></label>
+                                    <input type="email" id="patientEmail" name="patientEmail" required placeholder="tu@email.com" autocomplete="email" aria-required="true">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="patientPhone">Teléfono <span class="required" aria-label="requerido">*</span></label>
+                                    <input type="tel" id="patientPhone" name="patientPhone" required placeholder="+54 9 11 1234-5678" autocomplete="tel" aria-required="true">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="childName">Nombre del niño/a</label>
-                                    <input type="text" id="childName" name="childName" placeholder="Opcional">
+                                    <input type="text" id="childName" name="childName" placeholder="Opcional" autocomplete="off">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="childAge">Edad del niño/a</label>
-                                    <input type="text" id="childAge" name="childAge" placeholder="Ej: 3 años">
+                                    <input type="text" id="childAge" name="childAge" placeholder="Ej: 3 años" autocomplete="off">
                                 </div>
 
                                 <div class="form-group">
@@ -627,7 +685,7 @@
                                 </div>
 
                                 <div class="appointment-summary" id="appointmentSummary">
-                                    <i data-lucide="calendar"></i>
+                                    <i data-lucide="calendar" aria-hidden="true"></i>
                                     <span id="summaryText"></span>
                                 </div>
 
@@ -640,7 +698,7 @@
 
                         <!-- Estado inicial: placeholder -->
                         <div class="appointments-placeholder" id="appointmentsPlaceholder">
-                            <i data-lucide="calendar-check"></i>
+                            <i data-lucide="calendar-check" aria-hidden="true"></i>
                             <p>Seleccioná una fecha en el calendario para ver los horarios disponibles</p>
                         </div>
 
@@ -648,10 +706,13 @@
 
                 </div>
 
-                <small class="appointments-note">Las consultas pueden ser presenciales o virtuales</small>
+                <!--
+                    ✅ CORREGIDO: <small> reemplazado por <p> con clase.
+                    <small> es para disclaimers legales, no para notas informativas.
+                -->
+                <p class="appointments-note">Las consultas pueden ser presenciales o virtuales</p>
             </div>
         </section>
-
         <!-- Sección Contacto -->
         <section id="contacto" class="contact-section" aria-labelledby="contacto-heading">
             <div class="container">
@@ -659,12 +720,12 @@
                 <p class="section-subtitle">Estamos acá para escucharte y acompañarte</p>
 
                 <div class="contact-container">
-                    
+
                     <!-- Columna izquierda: Mapa -->
                     <div class="contact-map">
-                        <div id="map" class="map-container"></div>
+                        <div id="map" class="map-container" role="region" aria-label="Mapa de ubicación"></div>
                         <div class="map-placeholder" id="mapPlaceholder">
-                            <i data-lucide="map-pin"></i>
+                            <i data-lucide="map-pin" aria-hidden="true"></i>
                             <p>Cullen 1619, Esperanza<br>Santa Fe, Argentina</p>
                             <small>El mapa se cargará cuando esté disponible</small>
                         </div>
@@ -672,28 +733,31 @@
 
                     <!-- Columna derecha: Información de contacto -->
                     <div class="contact-info">
-                        
+
                         <!-- Dirección -->
                         <div class="contact-card">
-                            <div class="contact-icon">
+                            <div class="contact-icon" aria-hidden="true">
                                 <i data-lucide="map-pin"></i>
                             </div>
                             <div class="contact-content">
                                 <h3>Dirección</h3>
-                                <p>Cullen 1619<br>Esperanza, Santa Fe</p>
-                                <a href="https://www.google.com/maps/dir/?api=1&destination=Cullen+1619,+Esperanza,+Santa+Fe,+Argentina" 
-                                   target="_blank" 
-                                   rel="noopener noreferrer" 
+                                <address>
+                                    Cullen 1619<br>
+                                    Esperanza, Santa Fe
+                                </address>
+                                <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Cullen+1619,+Esperanza,+Santa+Fe,+Argentina"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
                                    class="contact-link">
                                     Cómo llegar
-                                    <i data-lucide="external-link"></i>
+                                    <i data-lucide="external-link" aria-hidden="true"></i>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Email -->
                         <div class="contact-card">
-                            <div class="contact-icon">
+                            <div class="contact-icon" aria-hidden="true">
                                 <i data-lucide="mail"></i>
                             </div>
                             <div class="contact-content">
@@ -701,32 +765,32 @@
                                 <p>Envianos tu consulta por correo</p>
                                 <a href="mailto:contacto@pieldemar.com" class="contact-link">
                                     contacto@pieldemar.com
-                                    <i data-lucide="external-link"></i>
+                                    <i data-lucide="external-link" aria-hidden="true"></i>
                                 </a>
                             </div>
                         </div>
 
                         <!-- WhatsApp -->
                         <div class="contact-card">
-                            <div class="contact-icon whatsapp">
+                            <div class="contact-icon whatsapp" aria-hidden="true">
                                 <i data-lucide="message-circle"></i>
                             </div>
                             <div class="contact-content">
                                 <h3>WhatsApp</h3>
                                 <p>Escribinos para agendar tu consulta</p>
-                                <a href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20información%20sobre%20los%20servicios%20de%20Piel%20de%20Mar" 
-                                   target="_blank" 
-                                   rel="noopener noreferrer" 
+                                <a href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20informaci%C3%B3n%20sobre%20los%20servicios%20de%20Piel%20de%20Mar"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
                                    class="contact-link whatsapp-link">
                                     +54 9 3425 004018
-                                    <i data-lucide="external-link"></i>
+                                    <i data-lucide="external-link" aria-hidden="true"></i>
                                 </a>
                             </div>
                         </div>
 
                         <!-- Horarios -->
                         <div class="contact-card">
-                            <div class="contact-icon">
+                            <div class="contact-icon" aria-hidden="true">
                                 <i data-lucide="clock"></i>
                             </div>
                             <div class="contact-content">
@@ -743,21 +807,71 @@
     </main>
 
     <!-- FOOTER -->
+    <!--Links de aviso legal y política de privacidad: Reemplazar los href con las URLs reales cuando existan las páginas.
+        IMPORTANTE: La Política de Privacidad es obligatoria por Ley 25.326 ya que
+        el formulario recopila datos personales (nombre, email, teléfono, datos del niño).
+    -->
     <footer class="footer" role="contentinfo">
         <div class="container">
-            <p>Contacto | WhatsApp | Redes sociales</p>
-            <p>Aviso legal | Política de privacidad</p>
-            <p>&copy; <span id="currentYear"></span> Piel de Mar. Todos los derechos reservados.</p>
+            <nav class="footer-nav" aria-label="Links del footer">
+                <a href="#contacto">Contacto</a>
+                <span aria-hidden="true">|</span>
+                <a href="https://wa.me/5493425004018" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                <span aria-hidden="true">|</span>
+                <a href="https://instagram.com/pieldemar" target="_blank" rel="noopener noreferrer">Redes sociales</a>
+            </nav>
+            <nav class="footer-legal" aria-label="Links legales">
+                <!--
+                    IMPORTANTE: Crear estas páginas y actualizar los href.
+                    Son requeridas legalmente por la Ley 25.326 de Protección de Datos Personales.
+                -->
+                <a href="/aviso-legal">Aviso legal</a>
+                <span aria-hidden="true">|</span>
+                <a href="/politica-de-privacidad">Política de privacidad</a>
+            </nav>
+            <p class="footer-copy">
+                <small>&copy; <span id="currentYear"></span> Piel de Mar. Todos los derechos reservados.</small>
+            </p>
         </div>
     </footer>
 
     <!-- JavaScript -->
-    <script src="js/main.js"></script>
+    <script src="js/main.js" defer></script>
 
-    <!-- Año dinámico en footer -->
+    <!-- Inicializar Lucide Icons -->
     <script>
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-    </script>
+    window.addEventListener('load', function() {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        } else {
+            console.error('Lucide no cargó correctamente');
+        }
+    });
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+</script>
+
+    <!--
+        ✅ NOTA PARA PRODUCCIÓN — Clase sr-only requerida en CSS:
+        Asegurarse de que styles.css incluya:
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .resource-option--disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+    -->
 
 </body>
 </html>
