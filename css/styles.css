@@ -100,7 +100,6 @@
 
     /* Tipografías */
     --font-principal: 'Belgian Aesthetic', Georgia, serif;
-    /* ✅ CORREGIDO: fallback específico en lugar de sans-serif genérico */
     --font-secundaria: 'Fahkwang', 'Helvetica Neue', Arial, sans-serif;
 
     /* Espaciados */
@@ -134,8 +133,7 @@ body {
     color: var(--profundo);
     background-color: var(--arena);
     line-height: 1.7;
-    /* ✅ CORREGIDO: overflow-x en html en vez de body — evita bugs en iOS Safari con position:fixed */
-    overflow-x: clip;
+    overflow-x: hidden;
 }
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-principal);
@@ -173,7 +171,6 @@ img {
    ACCESIBILIDAD
    ======================================== */
 
-/* Visualmente oculto pero legible por lectores de pantalla y buscadores */
 .sr-only {
     position: absolute;
     width: 1px;
@@ -186,7 +183,6 @@ img {
     border: 0;
 }
 
-/* ✅ AGREGADO: Focus visible para navegación por teclado */
 :focus-visible {
     outline: 2px solid var(--agua);
     outline-offset: 3px;
@@ -214,10 +210,10 @@ img {
     justify-content: center;
     overflow: hidden;
     cursor: pointer;
-    /* ✅ AGREGADO: contain para aislar repaints de la animación del hero */
     contain: layout paint;
 }
 .hero-background {
+    will-change: transform;
     position: absolute;
     inset: 0;
     background-image: url('../assets/img/fondos/Pat_01_04.png');
@@ -239,7 +235,6 @@ img {
     50%       { transform: scale(1.05); }
 }
 
-/* Logo principal hero */
 .logo-container {
     position: relative;
     z-index: 10;
@@ -287,7 +282,8 @@ img {
     width: 100%;
     height: var(--navbar-height);
     background: var(--arena);
-    backdrop-filter: blur(5px);
+    backdrop-filter:blur(5px);
+    -webkit-backdrop-filter:blur(5px);
     padding: var(--spacing-xs) 0;
     z-index: 999;
     border-bottom: 1px solid var(--tiza);
@@ -496,6 +492,7 @@ section {
     text-align: center;
     overflow: hidden;
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
 }
@@ -503,7 +500,7 @@ section {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url('../assets/img/fondos/Pat_01_04.png');
+    background-image: url('../assets/img/fondos/Pat_01_01.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -656,15 +653,16 @@ section {
    SECCIÓN TU HIJ@ Y VOS
    ======================================== */
 .tu-hijo-y-vos-section {
-    background: linear-gradient(180deg, var(--tiza) 0%, rgba(148, 209, 216, 0.15) 100%);
+    background-image:  url(../assets/img/fondos/Rec_02_2.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 .tu-hijo-y-vos-section h2 {
     text-align: center;
     color: var(--profundo);
 }
 
-/* ✅ CORREGIDO: .tu-hijo-y-vos-content reemplaza al .tu-hijo-y-vos-grid
-   que estaba definido en CSS pero no existía en el HTML */
 .tu-hijo-y-vos-content {
     max-width: 900px;
     margin: 0 auto;
@@ -675,17 +673,16 @@ section {
 }
 .tu-hijo-y-vos-content .check-list {
     background: white;
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm);
     border-radius: 20px;
     margin-bottom: 0;
     box-shadow: 0 4px 20px rgba(36, 67, 106, 0.08);
     border: 1px solid rgba(148, 209, 216, 0.2);
-    /* Ocupa todo el ancho disponible en la primera fila */
     grid-column: 1 / -1;
 }
 .tu-hijo-y-vos-card {
     background: white;
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm);
     border-radius: 20px;
     box-shadow: 0 4px 20px rgba(36, 67, 106, 0.08);
     transition: var(--transition-fast);
@@ -705,10 +702,7 @@ section {
 }
 
 /* ========================================
-   SECCIÓN DIFERENCIAL — TABLA SEMÁNTICA
-   ✅ CORREGIDO: CSS reescrito para apuntar a elementos
-   <table>, <thead>, <tbody>, <th>, <td> reales
-   en lugar de divs con roles ARIA que ya no existen en el HTML
+   SECCIÓN DIFERENCIAL 
    ======================================== */
 .diferencial-section {
     background: linear-gradient(180deg, rgba(148, 209, 216, 0.15) 0%, var(--tiza) 100%);
@@ -729,7 +723,7 @@ section {
     background: white;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
+    box-shadow: 0 4px 16px rgba(5,73,84,.12);
     border-collapse: collapse;
 }
 
@@ -854,7 +848,11 @@ section {
    SECCIÓN SERVICIOS
    ======================================== */
 .service-section {
-    background: var(--tiza);
+    background-image:url(../assets/img/fondos/Rec_02_1.png);
+    background-color: var(--profundo);
+    background-size:contain;
+    background-position:right;
+    background-repeat: repeat;
     display: flex;
     align-items: center;
     padding-top: var(--spacing-xs);
@@ -934,7 +932,8 @@ section {
    SECCIÓN TESTIMONIOS — CARRUSEL
    ======================================== */
 .testimonios-section {
-    background: linear-gradient(180deg, rgba(148, 209, 216, 0.15) 0%, var(--arena) 100%);
+    background-color: var(--tiza);
+    
     display: flex;
     align-items: flex-start;
     padding-top: var(--spacing-xs);
@@ -967,12 +966,14 @@ section {
 .testimonio-card {
     flex: 0 0 calc(33.3333% - var(--spacing-xs) * 2 / 3);
     min-width: calc(33.3333% - var(--spacing-xs) * 2 / 3);
-    background: white;
+    background-color: (var(--agua));
+    background-image: url(../assets/img/fondos/Rec_01_3.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
     padding: var(--spacing-xs);
     border-radius: 16px;
     border: 1px solid var(--oceano);
-    /* ✅ CORREGIDO: sombra con rgba en lugar de color sólido var(--profundo)
-       que generaba una sombra oscura inconsistente con el resto del sitio */
     box-shadow: 0 2px 12px rgba(5, 73, 84, 0.15);
     transition: var(--transition-fast);
     display: flex;
@@ -1062,7 +1063,10 @@ section {
    SECCIÓN RECURSOS
    ======================================== */
 .resources-section {
-    background: linear-gradient(180deg, var(--arena) 0%, var(--tiza) 100%);
+    background-image: url(../assets/img/fondos/Pat_02_03.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     text-align: center;
 }
 .resources-section h2 {
@@ -1810,8 +1814,9 @@ section {
         top: var(--navbar-height);
         left: 0;
         width: 100%;
-        background: rgba(233, 222, 203, 0.98);
-        backdrop-filter: blur(10px);
+        background: var(--arena);
+        backdrop-filter:blur(10px);
+        -webkit-backdrop-filter:blur(10px);
         flex-direction: column;
         padding: var(--spacing-md);
         gap: 0;
@@ -2040,7 +2045,7 @@ section {
     .social-links-mobile,
     .appointments-section,
     .footer-nav {
-        display: none !important;
+        display: none;
     }
     body {
         background: white;
@@ -2052,7 +2057,7 @@ section {
         transform: none;
     }
     section {
-        min-height: auto !important;
+        min-height: auto;
         padding: 1rem 0;
         page-break-inside: avoid;
     }
@@ -2074,10 +2079,10 @@ section {
     *,
     *::before,
     *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
+        animation-duration: 0.01ms;
+        animation-iteration-count: 1;
+        transition-duration: 0.01ms;
+        scroll-behavior: auto;
     }
     .hero-background {
         animation: none;
@@ -2102,4 +2107,463 @@ section {
    ======================================== */
     .anim-card { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .anim-visible { opacity: 1; transform: translateY(0); }
-    @media (prefers-reduced-motion: reduce) { .anim-card { opacity: 1; transform: none; transition: none; } }
+   /* ========================================
+TIPOGRAFÍAS
+======================================== */
+
+@font-face{
+font-family:'Belgian Aesthetic';
+src:url('../assets/tipografias/Belgan-Aesthetic.ttf') format('truetype');
+font-weight:400;
+font-style:normal;
+font-display:swap;
+}
+
+@font-face{
+font-family:'Fahkwang';
+src:url('../assets/tipografias/Fahkwang-Light.ttf') format('truetype');
+font-weight:300;
+font-style:normal;
+font-display:swap;
+}
+
+@font-face{
+font-family:'Fahkwang';
+src:url('../assets/tipografias/Fahkwang-LightItalic.ttf') format('truetype');
+font-weight:300;
+font-style:italic;
+font-display:swap;
+}
+
+@font-face{
+font-family:'Fahkwang';
+src:url('../assets/tipografias/Fahkwang-Regular.ttf') format('truetype');
+font-weight:400;
+font-style:normal;
+font-display:swap;
+}
+
+@font-face{
+font-family:'Fahkwang';
+src:url('../assets/tipografias/Fahkwang-Italic.ttf') format('truetype');
+font-weight:400;
+font-style:italic;
+font-display:swap;
+}
+
+@font-face{
+font-family:'Fahkwang';
+src:url('../assets/tipografias/Fahkwang-Medium.ttf') format('truetype');
+font-weight:500;
+font-style:normal;
+font-display:swap;
+}
+
+@font-face{
+font-family:'Fahkwang';
+src:url('../assets/tipografias/Fahkwang-MediumItalic.ttf') format('truetype');
+font-weight:500;
+font-style:italic;
+font-display:swap;
+}
+
+@font-face{
+font-family:'Fahkwang';
+src:url('../assets/tipografias/Fahkwang-SemiBold.ttf') format('truetype');
+font-weight:600;
+font-style:normal;
+font-display:swap;
+}
+
+@font-face{
+font-family:'Fahkwang';
+src:url('../assets/tipografias/Fahkwang-SemiBoldItalic.ttf') format('truetype');
+font-weight:600;
+font-style:italic;
+font-display:swap;
+}
+
+@font-face{
+font-family:'Fahkwang';
+src:url('../assets/tipografias/Fahkwang-Bold.ttf') format('truetype');
+font-weight:700;
+font-style:normal;
+font-display:swap;
+}
+
+@font-face{
+font-family:'Fahkwang';
+src:url('../assets/tipografias/Fahkwang-BoldItalic.ttf') format('truetype');
+font-weight:700;
+font-style:italic;
+font-display:swap;
+}
+
+/* ========================================
+VARIABLES
+======================================== */
+
+:root{
+
+--profundo:#054954;
+--oceano:#24436a;
+--agua:#94d1d8;
+--arena:#e9decb;
+--tiza:#efefed;
+
+--font-principal:'Belgian Aesthetic',Georgia,serif;
+--font-secundaria:'Fahkwang','Helvetica Neue',Arial,sans-serif;
+
+--spacing-xs:.5rem;
+--spacing-sm:1rem;
+--spacing-md:2rem;
+--spacing-lg:4rem;
+--spacing-xl:6rem;
+
+--navbar-height:80px;
+
+--transition-smooth:all .6s cubic-bezier(.4,0,.2,1);
+--transition-fast:all .3s ease;
+
+}
+
+/* ========================================
+RESET
+======================================== */
+
+*,*::before,*::after{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+font-family:var(--font-secundaria);
+color:var(--profundo);
+background:var(--arena);
+line-height:1.7;
+overflow-x:hidden;
+}
+
+h1,h2,h3,h4,h5,h6{
+font-family:var(--font-principal);
+font-weight:400;
+letter-spacing:.5px;
+line-height:1.3;
+}
+
+h1{font-size:clamp(2rem,5vw,3.5rem);margin-bottom:var(--spacing-md)}
+h2{font-size:clamp(1.75rem,4vw,2.75rem);margin-bottom:var(--spacing-md)}
+h3{font-size:clamp(1.25rem,3vw,1.75rem);margin-bottom:var(--spacing-sm)}
+
+p{
+font-size:clamp(1rem,2vw,1.125rem);
+font-weight:300;
+}
+
+a{
+text-decoration:none;
+color:inherit;
+}
+
+img{
+max-width:100%;
+height:auto;
+display:block;
+}
+
+/* ========================================
+ACCESIBILIDAD
+======================================== */
+
+.sr-only{
+position:absolute;
+width:1px;
+height:1px;
+padding:0;
+margin:-1px;
+overflow:hidden;
+clip:rect(0,0,0,0);
+white-space:nowrap;
+border:0;
+}
+
+:focus-visible{
+outline:2px solid var(--agua);
+outline-offset:3px;
+border-radius:4px;
+}
+
+/* ========================================
+CONTAINER
+======================================== */
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:0 var(--spacing-xs);
+}
+
+/* ========================================
+HERO
+======================================== */
+
+.hero{
+position:relative;
+width:100%;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+cursor:pointer;
+}
+
+.hero-background{
+position:absolute;
+inset:0;
+background:url('../assets/img/fondos/Pat_01_01.png') center/cover no-repeat;
+/* animation:waveMove 20s ease-in-out infinite; */
+will-change:transform;
+transform:translateZ(0);
+z-index:1;
+will-change:transform;
+}
+
+.hero-background::after{
+content:'';
+position:absolute;
+inset:0;
+background:rgba(239,239,237,.1);
+pointer-events:none;
+}
+
+@keyframes waveMove{
+
+0%,100%{
+transform:scale(1);
+}
+
+50%{
+transform:scale(1.05);
+}
+
+}
+
+/* ========================================
+NAVBAR
+======================================== */
+
+.navbar{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:var(--navbar-height);
+background:var(--arena);
+backdrop-filter:blur(5px);
+-webkit-backdrop-filter:blur(5px);
+padding:var(--spacing-xs)0;
+z-index:999;
+border-bottom:1px solid var(--tiza);
+transform:translate3d(0,-100%,0);
+transition:var(--transition-smooth);
+}
+
+.navbar.visible{
+opacity:1;
+transform:translateY(0);
+}
+
+.navbar-container{
+max-width:1400px;
+margin:auto;
+padding:0 var(--spacing-sm);
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:var(--spacing-md);
+height:100%;
+}
+
+/* ========================================
+SOCIAL LINKS
+======================================== */
+
+.social-links,
+.social-links-mobile{
+display:flex;
+gap:var(--spacing-sm);
+align-items:center;
+}
+
+.social-links a,
+.social-links-mobile a{
+
+width:28px;
+height:28px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+opacity:.7;
+
+transition:var(--transition-fast);
+
+border-radius:50%;
+padding:4px;
+}
+
+.social-links a:hover,
+.social-links-mobile a:hover{
+
+opacity:1;
+transform:translateY(-2px);
+background:var(--agua);
+
+}
+
+.social-links img,
+.social-links-mobile img{
+
+width:100%;
+height:100%;
+object-fit:contain;
+
+}
+
+/* ========================================
+BOTONES
+======================================== */
+
+.btn{
+
+display:inline-block;
+
+padding:.875rem 2rem;
+
+font-family:var(--font-secundaria);
+font-size:1rem;
+font-weight:500;
+
+text-align:center;
+
+border:none;
+border-radius:50px;
+
+cursor:pointer;
+
+transition:var(--transition-fast);
+
+margin-top:var(--spacing-sm);
+
+}
+
+.btn.primary{
+
+background:var(--profundo);
+color:var(--tiza);
+
+box-shadow:0 4px 15px rgba(5,73,84,.2);
+
+}
+
+.btn.primary:hover{
+
+background:var(--oceano);
+
+transform:translateY(-2px);
+
+box-shadow:0 6px 20px rgba(5,73,84,.3);
+
+}
+
+.btn.link{
+
+background:transparent;
+color:var(--oceano);
+
+border:2px solid var(--agua);
+
+padding:.75rem 1.75rem;
+
+}
+
+.btn.link:hover{
+
+background:var(--agua);
+color:var(--profundo);
+
+}
+
+/* ========================================
+CARDS
+======================================== */
+
+.service-card,
+.resources-main-card,
+.calendar-wrapper,
+.time-selector,
+.appointment-form,
+.contact-card{
+
+background:white;
+
+border-radius:20px;
+
+border:1px solid rgba(148,209,216,.2);
+
+box-shadow:0 4px 30px rgba(5,73,84,.1);
+
+}
+
+/* ========================================
+ANIMACIONES
+======================================== */
+
+.anim-card{
+
+opacity:0;
+
+transform:translateY(30px);
+
+transition:opacity .6s ease, transform .6s ease;
+
+}
+
+.anim-visible{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+/* ========================================
+REDUCED MOTION
+======================================== */
+
+@media (prefers-reduced-motion: reduce){
+
+*,
+*::before,
+*::after{
+
+animation-duration:.01ms;
+animation-iteration-count:1;
+
+transition-duration:.01ms;
+
+scroll-behavior:auto;
+
+}
+
+.hero-background{
+animation:none;
+}
+
+}
