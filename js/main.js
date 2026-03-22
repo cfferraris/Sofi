@@ -1,30 +1,12 @@
 // ========================================
-// PIEL DE MAR - Main JavaScript v1
-// ========================================
-// Correcciones aplicadas:
-// - Un solo DOMContentLoaded unificado
-// - Validación completa de formulario
-// - Verificación de honeypot anti-spam
-// - Sin console.log con datos personales
-// - Feedback visual durante submit
-// - Error visible al usuario si falla el servidor
-// - today() como función para evitar bug de medianoche
-// - prefers-reduced-motion respetado en carrusel
-// - Page Visibility API para pausar autoplay
-// - IntersectionObserver con clases CSS en lugar de estilos inline
-// - carouselStatus actualizado para lectores de pantalla
-// - Google Maps cargado con IntersectionObserver
-// - MAP_CONFIG encapsulado en scope privado
-// - Honeypot verificado antes de procesar submit
-// - fetch con AbortController y timeout
-// - saveAppointment con error visible al usuario
-// - Fechas hardcodeadas eliminadas del fallback
+// PIEL DE MAR - Main JavaScript v2 (Simplificado)
+// Sin sistema de turnos ni Google Maps
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
 
     // ========================================
-    // CONFIGURACIÓN GENERAL
+    // CONFIGURACIÓN GENERAL (SIMPLIFICADA)
     // ========================================
     const CONFIG = {
         // Transición del hero
@@ -34,27 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
         HERO_CONTENT_SHOW_MS:   1300,
         HERO_HIDE_MS:           1500,
 
-        // Calendario
-        BOOKING_RANGE_MONTHS:      1,   // cuántos meses hacia adelante se puede reservar
-        WORK_HOURS_START:          9,
-        WORK_HOURS_END:           18,
-        WORK_HOURS_INTERVAL:       1,   // cada N horas
-
         // Carrusel
         CAROUSEL_AUTOPLAY_MS:   5000,
-        CAROUSEL_RESIZE_DEBOUNCE: 150,
-
-        // Formulario
-        FORM_SUBMIT_TIMEOUT_MS: 8000,   // timeout del fetch de submit
-        APPOINTMENTS_FETCH_TIMEOUT_MS: 5000,
-
-        // Mapa
-        MAP_CENTER: { lat: -31.4490, lng: -60.9309 },
-        MAP_ZOOM:   16,
-        // ⚠️ IMPORTANTE: Reemplazar con tu API Key real.
-        // Antes de publicar, restringir la key en Google Cloud Console
-        // a los dominios: pieldemar.com y www.pieldemar.com
-        MAP_API_KEY: 'TU_API_KEY_AQUI'
+        CAROUSEL_RESIZE_DEBOUNCE: 150
     };
 
     // ========================================
@@ -62,87 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ========================================
 
     /**
-     * Retorna la fecha actual como objeto Date.
-     * Función en lugar de constante para evitar el bug de medianoche:
-     * si la página queda abierta hasta el día siguiente, siempre
-     * obtenemos la fecha real del momento de consulta.
-     */
-    function getToday() {
-        const d = new Date();
-        d.setHours(0, 0, 0, 0);
-        return d;
-    }
-
-    /**
-     * Formatea una fecha como YYYY-MM-DD usando hora local.
-     * Evita el bug de timezone que ocurre con toISOString()
-     * en zonas horarias con offset negativo (ej: Argentina UTC-3).
-     */
-    function formatDate(date) {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, '0');
-        const d = String(date.getDate()).padStart(2, '0');
-        return `${y}-${m}-${d}`;
-    }
-
-    /**
-     * Formatea una fecha para mostrar al usuario.
-     * Ej: "Lunes 15 de marzo"
-     */
-    function formatDateDisplay(date) {
-        const days   = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-        const months = ['enero','febrero','marzo','abril','mayo','junio',
-                        'julio','agosto','septiembre','octubre','noviembre','diciembre'];
-        return `${days[date.getDay()]} ${date.getDate()} de ${months[date.getMonth()]}`;
-    }
-
-    /** Compara dos fechas ignorando la hora */
-    function isSameDay(a, b) {
-        return a.getFullYear() === b.getFullYear()
-            && a.getMonth()    === b.getMonth()
-            && a.getDate()     === b.getDate();
-    }
-
-    /**
-     * Verifica si una fecha está fuera del rango de reserva.
-     * El rango es configurable mediante CONFIG.BOOKING_RANGE_MONTHS.
-     */
-    function isOutOfRange(date) {
-        const today  = getToday();
-        const maxDate = new Date(today);
-        maxDate.setMonth(maxDate.getMonth() + CONFIG.BOOKING_RANGE_MONTHS);
-        return date > maxDate;
-    }
-
-    /**
-     * fetch con timeout usando AbortController.
-     * Si el servidor no responde en `ms` milisegundos, rechaza la promesa.
-     */
-    async function fetchWithTimeout(url, options = {}, ms = CONFIG.FORM_SUBMIT_TIMEOUT_MS) {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), ms);
-        try {
-            const response = await fetch(url, { ...options, signal: controller.signal });
-            return response;
-        } finally {
-            clearTimeout(timer);
-        }
-    }
-
-    /**
-     * Escapa texto para insertar en HTML de forma segura.
-     * Evita XSS al interpolar datos en template literals de HTML.
-     */
-    function escapeHtml(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
-
-    /**
      * Muestra un mensaje de notificación accesible al usuario
      * en lugar de alert() bloqueante.
-     * Crea/reutiliza un elemento #toast en el DOM.
      */
     function showToast(message, type = 'success') {
         let toast = document.getElementById('pdm-toast');
@@ -173,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         toast.style.background = type === 'error' ? '#c44' : '#054954';
         toast.textContent = message;
-        // Forzar reflow para que la transición funcione al reutilizar
         toast.getBoundingClientRect();
         toast.style.transform = 'translateX(-50%) translateY(0)';
         clearTimeout(toast._hideTimer);
@@ -220,11 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         clearTimeout(transitionTimer);
 
-        // ✅ Respetar prefers-reduced-motion:
-        // Si el usuario prefiere menos movimiento, la transición
-        // ocurre instantáneamente sin animaciones
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const delay = reducedMotion ? 0 : 1;
 
         logoContainer?.classList.add('transitioning');
 
@@ -271,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Cerrar con Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeMenu();
     });
@@ -308,15 +187,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // ========================================
     window.addEventListener('scroll', () => {
         if (!navbar) return;
-        navbar.style.boxShadow = window.scrollY > 100
-            ? '0 4px 20px rgba(5, 73, 84, 0.1)'
-            : 'none';
+        if (window.scrollY > 100) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
     }, { passive: true });
 
     // ========================================
-    // ANIMACIÓN DE ENTRADA — INTERSECTION OBSERVER
-    // ✅ CORREGIDO: usa clases CSS en lugar de estilos inline
-    // para no interferir con la especificidad del CSS
+    // ANIMACIÓN DE ENTRADA 
     // ========================================
     const animObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -330,7 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
         rootMargin: '0px 0px -100px 0px'
     });
 
-  
     document.querySelectorAll('.service-card, .tu-hijo-y-vos-card').forEach(card => {
         card.classList.add('anim-card');
         animObserver.observe(card);
@@ -426,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function startAutoPlay() {
             const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (reducedMotion) return; // No autoplay si el usuario prefiere menos movimiento
+            if (reducedMotion) return;
             stopAutoPlay();
             autoPlayId = setInterval(() => {
                 const maxIndex = cards.length - visibleCards;
@@ -494,514 +372,202 @@ document.addEventListener('DOMContentLoaded', () => {
         startAutoPlay();
     }
 
-    // ========================================
-    // SISTEMA DE TURNOS — CALENDARIO Y RESERVAS
-    // ========================================
-    const calendarDays            = document.getElementById('calendarDays');
-    const currentMonthEl          = document.getElementById('currentMonth');
-    const prevMonthBtn            = document.getElementById('prevMonth');
-    const nextMonthBtn            = document.getElementById('nextMonth');
-    const timeSelector            = document.getElementById('timeSelector');
-    const timeSlotsEl             = document.getElementById('timeSlots');
-    const selectedDateDisplay     = document.getElementById('selectedDateDisplay');
-    const appointmentForm         = document.getElementById('appointmentForm');
-    const appointmentsPlaceholder = document.getElementById('appointmentsPlaceholder');
-    const reservationForm         = document.getElementById('reservationForm');
-    const cancelBtn               = document.getElementById('cancelBtn');
-    const summaryText             = document.getElementById('summaryText');
-
-    if (calendarDays && currentMonthEl && prevMonthBtn && nextMonthBtn
-        && timeSelector && timeSlotsEl && appointmentForm
-        && appointmentsPlaceholder && reservationForm && cancelBtn) {
-
-        let currentMonth  = getToday().getMonth();
-        let currentYear   = getToday().getFullYear();
-        let selectedDate  = null;
-        let selectedTime  = null;
-        let bookedAppointments = {};
-        let isSubmitting  = false; 
-        // ========================================
-        // CARGAR TURNOS OCUPADOS
-        // ========================================
-        async function loadBookedAppointments() {
-            try {
-                const response = await fetchWithTimeout(
-                    'data/appointments.json',
-                    {},
-                    CONFIG.APPOINTMENTS_FETCH_TIMEOUT_MS
-                );
-                if (response.ok) {
-                    bookedAppointments = await response.json();
-                }
-            } catch {
-                bookedAppointments = {};
-            }
-        }
-
-        // ========================================
-        // RENDERIZAR CALENDARIO
-        // ========================================
-        function renderCalendar(month, year) {
-            calendarDays.innerHTML = '';
-
-            const today       = getToday(); // ✅ siempre la fecha actual real
-            const firstDay    = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const lastMonthDays = new Date(year, month, 0).getDate();
-
-            const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-                                'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-            currentMonthEl.textContent = `${monthNames[month]} ${year}`;
-
-            // Día de inicio en grid (lunes = 0)
-            const startDay = firstDay === 0 ? 6 : firstDay - 1;
-
-            // Celdas vacías para alinear el primer día
-            for (let i = 0; i < startDay; i++) {
-                const empty = document.createElement('div');
-                empty.classList.add('calendar-day', 'empty');
-                empty.setAttribute('aria-hidden', 'true');
-                calendarDays.appendChild(empty);
-            }
-
-            // Días del mes
-            for (let day = 1; day <= daysInMonth; day++) {
-                const date      = new Date(year, month, day);
-                const dayOfWeek = date.getDay();
-                const dayEl     = document.createElement('div');
-                dayEl.classList.add('calendar-day');
-                dayEl.textContent = day;
-                dayEl.setAttribute('role', 'gridcell');
-
-                const isToday    = isSameDay(date, today);
-                const isPast     = date < today;
-                const isWeekend  = dayOfWeek === 0 || dayOfWeek === 6;
-                const outOfRange = isOutOfRange(date);
-
-                if (isToday) dayEl.classList.add('today');
-
-                if (isPast || isWeekend || outOfRange) {
-                    dayEl.classList.add('disabled');
-                    dayEl.setAttribute('aria-disabled', 'true');
-                } else {
-                    dayEl.setAttribute('tabindex', '0');
-                    dayEl.setAttribute('aria-label', `${formatDateDisplay(date)}, disponible`);
-                    dayEl.addEventListener('click',   () => selectDate(date, dayEl));
-                    dayEl.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            selectDate(date, dayEl);
-                        }
-                    });
-                }
-
-                calendarDays.appendChild(dayEl);
-            }
-
-            // Deshabilitar botón de mes anterior si ya estamos en el mes actual
-            const today2 = getToday();
-            prevMonthBtn.disabled = (month === today2.getMonth() && year === today2.getFullYear());
-            nextMonthBtn.disabled = (month === today2.getMonth() + CONFIG.BOOKING_RANGE_MONTHS
-                                  && year === today2.getFullYear());
-        }
-
-        // ========================================
-        // SELECCIONAR FECHA
-        // ========================================
-        function selectDate(date, dayEl) {
-            document.querySelectorAll('.calendar-day.selected').forEach(el => {
-                el.classList.remove('selected');
-                el.setAttribute('aria-pressed', 'false');
-            });
-
-            dayEl.classList.add('selected');
-            dayEl.setAttribute('aria-pressed', 'true');
-
-            selectedDate = date;
-            selectedTime = null;
-
-            appointmentsPlaceholder.style.display = 'none';
-            appointmentForm.style.display         = 'none';
-            timeSelector.style.display            = 'block';
-
-            if (selectedDateDisplay) {
-                selectedDateDisplay.textContent = formatDateDisplay(date);
-            }
-            renderTimeSlots(date);
-        }
-
-        // ========================================
-        // RENDERIZAR HORARIOS
-        // ========================================
-        function renderTimeSlots(date) {
-            timeSlotsEl.innerHTML = '';
-            const dateString = formatDate(date);
-            const booked     = bookedAppointments[dateString] ?? [];
-
-            for (let hour = CONFIG.WORK_HOURS_START; hour < CONFIG.WORK_HOURS_END; hour += CONFIG.WORK_HOURS_INTERVAL) {
-                const timeString = `${String(hour).padStart(2, '0')}:00`;
-                const slotEl     = document.createElement('button');
-                slotEl.classList.add('time-slot');
-                slotEl.textContent = timeString;
-                slotEl.type = 'button';
-
-                if (booked.includes(timeString)) {
-                    slotEl.classList.add('taken');
-                    slotEl.disabled = true;
-                    slotEl.setAttribute('aria-label', `${timeString} - no disponible`);
-                } else {
-                    slotEl.setAttribute('aria-label', `${timeString} - disponible`);
-                    slotEl.addEventListener('click', () => selectTime(timeString, slotEl));
-                }
-                timeSlotsEl.appendChild(slotEl);
-            }
-        }
-
-        // ========================================
-        // SELECCIONAR HORARIO
-        // ========================================
-        function selectTime(time, slotEl) {
-            document.querySelectorAll('.time-slot.selected').forEach(el => {
-                el.classList.remove('selected');
-            });
-
-            slotEl.classList.add('selected');
-            selectedTime = time;
-
-            timeSelector.style.display    = 'none';
-            appointmentForm.style.display = 'block';
-
-            if (summaryText) {
-                summaryText.textContent =
-                    `${formatDateDisplay(selectedDate)} a las ${selectedTime}`;
-            }
-
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons({ nodes: [appointmentForm] });
-            }
-        }
-
-        // ========================================
-        // NAVEGACIÓN DEL CALENDARIO
-        // ========================================
-        prevMonthBtn.addEventListener('click', () => {
-            currentMonth--;
-            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-            renderCalendar(currentMonth, currentYear);
-        });
-
-        nextMonthBtn.addEventListener('click', () => {
-            currentMonth++;
-            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-            renderCalendar(currentMonth, currentYear);
-        });
-
-        // ========================================
-        // VALIDACIÓN DEL FORMULARIO
-        // ========================================
-
-        /**
-         * Valida el formato de email.
-         * Expresión regular básica pero suficiente para UX.
-         */
-        function isValidEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-        }
-
-        /**
-         * Valida el formato de teléfono.
-         * Acepta +54 9 11 1234-5678, (011) 1234-5678, etc.
-         */
-        function isValidPhone(phone) {
-            return /^[\d\s\+\-\(\)]{7,20}$/.test(phone.trim());
-        }
-
-        function setFieldError(fieldId, message) {
-            const field    = document.getElementById(fieldId);
-            const errorId  = `${fieldId}-error`;
-            let   errorEl  = document.getElementById(errorId);
-
-            if (!field) return;
-
-            if (message) {
-                // Crear elemento de error si no existe
-                if (!errorEl) {
-                    errorEl = document.createElement('span');
-                    errorEl.id = errorId;
-                    errorEl.style.cssText = `
-                        display: block;
-                        color: #c44;
-                        font-size: 0.8rem;
-                        margin-top: 0.25rem;
-                    `;
-                    field.parentNode.appendChild(errorEl);
-                }
-                errorEl.textContent = message;
-                field.setAttribute('aria-describedby', errorId);
-                field.setAttribute('aria-invalid', 'true');
-                field.style.borderColor = '#c44';
-            } else {
-                if (errorEl) errorEl.textContent = '';
-                field.removeAttribute('aria-describedby');
-                field.setAttribute('aria-invalid', 'false');
-                field.style.borderColor = '';
-            }
-        }
-
-        function validateForm(data) {
-            let valid = true;
-
-            if (!data.patientName.trim()) {
-                setFieldError('patientName', 'El nombre es requerido');
-                valid = false;
-            } else {
-                setFieldError('patientName', '');
-            }
-
-            if (!data.patientEmail.trim()) {
-                setFieldError('patientEmail', 'El email es requerido');
-                valid = false;
-            } else if (!isValidEmail(data.patientEmail)) {
-                setFieldError('patientEmail', 'Ingresá un email válido');
-                valid = false;
-            } else {
-                setFieldError('patientEmail', '');
-            }
-
-            if (!data.patientPhone.trim()) {
-                setFieldError('patientPhone', 'El teléfono es requerido');
-                valid = false;
-            } else if (!isValidPhone(data.patientPhone)) {
-                setFieldError('patientPhone', 'Ingresá un teléfono válido');
-                valid = false;
-            } else {
-                setFieldError('patientPhone', '');
-            }
-
-            return valid;
-        }
-
-        // ========================================
-        // BOTÓN CANCELAR
-        // ========================================
-        cancelBtn.addEventListener('click', () => {
-            appointmentForm.style.display = 'none';
-            timeSelector.style.display    = 'block';
-            reservationForm.reset();
-            ['patientName','patientEmail','patientPhone'].forEach(id => setFieldError(id, ''));
-        });
-
-        // ========================================
-        // SUBMIT DEL FORMULARIO
-        // ========================================
-        reservationForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            if (isSubmitting) return;
-
-            const honeypot = document.getElementById('_gotcha');
-            if (honeypot && honeypot.value !== '') {
-                // Es un bot — rechazar silenciosamente
-                return;
-            }
-
-            const data = {
-                date:          formatDate(selectedDate),
-                time:          selectedTime,
-                patientName:   document.getElementById('patientName').value,
-                patientEmail:  document.getElementById('patientEmail').value,
-                patientPhone:  document.getElementById('patientPhone').value,
-                childName:     document.getElementById('childName')?.value  ?? '',
-                childAge:      document.getElementById('childAge')?.value   ?? '',
-                consultReason: document.getElementById('consultReason')?.value ?? ''
-            };
-
-            if (!validateForm(data)) {
-                const firstError = reservationForm.querySelector('[aria-invalid="true"]');
-                firstError?.focus();
-                return;
-            }
-
-            const submitBtn = reservationForm.querySelector('[type="submit"]');
-            isSubmitting = true;
-            if (submitBtn) {
-                submitBtn.disabled     = true;
-                submitBtn.textContent  = 'Enviando…';
-            }
-
-            const success = await saveAppointment(data);
-
-            isSubmitting = false;
-            if (submitBtn) {
-                submitBtn.disabled    = false;
-                submitBtn.textContent = 'Confirmar turno';
-            }
-
-            if (success) {
-                // Actualizar turnos ocupados localmente
-                if (!bookedAppointments[data.date]) {
-                    bookedAppointments[data.date] = [];
-                }
-                bookedAppointments[data.date].push(data.time);
-
-                showToast(`✅ Turno confirmado: ${formatDateDisplay(selectedDate)} a las ${selectedTime}`);
-
-                // Reset del estado
-                reservationForm.reset();
-                appointmentForm.style.display         = 'none';
-                appointmentsPlaceholder.style.display = 'flex';
-                selectedDate = null;
-                selectedTime = null;
-                document.querySelectorAll('.calendar-day.selected').forEach(el => {
-                    el.classList.remove('selected');
-                    el.removeAttribute('aria-pressed');
-                });
-            }
-        });
-
-        // ========================================
-        // GUARDAR TURNO EN EL SERVIDOR
-        // ========================================
-        async function saveAppointment(data) {
-            try {
-                const response = await fetchWithTimeout(
-                    'api/appointments',
-                    {
-                        method:  'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        // ✅ No se loguean datos personales — solo se envían al servidor
-                        body:    JSON.stringify(data)
-                    },
-                    CONFIG.FORM_SUBMIT_TIMEOUT_MS
-                );
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                return true;
-
-            } catch (error) {
-                if (error.name === 'AbortError') {
-                    showToast('El servidor tardó demasiado. Por favor intentá de nuevo o contactanos por WhatsApp.', 'error');
-                } else {
-                    showToast('No pudimos confirmar el turno. Por favor contactanos por WhatsApp.', 'error');
-                }
-                return false;
-            }
-        }
-
-        // ========================================
-        // INICIALIZAR CALENDARIO
-        // ========================================
-        loadBookedAppointments().then(() => {
-            renderCalendar(currentMonth, currentYear);
-        });
-
-    } // fin if (calendarDays ...)
-
-    // ========================================
-    // GOOGLE MAPS — SECCIÓN CONTACTO
-    // ========================================
-    (function initGoogleMaps() {
-        const MAP_CONFIG = {
-            center:  { lat: -31.4490, lng: -60.9309 },
-            zoom:    CONFIG.MAP_ZOOM,
-            // ⚠️ Reemplazar con tu API Key real.
-            // Restringir en Google Cloud Console a: pieldemar.com, www.pieldemar.com
-            apiKey:  CONFIG.MAP_API_KEY
-        };
-
-        const mapContainer   = document.getElementById('map');
-        const mapPlaceholder = document.getElementById('mapPlaceholder');
-
-        if (!mapContainer) return;
-        if (MAP_CONFIG.apiKey === 'TU_API_KEY_AQUI') {
-            // Sin API key configurada: mostrar solo el placeholder
-            return;
-        }
-
-        let mapLoaded = false;
-
-        function _initMapInternal() {
-            if (mapLoaded) return;
-            mapLoaded = true;
-
-            try {
-                const map = new google.maps.Map(mapContainer, {
-                    center:              MAP_CONFIG.center,
-                    zoom:                MAP_CONFIG.zoom,
-                    mapTypeControl:      false,
-                    streetViewControl:   false,
-                    fullscreenControl:   true,
-                    styles: [
-                        {
-                            featureType: 'water',
-                            elementType: 'geometry',
-                            stylers: [{ color: '#94d1d8' }]
-                        },
-                        {
-                            featureType: 'landscape',
-                            elementType: 'geometry',
-                            stylers: [{ color: '#efefed' }]
-                        }
-                    ]
-                });
-
-                const marker = new google.maps.Marker({
-                    position:  MAP_CONFIG.center,
-                    map:       map,
-                    title:     'Piel de Mar',
-                    animation: google.maps.Animation.DROP
-                });
-
-                const infoWindow = new google.maps.InfoWindow({
-                    content: `
-                        <div style="font-family:Arial,sans-serif;padding:10px;">
-                            <h3 style="margin:0 0 8px;color:#054954;">${escapeHtml('Piel de Mar')}</h3>
-                            <p style="margin:0;color:#24436a;">
-                                ${escapeHtml('Cullen 1619')}<br>
-                                ${escapeHtml('Esperanza, Santa Fe')}
-                            </p>
-                            <p style="margin:8px 0 0;font-size:.9rem;">
-                                <a href="https://www.google.com/maps/dir/?api=1&destination=Cullen+1619,+Esperanza,+Santa+Fe,+Argentina"
-                                   target="_blank"
-                                   rel="noopener noreferrer"
-                                   style="color:#054954;text-decoration:none;font-weight:bold;">
-                                    Cómo llegar →
-                                </a>
-                            </p>
-                        </div>
-                    `
-                });
-
-                marker.addListener('click', () => infoWindow.open(map, marker));
-
-                mapContainer.classList.add('loaded');
-                if (mapPlaceholder) mapPlaceholder.style.display = 'none';
-
-            } catch {
-                // Error al cargar el mapa — el placeholder permanece visible
-            }
-        }
-
-        const callbackName = '_pdmMapReady';
-        window[callbackName] = _initMapInternal;
-        const mapObserver = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                mapObserver.disconnect();
-
-                const script   = document.createElement('script');
-                script.src     = `https://maps.googleapis.com/maps/api/js?key=${MAP_CONFIG.apiKey}&callback=${callbackName}`;
-                script.async   = true;
-                script.defer   = true;
-                script.onerror = () => {
-                    // Error de red al cargar Maps — el placeholder permanece
-                };
-                document.head.appendChild(script);
-            }
-        }, { threshold: 0.1 });
-
-        mapObserver.observe(mapContainer);
-
-    })(); 
 });
+// ========================================
+// SLIDER DE INTRODUCCIÓN - OPTIMIZADO CONVERSIÓN
+// ========================================
+
+const introTrack = document.getElementById('introSliderTrack');
+const introPrevBtn = document.getElementById('introPrevBtn');
+const introNextBtn = document.getElementById('introNextBtn');
+const introDotsContainer = document.getElementById('introSliderDots');
+const introSliderStatus = document.getElementById('introSliderStatus');
+
+if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
+    const introSlides = Array.from(introTrack.querySelectorAll('.intro-slide'));
+    let introCurrentIndex = 0;
+    let introAutoPlayId = null;
+    const INTRO_AUTOPLAY_MS = 5000; // 5 segundos (≥ 4s para no bajar conversión)
+
+    // Obtener ancho de slide
+    function getIntroSlideWidth() {
+        return introSlides[0]?.offsetWidth ?? 0;
+    }
+
+    // Construir indicadores (dots)
+    function buildIntroDots() {
+        introDotsContainer.innerHTML = '';
+        introSlides.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.classList.add('intro-slider-dot');
+            dot.setAttribute('aria-label', `Ir a diapositiva ${i + 1}`);
+            dot.setAttribute('role', 'tab');
+            dot.setAttribute('aria-selected', String(i === 0));
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToIntroSlide(i));
+            introDotsContainer.appendChild(dot);
+        });
+    }
+
+    // Actualizar indicadores
+    function updateIntroDots() {
+        introDotsContainer.querySelectorAll('.intro-slider-dot').forEach((dot, i) => {
+            const active = i === introCurrentIndex;
+            dot.classList.toggle('active', active);
+            dot.setAttribute('aria-selected', String(active));
+        });
+    }
+
+    // Actualizar botones
+    function updateIntroButtons() {
+        introPrevBtn.disabled = introCurrentIndex === 0;
+        nextBtn.disabled = introCurrentIndex >= introSlides.length - 1;
+    }
+
+    // Ir a slide específico
+    function goToIntroSlide(index) {
+        const maxIndex = introSlides.length - 1;
+        introCurrentIndex = Math.max(0, Math.min(index, maxIndex));
+
+        introTrack.style.willChange = 'transform';
+        introTrack.style.transform = `translateX(-${introCurrentIndex * getIntroSlideWidth()}px)`;
+
+        // Marcar slide activo
+        introSlides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === introCurrentIndex);
+        });
+
+        introTrack.addEventListener('transitionend', () => {
+            introTrack.style.willChange = 'auto';
+        }, { once: true });
+
+        updateIntroDots();
+        updateIntroButtons();
+
+        // Actualizar estado accesible
+        if (introSliderStatus) {
+            introSliderStatus.textContent = `Diapositiva ${introCurrentIndex + 1} de ${introSlides.length}`;
+        }
+    }
+
+    // Autoplay (se detiene al llegar al final - no hace loop)
+    function startIntroAutoPlay() {
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reducedMotion) return;
+        
+        stopIntroAutoPlay();
+        
+        // Solo iniciar si no estamos en la última slide
+        if (introCurrentIndex < introSlides.length - 1) {
+            introAutoPlayId = setInterval(() => {
+                if (introCurrentIndex < introSlides.length - 1) {
+                    goToIntroSlide(introCurrentIndex + 1);
+                } else {
+                    // Llegamos al final - detener autoplay
+                    stopIntroAutoPlay();
+                }
+            }, INTRO_AUTOPLAY_MS);
+        }
+    }
+
+    function stopIntroAutoPlay() {
+        clearInterval(introAutoPlayId);
+        introAutoPlayId = null;
+    }
+
+    // Event listeners
+    introPrevBtn.addEventListener('click', () => {
+        stopIntroAutoPlay();
+        goToIntroSlide(introCurrentIndex - 1);
+        startIntroAutoPlay();
+    });
+
+    introNextBtn.addEventListener('click', () => {
+        stopIntroAutoPlay();
+        goToIntroSlide(introCurrentIndex + 1);
+        startIntroAutoPlay();
+    });
+
+    // Pausar al hover
+    introTrack.addEventListener('mouseenter', stopIntroAutoPlay);
+    introTrack.addEventListener('mouseleave', startIntroAutoPlay);
+
+    // Soporte táctil (swipe)
+    let introTouchStartX = 0;
+    let introTouchEndX = 0;
+
+    introTrack.addEventListener('touchstart', (e) => {
+        introTouchStartX = e.touches[0].clientX;
+        stopIntroAutoPlay();
+    }, { passive: true });
+
+    introTrack.addEventListener('touchmove', (e) => {
+        introTouchEndX = e.touches[0].clientX;
+    }, { passive: true });
+
+    introTrack.addEventListener('touchend', () => {
+        const diff = introTouchStartX - introTouchEndX;
+        const threshold = 50;
+
+        if (Math.abs(diff) > threshold) {
+            if (diff > 0) {
+                // Swipe izquierda → siguiente
+                goToIntroSlide(introCurrentIndex + 1);
+            } else {
+                // Swipe derecha → anterior
+                goToIntroSlide(introCurrentIndex - 1);
+            }
+        }
+        startIntroAutoPlay();
+    });
+
+    // Pausar cuando la página está oculta
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopIntroAutoPlay();
+        } else {
+            startIntroAutoPlay();
+        }
+    });
+
+    // Teclado (accesibilidad)
+    document.addEventListener('keydown', (e) => {
+        // Solo responder si el slider está en viewport
+        const rect = introTrack.getBoundingClientRect();
+        const inView = rect.top < window.innerHeight && rect.bottom > 0;
+        
+        if (!inView) return;
+
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            stopIntroAutoPlay();
+            goToIntroSlide(introCurrentIndex - 1);
+            startIntroAutoPlay();
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            stopIntroAutoPlay();
+            goToIntroSlide(introCurrentIndex + 1);
+            startIntroAutoPlay();
+        }
+    });
+
+    // Recalcular en resize con debounce
+    let introResizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(introResizeTimer);
+        introResizeTimer = setTimeout(() => {
+            goToIntroSlide(introCurrentIndex);
+        }, 150);
+    });
+
+    // Inicializar
+    buildIntroDots();
+    updateIntroButtons();
+    introSlides[0]?.classList.add('active');
+    
+    // Iniciar autoplay después de un pequeño delay
+    // (permite que el usuario vea el slide 1 completo primero)
+    setTimeout(() => {
+        startIntroAutoPlay();
+    }, 1000);
+}
