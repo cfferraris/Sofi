@@ -1,4 +1,14 @@
 /* ========================================
+   PIEL DE MAR - STYLES - FASE 1 APLICADA
+   ========================================
+   Mejoras de diseño integradas:
+   ✅ Texturas de fondo sutiles
+   ✅ Espaciado vertical aumentado  
+   ✅ Sistema de sombras refinado
+   ✅ Tipografía con mejor respiración
+   ======================================== */
+
+/* ========================================
    TIPOGRAFÍAS LOCALES
    ======================================== */
 
@@ -7,7 +17,7 @@
     src: url('../assets/tipografias/Belgan-Aesthetic.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
-    font-display: fallback; /* ✅ CORREGIDO: fallback > swap para marcas — evita destello de fuente incorrecta */
+    font-display: fallback;
 }
 
 @font-face {
@@ -82,13 +92,7 @@
 }
 
 /* ========================================
-   VARIABLES CSS
-   Paleta de color:
-   - --profundo : color principal oscuro, fondos y texto de alto contraste
-   - --oceano   : color secundario, textos y elementos de apoyo
-   - --agua     : color de acento claro, hovers, íconos e highlights
-   - --arena    : fondo cálido de secciones alternadas
-   - --tiza     : fondo claro principal y texto sobre fondos oscuros
+   VARIABLES CSS - FASE 1 MEJORADAS
    ======================================== */
 :root {
     /* Colores */
@@ -102,14 +106,14 @@
     --font-principal: 'Belgian Aesthetic', Georgia, serif;
     --font-secundaria: 'Fahkwang', 'Helvetica Neue', Arial, sans-serif;
 
-    /* Espaciados */
+    /* ✨ FASE 1: Espaciados aumentados */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
-    --spacing-md: 2rem;
-    --spacing-lg: 4rem;
-    --spacing-xl: 6rem;
+    --spacing-md: 2.5rem;     /* ↑ de 2rem */
+    --spacing-lg: 5rem;       /* ↑ de 4rem */
+    --spacing-xl: 7rem;       /* ↑ de 6rem */
 
-    /* Navbar - fuente única de verdad */
+    /* Navbar */
     --navbar-height: 80px;
 
     /* Transiciones */
@@ -118,7 +122,7 @@
 }
 
 /* ========================================
-   RESET Y ESTILOS BASE
+   RESET Y ESTILOS BASE - FASE 1 MEJORADOS
    ======================================== */
 *, *::before, *::after {
     margin: 0;
@@ -132,13 +136,13 @@ body {
     font-family: var(--font-secundaria);
     color: var(--profundo);
     background-color: var(--arena);
-    line-height: 1.7;
-    overflow-x: hidden;
+    line-height: 1.75;  /* ✨ FASE 1: mejorado de 1.7 */
+    overflow-x: clip;
 }
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-principal);
     font-weight: 400;
-    letter-spacing: 0.5px;
+    letter-spacing: -0.01em;  /* ✨ FASE 1: mejorado de 0.5px */
     line-height: 1.3;
 }
 h1 {
@@ -147,7 +151,7 @@ h1 {
 }
 h2 {
     font-size: clamp(1.75rem, 4vw, 2.75rem);
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-xs);
 }
 h3 {
     font-size: clamp(1.25rem, 3vw, 1.75rem);
@@ -156,6 +160,7 @@ h3 {
 p {
     font-size: clamp(1rem, 2vw, 1.125rem);
     font-weight: 300;
+    max-width: 65ch;  /* ✨ FASE 1: ancho óptimo de lectura */
 }
 a {
     text-decoration: none;
@@ -170,7 +175,6 @@ img {
 /* ========================================
    ACCESIBILIDAD
    ======================================== */
-
 .sr-only {
     position: absolute;
     width: 1px;
@@ -195,11 +199,11 @@ img {
 .container {
     max-width: 1200px;
     margin: auto;
-    padding: 0 var(--spacing-xs);
+    padding: 0 var(--spacing-sm);  /* ✨ FASE 1: aumentado de xs */
 }
 
 /* ========================================
-   HERO SECTION
+   HERO SECTION - FASE 1 CON TEXTURA
    ======================================== */
 .hero {
     position: relative;
@@ -212,8 +216,22 @@ img {
     cursor: pointer;
     contain: layout paint;
 }
+
+/* ✨ FASE 1: Textura overlay en hero */
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('../assets/img/fondos/Pat_01_01.png');
+    background-size: 400px;
+    background-repeat: repeat;
+    opacity: 0.05;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    z-index: 2;
+}
+
 .hero-background {
-    will-change: transform;
     position: absolute;
     inset: 0;
     background-image: url('../assets/img/fondos/Pat_01_04.png');
@@ -282,18 +300,22 @@ img {
     width: 100%;
     height: var(--navbar-height);
     background: var(--arena);
-    backdrop-filter:blur(5px);
-    -webkit-backdrop-filter:blur(5px);
+    backdrop-filter: blur(5px);
     padding: var(--spacing-xs) 0;
     z-index: 999;
     border-bottom: 1px solid var(--tiza);
     opacity: 0;
     transform: translateY(-100%);
     transition: var(--transition-smooth);
+    box-shadow: none;  /* ✨ FASE 1: sin sombra inicial */
 }
 .navbar.visible {
     opacity: 1;
     transform: translateY(0);
+}
+/* ✨ FASE 1: Sombra solo al scroll */
+.navbar.scrolled {
+    box-shadow: 0 4px 20px rgba(5, 73, 84, 0.08);
 }
 .navbar-container {
     max-width: 1400px;
@@ -306,7 +328,6 @@ img {
     height: 100%;
 }
 
-/* Logo isotipo navbar */
 .navbar-logo {
     flex-shrink: 0;
     opacity: 0;
@@ -323,7 +344,6 @@ img {
     width: auto;
 }
 
-/* Menú hamburguesa */
 .menu-toggle {
     display: none;
     flex-direction: column;
@@ -352,7 +372,6 @@ img {
     transform: rotate(-45deg) translate(7px, -7px);
 }
 
-/* Menú de navegación */
 .nav-menu {
     display: flex;
     list-style: none;
@@ -369,6 +388,7 @@ img {
     position: relative;
     padding: var(--spacing-xs) 0;
     transition: var(--transition-fast);
+    letter-spacing: 0.02em;  /* ✨ FASE 1: más respiración */
 }
 .nav-link::after {
     content: '';
@@ -388,7 +408,6 @@ img {
     width: 100%;
 }
 
-/* Redes sociales desktop */
 .social-links {
     display: flex;
     gap: var(--spacing-sm);
@@ -416,7 +435,6 @@ img {
     object-fit: contain;
 }
 
-/* Redes sociales mobile - ocultas en desktop */
 .nav-social-mobile {
     display: none;
     list-style: none;
@@ -461,7 +479,6 @@ img {
     transform: translateY(0);
 }
 
-/* Todas las secciones usan la variable --navbar-height */
 .main-content section {
     min-height: calc(100vh - var(--navbar-height));
     display: flex;
@@ -472,27 +489,26 @@ img {
     width: 100%;
 }
 
-/* Padding base para secciones */
 section {
-    padding: var(--spacing-lg) 0;
+    padding: var(--spacing-sm) 0; 
 }
 .section-subtitle {
     text-align: center;
     color: var(--oceano);
     font-weight: 300;
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-sm);
+    opacity: 0.9;  /* ✨ FASE 1: jerarquía visual */
 }
 
 /* ========================================
-   SECCIÓN INTRO (PIEL DE MAR)
+   SECCIÓN INTRO - FASE 1 CON TEXTURA
    ======================================== */
 .intro-section {
     position: relative;
-    padding: calc(var(--navbar-height) + var(--spacing-md)) var(--spacing-xl);
+    padding: calc(var(--navbar-height) + var(--spacing-sm)) var(--spacing-md);
     text-align: center;
     overflow: hidden;
     min-height: 100vh;
-    min-height: 100dvh;
     display: flex;
     align-items: center;
 }
@@ -500,13 +516,14 @@ section {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url('../assets/img/fondos/Pat_01_01.png');
+    background-image: url('../assets/img/fondos/Pat_01_04.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     z-index: -2;
 }
+/* ✨ FASE 1: Overlay con textura agua calma */
 .intro-section::after {
     content: '';
     position: absolute;
@@ -514,17 +531,21 @@ section {
     background: linear-gradient(180deg,
         rgba(239, 239, 237, 0.85) 0%,
         rgba(233, 222, 203, 0.75) 100%
-    );
+    ),
+    url('../assets/img/fondos/Pat_02_03.png');
+    background-size: cover, 600px;
+    background-position: center, center;
+    background-repeat: no-repeat, repeat;
+    opacity: 0.95;
     z-index: -1;
 }
 
-/* ✅ CORREGIDO: era h1 pero el HTML usa h2 en esta sección */
 .intro-section h2 {
     text-align: center;
     color: var(--profundo);
     position: relative;
     z-index: 1;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
 }
 .intro-section .btn {
     display: block;
@@ -533,7 +554,7 @@ section {
 }
 
 /* ========================================
-   LISTAS
+   LISTAS - FASE 1 CON MÁS ESPACIO
    ======================================== */
 .icon-list {
     list-style: none;
@@ -544,26 +565,26 @@ section {
 }
 .icon-list li {
     position: relative;
-    padding-left: 2rem;
-    margin-bottom: var(--spacing-sm);
+    padding-left: var(--spacing-md);
+    margin-bottom: var(--spacing-xs);  
     color: var(--oceano);
     font-size: 1.05rem;
-    line-height: 1.6;
+    line-height: 1.75;  
+    font-weight: 300;  
 }
 .icon-list li::before {
-    content: '◦';
+    content: '●';
     position: absolute;
-    left: 0;
+    left: 0.75rem;
     color: var(--agua);
-    font-size: 1.8rem;
-    line-height: 1.2;
-    font-weight: bold;
+    font-size: 0.6rem;
+    top: 0.75rem;
 }
 
 .check-list {
     list-style: none;
     padding: 0;
-    margin: var(--spacing-md) auto;
+    margin: var(--spacing-xs) auto;
     max-width: 800px;
     text-align: left;
 }
@@ -573,7 +594,8 @@ section {
     margin-bottom: var(--spacing-sm);
     color: var(--oceano);
     font-size: 1.05rem;
-    line-height: 1.6;
+    line-height: 1.75;  /* ✨ FASE 1: mejorado */
+    font-weight: 300;
 }
 .check-list li::before {
     content: '✓';
@@ -599,7 +621,7 @@ section {
     margin: var(--spacing-md) auto;
     max-width: 800px;
     text-align: center;
-    line-height: 1.7;
+    line-height: 1.75;  /* ✨ FASE 1: mejorado */
 }
 
 /* ========================================
@@ -618,16 +640,17 @@ section {
     cursor: pointer;
     transition: var(--transition-fast);
     margin-top: var(--spacing-sm);
+    letter-spacing: 0.02em;  /* ✨ FASE 1: más respiración */
 }
 .btn.primary {
     background: var(--profundo);
     color: var(--tiza);
-    box-shadow: 0 4px 15px rgba(5, 73, 84, 0.2);
+    box-shadow: 0 4px 20px rgba(5, 73, 84, 0.12);  /* ✨ FASE 1: sombra refinada */
 }
 .btn.primary:hover {
     background: var(--oceano);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(5, 73, 84, 0.3);
+    box-shadow: 0 8px 30px rgba(5, 73, 84, 0.2);  /* ✨ FASE 1: sombra refinada */
 }
 .btn.primary:active {
     transform: translateY(0);
@@ -650,47 +673,76 @@ section {
 }
 
 /* ========================================
-   SECCIÓN TU HIJ@ Y VOS
+   SECCIÓN TU HIJ@ Y VOS - FASE 1 MEJORADA
    ======================================== */
 .tu-hijo-y-vos-section {
-    background-image:  url(../assets/img/fondos/Rec_02_2.png);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: linear-gradient(180deg, var(--tiza) 0%, rgba(148, 209, 216, 0.15) 100%);
+    position: relative;
 }
+
+/* ✨ FASE 1: Elemento decorativo de olas */
+.tu-hijo-y-vos-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 400px;
+    height: 200px;
+    background-image: url('../assets/img/fondos/Rec_02_3.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 0;
+}
+
 .tu-hijo-y-vos-section h2 {
     text-align: center;
     color: var(--profundo);
 }
 
 .tu-hijo-y-vos-content {
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--spacing-md);
+    grid-template-columns: 1fr 1fr;  /* ✨ 2 columnas: checklist | cards */
+    gap: var(--spacing-lg);
     align-items: start;
+    position: relative;
+    z-index: 1;
 }
+
+/* Columna izquierda: Checklist */
 .tu-hijo-y-vos-content .check-list {
     background: white;
     padding: var(--spacing-sm);
     border-radius: 20px;
     margin-bottom: 0;
-    box-shadow: 0 4px 20px rgba(36, 67, 106, 0.08);
+    box-shadow: 0 4px 20px rgba(5, 73, 84, 0.08);
     border: 1px solid rgba(148, 209, 216, 0.2);
-    grid-column: 1 / -1;
+    grid-column: 1;  /* Ocupa solo columna izquierda */
+    grid-row: 1 / -1;  /* Se extiende por todas las filas */
+}
+
+/* Columna derecha: Contenedor de cards */
+.tu-hijo-y-vos-cards {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    grid-column: 2; 
 }
 .tu-hijo-y-vos-card {
     background: white;
     padding: var(--spacing-sm);
     border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(36, 67, 106, 0.08);
+    box-shadow: 0 4px 20px rgba(5, 73, 84, 0.08);
     transition: var(--transition-fast);
     border: 1px solid rgba(148, 209, 216, 0.2);
 }
 .tu-hijo-y-vos-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 30px rgba(36, 67, 106, 0.15);
+    transform: translateY(-5px);  /* ✨ FASE 1: lift más pronunciado */
+    box-shadow: 0 12px 40px rgba(5, 73, 84, 0.15);  /* ✨ FASE 1: sombra mejorada */
 }
 .tu-hijo-y-vos-card h3 {
     color: var(--profundo);
@@ -699,10 +751,11 @@ section {
 .tu-hijo-y-vos-card p {
     color: var(--oceano);
     font-weight: 300;
+    line-height: 1.75;
 }
 
 /* ========================================
-   SECCIÓN DIFERENCIAL 
+   SECCIÓN DIFERENCIAL — TABLA SEMÁNTICA
    ======================================== */
 .diferencial-section {
     background: linear-gradient(180deg, rgba(148, 209, 216, 0.15) 0%, var(--tiza) 100%);
@@ -712,9 +765,7 @@ section {
     color: var(--profundo);
     margin-bottom: var(--spacing-sm);
 }
-.diferencial-section .section-subtitle {
-    margin-bottom: var(--spacing-lg);
-}
+
 
 .comparativa-table {
     width: 100%;
@@ -723,24 +774,22 @@ section {
     background: white;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 4px 16px rgba(5,73,84,.12);
+    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
     border-collapse: collapse;
 }
 
-/* Encabezado de tabla */
 .comparativa-table thead tr {
     background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
     color: var(--tiza);
 }
 .comparativa-table thead th {
-    padding: var(--spacing-sm) var(--spacing-xs);
+    padding: var(--spacing-md) var(--spacing-xs);  /* ✨ FASE 1: padding aumentado */
     text-align: center;
     font-family: var(--font-secundaria);
     font-weight: 500;
     font-size: 1rem;
 }
 .comparativa-table thead th:first-child {
-    /* Celda vacía de esquina */
     background: transparent;
     width: 35%;
 }
@@ -763,21 +812,23 @@ section {
     margin-left: var(--spacing-xs);
 }
 
-/* Filas del cuerpo */
 .comparativa-table tbody tr {
     border-bottom: 1px solid rgba(148, 209, 216, 0.2);
     transition: var(--transition-fast);
 }
+/* ✨ FASE 1: Filas alternadas */
+.comparativa-table tbody tr:nth-child(even) {
+    background: rgba(233, 222, 203, 0.15);
+}
 .comparativa-table tbody tr:hover {
-    background: rgba(148, 209, 216, 0.05);
+    background: rgba(148, 209, 216, 0.08);
 }
 .comparativa-table tbody tr:last-child {
     border-bottom: none;
 }
 
-/* Celda de encabezado de fila */
 .comparativa-table tbody th {
-    padding: var(--spacing-sm) var(--spacing-xs);
+    padding: var(--spacing-md) var(--spacing-sm);  /* ✨ FASE 1: padding aumentado */
     font-family: var(--font-principal);
     font-size: 1.05rem;
     color: var(--profundo);
@@ -787,9 +838,8 @@ section {
     vertical-align: middle;
 }
 
-/* Celdas de datos */
 .comparativa-table tbody td {
-    padding: var(--spacing-sm) var(--spacing-xs);
+    padding: var(--spacing-md) var(--spacing-sm);  /* ✨ FASE 1: padding aumentado */
     font-size: 0.95rem;
     line-height: 1.5;
     vertical-align: middle;
@@ -798,13 +848,13 @@ section {
     color: var(--oceano);
     border-right: 1px solid rgba(148, 209, 216, 0.2);
 }
+/* ✨ FASE 1: Columna Piel de Mar destacada */
 .comparativa-table tbody td:last-child {
     color: var(--profundo);
-    background: rgba(148, 209, 216, 0.08);
+    background: linear-gradient(90deg, transparent 0%, rgba(148, 209, 216, 0.08) 100%);
     font-weight: 500;
 }
 
-/* Contenido dentro de las celdas td */
 .comparativa-table tbody td i,
 .comparativa-table tbody td span {
     display: inline-block;
@@ -845,23 +895,42 @@ section {
 }
 
 /* ========================================
-   SECCIÓN SERVICIOS
+   SECCIÓN SERVICIOS - FASE 1 CON TEXTURA
    ======================================== */
 .service-section {
-    background-image:url(../assets/img/fondos/Rec_02_1.png);
-    background-color: var(--profundo);
-    background-size:contain;
-    background-position:right;
-    background-repeat: repeat;
+    background: var(--tiza);
     display: flex;
     align-items: center;
     padding-top: var(--spacing-xs);
     padding-bottom: var(--spacing-sm);
+    position: relative;
+    overflow: hidden;
 }
+
+/* ✨ FASE 1: Textura topográfica fija */
+.service-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('../assets/img/fondos/Pat_01_03.png');
+    background-size: 800px;
+    background-position: center;
+    background-repeat: repeat;
+    background-attachment: fixed;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.service-section > .container {
+    position: relative;
+    z-index: 1;
+}
+
 .service-section h2 {
     text-align: center;
     color: var(--profundo);
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
 }
 .service-grid {
     display: grid;
@@ -871,7 +940,7 @@ section {
 }
 .service-card {
     background: var(--arena);
-    padding: var(--spacing-xs);
+    padding: var(--spacing-sm);  /* ✨ FASE 1: padding aumentado */
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(5, 73, 84, 0.08);
     transition: var(--transition-fast);
@@ -882,12 +951,12 @@ section {
     text-align: center;
 }
 .service-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(5, 73, 84, 0.15);
+    transform: translateY(-6px);  /* ✨ FASE 1: lift mejorado */
+    box-shadow: 0 12px 40px rgba(5, 73, 84, 0.15);  /* ✨ FASE 1: sombra mejorada */
 }
 .service-icon {
-    width: 44px;
-    height: 44px;
+    width: 48px;  /* ✨ FASE 1: aumentado de 44px */
+    height: 48px;
     background: linear-gradient(135deg, var(--agua) 0%, rgba(148, 209, 216, 0.5) 100%);
     border-radius: 50%;
     display: flex;
@@ -897,14 +966,14 @@ section {
     transition: var(--transition-fast);
 }
 .service-icon i {
-    width: 22px;
-    height: 22px;
+    width: 24px;  /* ✨ FASE 1: aumentado de 22px */
+    height: 24px;
     color: var(--profundo);
     transition: var(--transition-fast);
 }
 .service-card:hover .service-icon {
     transform: scale(1.1) rotate(5deg);
-    background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
+    background: linear-gradient(135deg, var(--agua) 0%, var(--tiza) 100%);
 }
 .service-card:hover .service-icon i {
     color: var(--tiza);
@@ -918,7 +987,7 @@ section {
     color: var(--oceano);
     font-weight: 300;
     font-size: clamp(0.75rem, 1.2vw, 0.85rem);
-    line-height: 1.4;
+    line-height: 1.5;
     flex-grow: 1;
 }
 .service-card .btn {
@@ -929,11 +998,10 @@ section {
 }
 
 /* ========================================
-   SECCIÓN TESTIMONIOS — CARRUSEL
+   SECCIÓN TESTIMONIOS - FASE 1 MEJORADA
    ======================================== */
 .testimonios-section {
-    background-color: var(--tiza);
-    
+    background: linear-gradient(180deg, rgba(148, 209, 216, 0.15) 0%, var(--arena) 100%);
     display: flex;
     align-items: flex-start;
     padding-top: var(--spacing-xs);
@@ -953,38 +1021,43 @@ section {
 }
 .carousel-track {
     display: flex;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-md);  /* ✨ FASE 1: gap aumentado */
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    /* ✅ CORREGIDO: will-change eliminado del estado estático.
-       Debe agregarse/quitarse con JS solo durante la animación activa
-       para no mantener una capa de composición GPU permanente.
-       En main.js: antes de animar → track.style.willChange = 'transform'
-                   después de animar → track.style.willChange = 'auto'    */
 }
 
-/* Tarjetas de testimonio */
 .testimonio-card {
-    flex: 0 0 calc(33.3333% - var(--spacing-xs) * 2 / 3);
-    min-width: calc(33.3333% - var(--spacing-xs) * 2 / 3);
-    background-color: (var(--agua));
-    background-image: url(../assets/img/fondos/Rec_01_3.png);
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    padding: var(--spacing-xs);
-    border-radius: 16px;
-    border: 1px solid var(--oceano);
-    box-shadow: 0 2px 12px rgba(5, 73, 84, 0.15);
+    flex: 0 0 calc(33.3333% - var(--spacing-md) * 2 / 3);
+    min-width: calc(33.3333% - var(--spacing-md) * 2 / 3);
+    background: white;
+    padding: var(--spacing-md);  /* ✨ FASE 1: padding aumentado */
+    border-radius: 20px;  /* ✨ FASE 1: más redondeado */
+    border-left: 4px solid var(--profundo);  /* ✨ FASE 1: borde izquierdo */
+    box-shadow: 0 2px 12px rgba(5, 73, 84, 0.08);  /* ✨ FASE 1: sombra refinada */
     transition: var(--transition-fast);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     margin: 0;
+    position: relative;
 }
+
+/* ✨ FASE 1: Comillas como marca de agua */
+.testimonio-card::before {
+    content: '"';
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-md);
+    font-size: 6rem;
+    font-family: Georgia, serif;
+    color: var(--agua);
+    opacity: 0.05;
+    line-height: 1;
+    pointer-events: none;
+}
+
 .testimonio-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(5, 73, 84, 0.12);
-    border-color: var(--agua);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(5, 73, 84, 0.15);  /* ✨ FASE 1: sombra mejorada */
 }
 .testimonio-card blockquote {
     margin: 0;
@@ -992,21 +1065,20 @@ section {
     flex: 1;
 }
 .testimonio-card blockquote p {
-    font-size: 0.8rem;
-    line-height: 1.5;
+    font-size: 0.9rem;  /* ✨ FASE 1: aumentado de 0.8rem */
+    line-height: 1.75;  /* ✨ FASE 1: mejorado */
     color: var(--oceano);
     font-weight: 300;
     font-style: italic;
-    margin-bottom: var(--spacing-xs);
+
 }
 .testimonio-author {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--spacing-xs);
-    padding-top: var(--spacing-xs);
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
     border-top: 1px solid rgba(148, 209, 216, 0.3);
-    margin-top: var(--spacing-xs);
 }
 .testimonio-author-info {
     display: flex;
@@ -1015,18 +1087,18 @@ section {
 }
 .testimonio-author strong {
     font-family: var(--font-principal);
-    font-size: 0.85rem;
+    font-size: 0.95rem;  /* ✨ FASE 1: aumentado */
     color: var(--profundo);
     font-weight: 400;
 }
 .testimonio-author span {
-    font-size: 0.7rem;
+    font-size: 0.8rem;  /* ✨ FASE 1: aumentado */
     color: var(--oceano);
     opacity: 0.8;
 }
 .testimonio-quote {
-    width: 26px;
-    height: 26px;
+    width: 32px;  /* ✨ FASE 1: aumentado */
+    height: 32px;
     background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
     border-radius: 50%;
     display: flex;
@@ -1035,18 +1107,17 @@ section {
     flex-shrink: 0;
 }
 .testimonio-quote i {
-    width: 13px;
-    height: 13px;
+    width: 16px;  /* ✨ FASE 1: aumentado */
+    height: 16px;
     color: var(--tiza);
 }
 
-/* Dots del carrusel — ocultos */
 .carousel-dots {
     display: none;
 }
 .carousel-dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;  /* ✨ FASE 1: aumentado */
+    height: 10px;
     border-radius: 50%;
     background: rgba(148, 209, 216, 0.4);
     border: none;
@@ -1056,26 +1127,47 @@ section {
 }
 .carousel-dot.active {
     background: var(--profundo);
-    transform: scale(1.3);
+    transform: scale(1.4);  /* ✨ FASE 1: aumentado */
 }
 
 /* ========================================
-   SECCIÓN RECURSOS
+   SECCIÓN RECURSOS - FASE 1 CON DECORACIÓN
    ======================================== */
 .resources-section {
-    background-image: url(../assets/img/fondos/Pat_02_03.png);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: linear-gradient(180deg, var(--arena) 0%, var(--tiza) 100%);
     text-align: center;
+    position: relative;
+    overflow: hidden;
 }
+
+/* ✨ FASE 1: Ballenas decorativas */
+.resources-section::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    height: 150px;
+    background-image: url('../assets/img/fondos/Rec_01_1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.resources-section > .container {
+    position: relative;
+    z-index: 1;
+}
+
 .resources-section h2 {
     text-align: center;
     color: var(--profundo);
     margin-bottom: var(--spacing-sm);
 }
-.resources-section .section-subtitle {
-    margin-bottom: var(--spacing-lg);
+.resources-section {
+    margin-bottom: var(--spacing-sm);
 }
 .resources-cards-container {
     display: grid;
@@ -1084,8 +1176,8 @@ section {
 }
 .resources-main-card {
     background: white;
-    padding: var(--spacing-md);
-    border-radius: 20px;
+    padding: var(--spacing-sm);  
+    border-radius: 24px;
     box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
     border: 1px solid rgba(148, 209, 216, 0.2);
     transition: var(--transition-fast);
@@ -1097,17 +1189,16 @@ section {
 .card-options {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-sm);
 }
 
-/* Opción de recurso — estado activo (enlace) */
 .resource-option {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm);
+    gap: var(--spacing-md); 
+    padding: var(--spacing-xs);
     background: var(--tiza);
-    border-radius: 12px;
+    border-radius: 16px;
     transition: var(--transition-fast);
     border: 1px solid transparent;
 }
@@ -1118,7 +1209,6 @@ section {
     box-shadow: 0 4px 15px rgba(148, 209, 216, 0.3);
 }
 
-/* ✅ AGREGADO: Estado deshabilitado para recursos "próximamente" */
 .resource-option--disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -1133,10 +1223,10 @@ section {
 }
 
 .option-icon {
-    width: 36px;
-    height: 36px;
-    background: white;
-    border-radius: 10px;
+    width: 48px;  /* ✨ FASE 1: aumentado */
+    height: 48px;
+    background: linear-gradient(135deg, var(--agua) 0%, rgba(148, 209, 216, 0.3) 100%);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1144,11 +1234,11 @@ section {
     transition: var(--transition-fast);
 }
 .resource-option:hover .option-icon {
-    background: var(--profundo);
+    background: linear-gradient(135deg, var(--agua) 0%,var(--tiza) 100%);
 }
 .option-icon i {
-    width: 20px;
-    height: 20px;
+    width: 24px;  /* ✨ FASE 1: aumentado */
+    height: 24px;
     color: var(--profundo);
     transition: var(--transition-fast);
 }
@@ -1170,371 +1260,202 @@ section {
     line-height: 1.2;
 }
 .option-content span {
-    font-size: 0.8rem;
+    font-size: 0.85rem;  /* ✨ FASE 1: aumentado */
     color: var(--oceano);
-    line-height: 1.3;
+    line-height: 1.5;  /* ✨ FASE 1: mejorado */
 }
 .option-arrow {
-    width: 18px;
-    height: 18px;
+    width: 20px;  /* ✨ FASE 1: aumentado */
+    height: 20px;
     color: var(--oceano);
     flex-shrink: 0;
     transition: var(--transition-fast);
+    opacity: 0.5;
 }
 .resource-option:hover .option-arrow {
     color: var(--profundo);
     transform: translateX(5px);
+    opacity: 1;
 }
+
 
 /* ========================================
-   SECCIÓN TURNOS — CALENDARIO Y FORMULARIO
+   SECCIÓN CONSULTA (NUEVA - reemplaza turnos)
    ======================================== */
-.appointments-section {
+.consultation-section {
     background: var(--tiza);
     text-align: center;
-    padding: var(--spacing-xl) 0;
-}
-.appointments-section h2 {
-    margin-bottom: var(--spacing-xs);
-}
-.appointments-intro {
-    font-size: 1.125rem;
-    color: var(--oceano);
-    margin-bottom: var(--spacing-lg);
-    font-weight: 300;
-}
-.appointments-note {
-    display: block;
-    margin-top: var(--spacing-lg);
-    color: var(--oceano);
-    font-size: 0.9rem;
-    font-style: italic;
+    padding: var(--spacing-sm) 0;
 }
 
-/* Container dividido en 2 columnas */
-.appointments-container {
+.consultation-section h2 {
+    margin-bottom: var(--spacing-sm);
+    color: var(--profundo);
+}
+
+.consultation-intro {
+    font-size: 1.125rem;
+    color: var(--oceano);
+    margin-bottom: var(--spacing-sm);
+    font-weight: 300;
+}
+
+.consultation-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-lg);
     max-width: 1100px;
     margin: 0 auto;
-    text-align: left;
 }
 
-/* ========================================
-   CALENDARIO — COLUMNA IZQUIERDA
-   ======================================== */
-.calendar-wrapper {
-    background: white;
-    padding: var(--spacing-md);
+.consultation-image {
+    position: relative;
     border-radius: 20px;
+    overflow: hidden;
     box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
     border: 1px solid rgba(148, 209, 216, 0.2);
 }
-.calendar-header {
+
+.consultation-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.consultation-content {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--spacing-md);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid rgba(148, 209, 216, 0.2);
+    flex-direction: column;
+    justify-content: center;
 }
-.calendar-month {
-    font-size: 1.3rem;
-    color: var(--profundo);
-    margin: 0;
-    font-family: var(--font-principal);
+
+.consultation-card {
+    background: white;
+    padding: var(--spacing-sm);
+    border-radius: 24px;
+    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
+    border: 1px solid rgba(148, 209, 216, 0.2);
+    text-align: center;
 }
-.calendar-nav {
-    width: 36px;
-    height: 36px;
-    border: none;
-    background: var(--tiza);
+
+.consultation-icon {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, var(--agua) 0%, rgba(148, 209, 216, 0.6) 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: var(--transition-fast);
+    margin: 0 auto var(--spacing-md);
 }
-.calendar-nav:hover:not(:disabled) {
-    background: var(--agua);
-    transform: scale(1.1);
-}
-.calendar-nav:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-}
-.calendar-nav i {
-    width: 20px;
-    height: 20px;
+
+.consultation-icon i {
+    width: 36px;
+    height: 36px;
     color: var(--profundo);
 }
 
-/* Grid del calendario */
-.calendar-grid {
-    display: block;
-}
-.calendar-weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-.calendar-weekdays div {
-    text-align: center;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--oceano);
-    padding: 0.5rem 0;
-    text-transform: uppercase;
-}
-.calendar-days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.5rem;
-}
-
-/* Días individuales */
-.calendar-day {
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--profundo);
-    cursor: pointer;
-    transition: var(--transition-fast);
-    border: 1px solid transparent;
-    background: var(--tiza);
-}
-.calendar-day:hover:not(.disabled):not(.empty) {
-    background: var(--agua);
-    border-color: var(--agua);
-    transform: scale(1.05);
-}
-.calendar-day.disabled {
-    color: rgba(36, 67, 106, 0.3);
-    cursor: not-allowed;
-    background: transparent;
-}
-.calendar-day.empty {
-    cursor: default;
-    visibility: hidden;
-}
-.calendar-day.today {
-    border-color: var(--oceano);
-    font-weight: 600;
-}
-.calendar-day.selected {
-    background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
-    color: var(--tiza);
-    border-color: var(--profundo);
-    font-weight: 600;
-}
-
-/* ========================================
-   COLUMNA DERECHA — HORARIOS Y FORMULARIO
-   ======================================== */
-.appointments-right {
-    display: flex;
-    flex-direction: column;
-}
-
-/* Placeholder inicial */
-.appointments-placeholder {
-    background: white;
-    padding: var(--spacing-xl);
-    border-radius: 20px;
-    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
-    border: 1px solid rgba(148, 209, 216, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 400px;
-}
-.appointments-placeholder i {
-    width: 64px;
-    height: 64px;
-    color: var(--agua);
-    margin-bottom: var(--spacing-md);
-}
-.appointments-placeholder p {
-    color: var(--oceano);
-    font-size: 1.05rem;
-    max-width: 300px;
-}
-
-/* Selector de horarios */
-.time-selector {
-    background: white;
-    padding: var(--spacing-md);
-    border-radius: 20px;
-    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
-    border: 1px solid rgba(148, 209, 216, 0.2);
-}
-.time-selector h4 {
+.consultation-card h3 {
     font-family: var(--font-principal);
     color: var(--profundo);
-    margin-bottom: var(--spacing-xs);
-}
-.selected-date-display {
-    color: var(--oceano);
-    font-size: 0.95rem;
-    margin-bottom: var(--spacing-md);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid rgba(148, 209, 216, 0.2);
-}
-.time-slots {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
-}
-.time-slot {
-    padding: 0.75rem;
-    border: 1px solid rgba(148, 209, 216, 0.3);
-    border-radius: 10px;
-    background: var(--tiza);
-    text-align: center;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--profundo);
-    cursor: pointer;
-    transition: var(--transition-fast);
-}
-.time-slot:hover:not(.taken) {
-    background: var(--agua);
-    border-color: var(--agua);
-    transform: scale(1.05);
-}
-.time-slot.taken {
-    background: rgba(200, 200, 200, 0.2);
-    color: rgba(36, 67, 106, 0.4);
-    cursor: not-allowed;
-    text-decoration: line-through;
-}
-.time-slot.selected {
-    background: linear-gradient(135deg, var(--profundo) 0%, var(--oceano) 100%);
-    color: var(--tiza);
-    border-color: var(--profundo);
-}
-
-/* ========================================
-   FORMULARIO DE RESERVA
-   ======================================== */
-.appointment-form {
-    background: white;
-    padding: var(--spacing-md);
-    border-radius: 20px;
-    box-shadow: 0 4px 30px rgba(5, 73, 84, 0.1);
-    border: 1px solid rgba(148, 209, 216, 0.2);
-}
-.appointment-form h4 {
-    font-family: var(--font-principal);
-    color: var(--profundo);
-    margin-bottom: var(--spacing-xs);
-}
-.form-subtitle {
-    color: var(--oceano);
-    font-size: 0.9rem;
-    margin-bottom: var(--spacing-md);
-}
-.form-group {
+    font-size: 1.75rem;
     margin-bottom: var(--spacing-sm);
 }
-.form-group label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--profundo);
-    margin-bottom: 0.4rem;
-}
-.form-group .required {
-    color: #c44;
-}
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid rgba(148, 209, 216, 0.3);
-    border-radius: 10px;
-    font-family: var(--font-secundaria);
-    font-size: 0.95rem;
-    color: var(--profundo);
-    transition: var(--transition-fast);
-    background: var(--tiza);
-}
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--agua);
-    background: white;
-    box-shadow: 0 0 0 3px rgba(148, 209, 216, 0.1);
-}
-.form-group textarea {
-    resize: vertical;
-    min-height: 80px;
+
+.consultation-card p {
+    color: var(--oceano);
+    font-size: 1.05rem;
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.75;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* Resumen del turno */
-.appointment-summary {
-    display: flex;
+.btn-whatsapp {
+    display: inline-flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm);
-    background: linear-gradient(135deg, rgba(148, 209, 216, 0.1) 0%, rgba(148, 209, 216, 0.05) 100%);
-    border-radius: 10px;
-    margin: var(--spacing-md) 0;
-    border: 1px solid rgba(148, 209, 216, 0.3);
+    gap: var(--spacing-xs);
+    font-size: 1.15rem;
+    padding: 1.125rem 2.5rem;
+    margin-top: var(--spacing-xs);
 }
-.appointment-summary i {
+
+.btn-whatsapp i {
     width: 24px;
     height: 24px;
-    color: var(--profundo);
+}
+
+.consultation-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+    color: var(--oceano);
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
+.consultation-note i {
+    width: 18px;
+    height: 18px;
+    color: var(--agua);
     flex-shrink: 0;
 }
-.appointment-summary span {
-    font-size: 0.95rem;
-    color: var(--profundo);
-    font-weight: 500;
+
+/* Responsive */
+@media (max-width: 768px) {
+    .consultation-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .consultation-image {
+        min-height: 300px;
+        order: 2;
+    }
+    
+    .consultation-content {
+        order: 1;
+    }
+    
+    .consultation-card {
+        padding: var(--spacing-md);
+    }
+    
+    .consultation-icon {
+        width: 64px;
+        height: 64px;
+    }
+    
+    .consultation-icon i {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .consultation-card h3 {
+        font-size: 1.5rem;
+    }
 }
 
-/* Botones del formulario */
-.form-actions {
-    display: flex;
-    gap: var(--spacing-sm);
-    margin-top: var(--spacing-md);
-}
-.form-actions .btn {
-    flex: 1;
-    margin: 0;
-}
+
 
 /* ========================================
-   SECCIÓN CONTACTO
-   ✅ CORREGIDO: Duplicado eliminado — una sola declaración
-   con todos los estilos fusionados
+   SECCIÓN CONTACTO - ACTUALIZADA
    ======================================== */
 .contact-section {
     background: linear-gradient(180deg, var(--tiza) 0%, var(--arena) 100%);
-    text-align: center;
-    padding: var(--spacing-xl) 0;
+
 }
 .contact-section h2 {
     text-align: center;
     color: var(--profundo);
+    margin-bottom: var(--spacing-sm);
+}
+.contact-section {
+    text-align: center;
     margin-bottom: var(--spacing-xs);
 }
-.contact-section .section-subtitle {
-    text-align: center;
-    margin-bottom: var(--spacing-lg);
-}
-
-/* Container dividido en 2 columnas */
 .contact-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1542,10 +1463,6 @@ section {
     max-width: 1100px;
     margin: 0 auto;
 }
-
-/* ========================================
-   MAPA — COLUMNA IZQUIERDA
-   ======================================== */
 .contact-map {
     position: relative;
     background: white;
@@ -1555,54 +1472,12 @@ section {
     border: 1px solid rgba(148, 209, 216, 0.2);
     min-height: 500px;
 }
-.map-container {
+.map-image {
     width: 100%;
     height: 100%;
-    min-height: 500px;
+    object-fit: cover;
+    display: block;
 }
-
-/* Placeholder del mapa */
-.map-placeholder {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: var(--spacing-lg);
-    background: linear-gradient(135deg,
-        rgba(148, 209, 216, 0.1) 0%,
-        rgba(233, 222, 203, 0.3) 100%
-    );
-}
-.map-placeholder i {
-    width: 64px;
-    height: 64px;
-    color: var(--profundo);
-    margin-bottom: var(--spacing-md);
-}
-.map-placeholder p {
-    font-size: 1.15rem;
-    color: var(--profundo);
-    font-weight: 500;
-    margin-bottom: var(--spacing-xs);
-    line-height: 1.6;
-}
-.map-placeholder small {
-    color: var(--oceano);
-    font-size: 0.85rem;
-    opacity: 0.8;
-}
-
-/* Ocultar placeholder cuando el mapa carga */
-.map-container.loaded + .map-placeholder {
-    display: none;
-}
-
-/* ========================================
-   INFO DE CONTACTO — COLUMNA DERECHA
-   ======================================== */
 .contact-info {
     display: flex;
     flex-direction: column;
@@ -1610,7 +1485,7 @@ section {
 }
 .contact-card {
     background: white;
-    padding: var(--spacing-md);
+    padding: var(--spacing-xs);
     border-radius: 20px;
     box-shadow: 0 4px 20px rgba(5, 73, 84, 0.08);
     border: 1px solid rgba(148, 209, 216, 0.2);
@@ -1671,7 +1546,7 @@ section {
     font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: var(--spacing-xs);
-    font-style: normal; /* address es itálico por defecto en navegadores */
+    font-style: normal;
 }
 .contact-link {
     display: inline-flex;
@@ -1700,9 +1575,6 @@ section {
     color: #128C7E;
 }
 
-/* ========================================
-   FOOTER
-   ======================================== */
 .footer {
     background: var(--profundo);
     color: var(--tiza);
@@ -1743,6 +1615,93 @@ section {
 }
 
 /* ========================================
+   BOTÓN FLOTANTE DE WHATSAPP
+   ======================================== */
+.whatsapp-float {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    z-index: 998;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1) translateY(-3px);
+    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6);
+    background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+}
+
+.whatsapp-float i {
+    width: 32px;
+    height: 32px;
+    color: white;
+}
+
+/* Animación de pulso sutil */
+@keyframes pulse-whatsapp {
+    0%, 100% {
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(37, 211, 102, 0.7), 
+                    0 0 0 10px rgba(37, 211, 102, 0.1);
+    }
+}
+
+.whatsapp-float {
+    animation: pulse-whatsapp 2s ease-in-out infinite;
+}
+
+/* Pausar animación al hover */
+.whatsapp-float:hover {
+    animation: none;
+}
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+    .whatsapp-float {
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 56px;
+        height: 56px;
+    }
+    
+    .whatsapp-float i {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+/* Ocultar durante transición del hero */
+.whatsapp-float {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+/* Mostrar después de que se muestre el navbar */
+body:has(.navbar.visible) .whatsapp-float {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Respetar preferencias de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+    .whatsapp-float {
+        animation: none;
+    }
+}
+
+/* ========================================
    RESPONSIVE — TABLET (max-width: 1024px)
    ======================================== */
 @media (max-width: 1024px) {
@@ -1762,14 +1721,13 @@ section {
         grid-template-columns: 1fr;
     }
     .testimonio-card {
-        flex: 0 0 50%;
-        min-width: 50%;
+        flex: 0 0 calc(50% - var(--spacing-md) / 2);
+        min-width: calc(50% - var(--spacing-md) / 2);
     }
-    /* ✅ AGREGADO: tabla responsive en tablet — apilada en lugar de cortada */
     .comparativa-table thead th,
     .comparativa-table tbody th,
     .comparativa-table tbody td {
-        padding: var(--spacing-xs) 0.4rem;
+        padding: var(--spacing-sm) 0.4rem;
         font-size: 0.9rem;
     }
 }
@@ -1814,9 +1772,8 @@ section {
         top: var(--navbar-height);
         left: 0;
         width: 100%;
-        background: var(--arena);
-        backdrop-filter:blur(10px);
-        -webkit-backdrop-filter:blur(10px);
+        background: rgba(233, 222, 203, 0.98);
+        backdrop-filter: blur(10px);
         flex-direction: column;
         padding: var(--spacing-md);
         gap: 0;
@@ -1844,7 +1801,6 @@ section {
         display: none;
     }
 
-    /* Fondo fijo → scroll en mobile (iOS Safari no soporta fixed) */
     .intro-section::before {
         background-attachment: scroll;
     }
@@ -1853,25 +1809,34 @@ section {
         min-height: auto;
     }
 
+    /* Tu hij@ y vos responsive */
+    .tu-hijo-y-vos-content {
+        grid-template-columns: 1fr;  /* Una sola columna en mobile */
+    }
+    
+    .tu-hijo-y-vos-content .check-list {
+        grid-column: 1;
+        grid-row: auto;
+    }
+    
+    .tu-hijo-y-vos-cards {
+        grid-column: 1;
+    }
+
     .service-grid {
         grid-template-columns: repeat(2, 1fr);
     }
     .service-section,
     .testimonios-section {
         min-height: auto;
-        padding: var(--spacing-xs) 0;
+        padding: var(--spacing-md) 0;
     }
     .testimonio-card {
         flex: 0 0 100%;
         min-width: 100%;
         margin: 0;
     }
-    .testimonios-section {
-        min-height: auto;
-        padding: var(--spacing-md) 0;
-    }
 
-    /* Tabla comparativa en mobile: columnas apiladas */
     .comparativa-table,
     .comparativa-table thead,
     .comparativa-table tbody,
@@ -1882,7 +1847,6 @@ section {
         width: 100%;
     }
     .comparativa-table thead tr {
-        /* Ocultar la fila de encabezados; el th de cada fila actúa de título */
         position: absolute;
         top: -9999px;
         left: -9999px;
@@ -1907,7 +1871,6 @@ section {
     .comparativa-table tbody td:last-child {
         border-bottom: none;
     }
-    /* Etiquetas de columna generadas con data-label desde JS o con ::before */
     .comparativa-table tbody td::before {
         content: attr(data-label);
         display: block;
@@ -2033,7 +1996,6 @@ section {
 
 /* ========================================
    IMPRESIÓN
-   ✅ AGREGADO: estilos básicos para impresión
    ======================================== */
 @media print {
     .navbar,
@@ -2045,7 +2007,7 @@ section {
     .social-links-mobile,
     .appointments-section,
     .footer-nav {
-        display: none;
+        display: none !important;
     }
     body {
         background: white;
@@ -2057,7 +2019,7 @@ section {
         transform: none;
     }
     section {
-        min-height: auto;
+        min-height: auto !important;
         padding: 1rem 0;
         page-break-inside: avoid;
     }
@@ -2079,10 +2041,10 @@ section {
     *,
     *::before,
     *::after {
-        animation-duration: 0.01ms;
-        animation-iteration-count: 1;
-        transition-duration: 0.01ms;
-        scroll-behavior: auto;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
     .hero-background {
         animation: none;
@@ -2103,467 +2065,21 @@ section {
 }
 
 /* ========================================
-   reordenar despues
+   ANIMACIONES DE ENTRADA
    ======================================== */
-    .anim-card { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .anim-visible { opacity: 1; transform: translateY(0); }
-   /* ========================================
-TIPOGRAFÍAS
-======================================== */
-
-@font-face{
-font-family:'Belgian Aesthetic';
-src:url('../assets/tipografias/Belgan-Aesthetic.ttf') format('truetype');
-font-weight:400;
-font-style:normal;
-font-display:swap;
+.anim-card { 
+    opacity: 0; 
+    transform: translateY(30px); 
+    transition: opacity 0.6s ease, transform 0.6s ease; 
 }
-
-@font-face{
-font-family:'Fahkwang';
-src:url('../assets/tipografias/Fahkwang-Light.ttf') format('truetype');
-font-weight:300;
-font-style:normal;
-font-display:swap;
+.anim-visible { 
+    opacity: 1; 
+    transform: translateY(0); 
 }
-
-@font-face{
-font-family:'Fahkwang';
-src:url('../assets/tipografias/Fahkwang-LightItalic.ttf') format('truetype');
-font-weight:300;
-font-style:italic;
-font-display:swap;
-}
-
-@font-face{
-font-family:'Fahkwang';
-src:url('../assets/tipografias/Fahkwang-Regular.ttf') format('truetype');
-font-weight:400;
-font-style:normal;
-font-display:swap;
-}
-
-@font-face{
-font-family:'Fahkwang';
-src:url('../assets/tipografias/Fahkwang-Italic.ttf') format('truetype');
-font-weight:400;
-font-style:italic;
-font-display:swap;
-}
-
-@font-face{
-font-family:'Fahkwang';
-src:url('../assets/tipografias/Fahkwang-Medium.ttf') format('truetype');
-font-weight:500;
-font-style:normal;
-font-display:swap;
-}
-
-@font-face{
-font-family:'Fahkwang';
-src:url('../assets/tipografias/Fahkwang-MediumItalic.ttf') format('truetype');
-font-weight:500;
-font-style:italic;
-font-display:swap;
-}
-
-@font-face{
-font-family:'Fahkwang';
-src:url('../assets/tipografias/Fahkwang-SemiBold.ttf') format('truetype');
-font-weight:600;
-font-style:normal;
-font-display:swap;
-}
-
-@font-face{
-font-family:'Fahkwang';
-src:url('../assets/tipografias/Fahkwang-SemiBoldItalic.ttf') format('truetype');
-font-weight:600;
-font-style:italic;
-font-display:swap;
-}
-
-@font-face{
-font-family:'Fahkwang';
-src:url('../assets/tipografias/Fahkwang-Bold.ttf') format('truetype');
-font-weight:700;
-font-style:normal;
-font-display:swap;
-}
-
-@font-face{
-font-family:'Fahkwang';
-src:url('../assets/tipografias/Fahkwang-BoldItalic.ttf') format('truetype');
-font-weight:700;
-font-style:italic;
-font-display:swap;
-}
-
-/* ========================================
-VARIABLES
-======================================== */
-
-:root{
-
---profundo:#054954;
---oceano:#24436a;
---agua:#94d1d8;
---arena:#e9decb;
---tiza:#efefed;
-
---font-principal:'Belgian Aesthetic',Georgia,serif;
---font-secundaria:'Fahkwang','Helvetica Neue',Arial,sans-serif;
-
---spacing-xs:.5rem;
---spacing-sm:1rem;
---spacing-md:2rem;
---spacing-lg:4rem;
---spacing-xl:6rem;
-
---navbar-height:80px;
-
---transition-smooth:all .6s cubic-bezier(.4,0,.2,1);
---transition-fast:all .3s ease;
-
-}
-
-/* ========================================
-RESET
-======================================== */
-
-*,*::before,*::after{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-html{
-scroll-behavior:smooth;
-}
-
-body{
-font-family:var(--font-secundaria);
-color:var(--profundo);
-background:var(--arena);
-line-height:1.7;
-overflow-x:hidden;
-}
-
-h1,h2,h3,h4,h5,h6{
-font-family:var(--font-principal);
-font-weight:400;
-letter-spacing:.5px;
-line-height:1.3;
-}
-
-h1{font-size:clamp(2rem,5vw,3.5rem);margin-bottom:var(--spacing-md)}
-h2{font-size:clamp(1.75rem,4vw,2.75rem);margin-bottom:var(--spacing-md)}
-h3{font-size:clamp(1.25rem,3vw,1.75rem);margin-bottom:var(--spacing-sm)}
-
-p{
-font-size:clamp(1rem,2vw,1.125rem);
-font-weight:300;
-}
-
-a{
-text-decoration:none;
-color:inherit;
-}
-
-img{
-max-width:100%;
-height:auto;
-display:block;
-}
-
-/* ========================================
-ACCESIBILIDAD
-======================================== */
-
-.sr-only{
-position:absolute;
-width:1px;
-height:1px;
-padding:0;
-margin:-1px;
-overflow:hidden;
-clip:rect(0,0,0,0);
-white-space:nowrap;
-border:0;
-}
-
-:focus-visible{
-outline:2px solid var(--agua);
-outline-offset:3px;
-border-radius:4px;
-}
-
-/* ========================================
-CONTAINER
-======================================== */
-
-.container{
-max-width:1200px;
-margin:auto;
-padding:0 var(--spacing-xs);
-}
-
-/* ========================================
-HERO
-======================================== */
-
-.hero{
-position:relative;
-width:100%;
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-overflow:hidden;
-cursor:pointer;
-}
-
-.hero-background{
-position:absolute;
-inset:0;
-background:url('../assets/img/fondos/Pat_01_01.png') center/cover no-repeat;
-/* animation:waveMove 20s ease-in-out infinite; */
-will-change:transform;
-transform:translateZ(0);
-z-index:1;
-will-change:transform;
-}
-
-.hero-background::after{
-content:'';
-position:absolute;
-inset:0;
-background:rgba(239,239,237,.1);
-pointer-events:none;
-}
-
-@keyframes waveMove{
-
-0%,100%{
-transform:scale(1);
-}
-
-50%{
-transform:scale(1.05);
-}
-
-}
-
-/* ========================================
-NAVBAR
-======================================== */
-
-.navbar{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:var(--navbar-height);
-background:var(--arena);
-backdrop-filter:blur(5px);
--webkit-backdrop-filter:blur(5px);
-padding:var(--spacing-xs)0;
-z-index:999;
-border-bottom:1px solid var(--tiza);
-transform:translate3d(0,-100%,0);
-transition:var(--transition-smooth);
-}
-
-.navbar.visible{
-opacity:1;
-transform:translateY(0);
-}
-
-.navbar-container{
-max-width:1400px;
-margin:auto;
-padding:0 var(--spacing-sm);
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:var(--spacing-md);
-height:100%;
-}
-
-/* ========================================
-SOCIAL LINKS
-======================================== */
-
-.social-links,
-.social-links-mobile{
-display:flex;
-gap:var(--spacing-sm);
-align-items:center;
-}
-
-.social-links a,
-.social-links-mobile a{
-
-width:28px;
-height:28px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-opacity:.7;
-
-transition:var(--transition-fast);
-
-border-radius:50%;
-padding:4px;
-}
-
-.social-links a:hover,
-.social-links-mobile a:hover{
-
-opacity:1;
-transform:translateY(-2px);
-background:var(--agua);
-
-}
-
-.social-links img,
-.social-links-mobile img{
-
-width:100%;
-height:100%;
-object-fit:contain;
-
-}
-
-/* ========================================
-BOTONES
-======================================== */
-
-.btn{
-
-display:inline-block;
-
-padding:.875rem 2rem;
-
-font-family:var(--font-secundaria);
-font-size:1rem;
-font-weight:500;
-
-text-align:center;
-
-border:none;
-border-radius:50px;
-
-cursor:pointer;
-
-transition:var(--transition-fast);
-
-margin-top:var(--spacing-sm);
-
-}
-
-.btn.primary{
-
-background:var(--profundo);
-color:var(--tiza);
-
-box-shadow:0 4px 15px rgba(5,73,84,.2);
-
-}
-
-.btn.primary:hover{
-
-background:var(--oceano);
-
-transform:translateY(-2px);
-
-box-shadow:0 6px 20px rgba(5,73,84,.3);
-
-}
-
-.btn.link{
-
-background:transparent;
-color:var(--oceano);
-
-border:2px solid var(--agua);
-
-padding:.75rem 1.75rem;
-
-}
-
-.btn.link:hover{
-
-background:var(--agua);
-color:var(--profundo);
-
-}
-
-/* ========================================
-CARDS
-======================================== */
-
-.service-card,
-.resources-main-card,
-.calendar-wrapper,
-.time-selector,
-.appointment-form,
-.contact-card{
-
-background:white;
-
-border-radius:20px;
-
-border:1px solid rgba(148,209,216,.2);
-
-box-shadow:0 4px 30px rgba(5,73,84,.1);
-
-}
-
-/* ========================================
-ANIMACIONES
-======================================== */
-
-.anim-card{
-
-opacity:0;
-
-transform:translateY(30px);
-
-transition:opacity .6s ease, transform .6s ease;
-
-}
-
-.anim-visible{
-
-opacity:1;
-transform:translateY(0);
-
-}
-
-/* ========================================
-REDUCED MOTION
-======================================== */
-
-@media (prefers-reduced-motion: reduce){
-
-*,
-*::before,
-*::after{
-
-animation-duration:.01ms;
-animation-iteration-count:1;
-
-transition-duration:.01ms;
-
-scroll-behavior:auto;
-
-}
-
-.hero-background{
-animation:none;
-}
-
+@media (prefers-reduced-motion: reduce) { 
+    .anim-card { 
+        opacity: 1; 
+        transform: none; 
+        transition: none; 
+    } 
 }
