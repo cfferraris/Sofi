@@ -116,7 +116,7 @@
 
             <!-- Logo isotipo -->
             <div class="navbar-logo">
-                <a href="#piel-de-mar" aria-label="Ir al inicio">
+                <a href="#piel-de-mar" aria-label="Volver al inicio">
                     <img
                         src="assets/img/logos/Isotipo2/Azul.png"
                         alt="Piel de Mar"
@@ -138,7 +138,7 @@
                 <li role="none"><a href="#tu-hijo-y-vos" class="nav-link" role="menuitem">Tu hij@ y vos</a></li>
                 <li role="none"><a href="#servicios" class="nav-link" role="menuitem">Servicios</a></li>
                 <li role="none"><a href="#recursos" class="nav-link" role="menuitem">Recursos</a></li>
-                <li role="none"><a href="#consulta" class="nav-link" role="menuitem">Consulta</a></li>
+                <li role="none"><a href="#consulta" class="nav-link" role="menuitem">Agendar</a></li>
                 <li role="none"><a href="#contacto" class="nav-link" role="menuitem">Contacto</a></li>
 
                 <!-- Redes sociales SOLO PARA MOBILE -->
@@ -186,44 +186,198 @@
     <!-- CONTENIDO PRINCIPAL -->
     <main id="mainContent" class="main-content">
 
-        <!-- Sección Piel de Mar -->
+        <!-- Sección Piel de Mar - SLIDER OPTIMIZADO -->
         <section id="piel-de-mar" class="intro-section" aria-labelledby="intro-heading">
-            <div class="container">
-                <h2 id="intro-heading">Tal vez estás notando que…</h2>
-                <ul class="icon-list">
-                    <li>Tu hijo se sobreestimula fácilmente ante ciertos estímulos</li>
-                    <li>Le cuesta regular sus emociones o adaptarse a cambios</li>
-                    <li>Sentís que algo en su desarrollo te genera dudas</li>
-                    <li>No sabés si lo que observás es parte de su edad o necesita acompañamiento</li>
-                    <li>Querés ayudarlo, pero no sabés por dónde empezar</li>
-                </ul>
-                <p class="section-close">Buscar orientación a tiempo puede generar cambios significativos en el bienestar de tu hijo y en la tranquilidad de toda la familia.</p>
-                <a href="#consulta" class="btn primary">Quiero orientación profesional</a>
+            <div class="container-full">
+                <h2 id="intro-heading" class="sr-only">Piel de Mar - Acompañamiento profesional</h2>
+
+                <!-- Contenedor del slider -->
+                <div class="intro-slider-wrapper">
+                    
+                    <!-- Controles de navegación -->
+                    <button class="intro-slider-btn prev" id="introPrevBtn" aria-label="Diapositiva anterior">
+                        <i data-lucide="chevron-left" aria-hidden="true"></i>
+                    </button>
+
+                    <div class="intro-slider-container">
+                        <div class="intro-slider-track" id="introSliderTrack">
+
+                            <!-- SLIDE 1: SOBREESTIMULACIÓN → "me pasa" -->
+                            <article class="intro-slide">
+                                <img 
+                                    src="assets/img/Niño sobre estimulado.png"
+                                    alt="Niño sobreestimulado"
+                                    class="intro-slide-bg"
+                                    loading="eager"
+                                >
+                                <div class="intro-slide-overlay"></div>
+                                <div class="intro-slide-content">
+                                    <h3 class="intro-slide-title">¿Notas que tu hijo se sobreestimula fácilmente?</h3>
+                                    <p class="intro-slide-subtitle">Algunos estímulos pueden ser más difíciles de procesar</p>
+                                    <a 
+                                        href="https://wa.me/5493425004018?text=Hola!%20Mi%20hijo%20se%20sobreestimula%20f%C3%A1cilmente" 
+                                        class="btn-intro"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Quiero entender qué le pasa
+                                    </a>
+                                </div>
+                            </article>
+
+                            <!-- SLIDE 2: REGULACIÓN → "se puede trabajar" -->
+                            <article class="intro-slide">
+                                <img 
+                                    src="assets/img/Regulacion.png" 
+                                    alt="Niño aprendiendo a regularse"
+                                    class="intro-slide-bg"
+                                    loading="lazy"
+                                >
+                                <div class="intro-slide-overlay"></div>
+                                <div class="intro-slide-content">
+                                    <h3 class="intro-slide-title">Puede aprender a regularse con acompañamiento</h3>
+                                    <p class="intro-slide-subtitle">Con la guía adecuada, los cambios son posibles</p>
+                                    <a 
+                                        href="https://wa.me/5493425004018?text=Hola!%20Quiero%20ayudar%20a%20mi%20hijo%20a%20regularse" 
+                                        class="btn-intro"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Ver cómo ayudarlo
+                                    </a>
+                                </div>
+                            </article>
+
+                            <!-- SLIDE 3: DUDA EMOCIONAL → "no estoy seguro" -->
+                            <article class="intro-slide">
+                                <img 
+                                    src="assets/img/Duda.png" 
+                                    alt="Madre con duda sobre su hijo"
+                                    class="intro-slide-bg"
+                                    loading="lazy"
+                                >
+                                <div class="intro-slide-overlay"></div>
+                                <div class="intro-slide-content">
+                                    <h3 class="intro-slide-title">Sentís que algo no termina de encajar</h3>
+                                    <p class="intro-slide-subtitle">Y no sabés si es importante o no</p>
+                                    <a 
+                                        href="https://wa.me/5493425004018?text=Hola!%20Necesito%20una%20orientaci%C3%B3n%20profesional" 
+                                        class="btn-intro"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Quiero una orientación
+                                    </a>
+                                </div>
+                            </article>
+
+                            <!-- SLIDE 4: DUDA RACIONAL → "¿es normal?" -->
+                            <article class="intro-slide">
+                                <img 
+                                    src="assets/img/Zona Gris.png" 
+                                    alt="Niño en desarrollo"
+                                    class="intro-slide-bg"
+                                    loading="lazy"
+                                >
+                                <div class="intro-slide-overlay"></div>
+                                <div class="intro-slide-content">
+                                    <h3 class="intro-slide-title">¿Es parte de su edad o necesita ayuda?</h3>
+                                    <p class="intro-slide-subtitle">La diferencia no siempre es evidente</p>
+                                    <a 
+                                        href="https://wa.me/5493425004018?text=Hola!%20Tengo%20dudas%20sobre%20el%20desarrollo%20de%20mi%20hijo" 
+                                        class="btn-intro"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Salir de la duda
+                                    </a>
+                                </div>
+                            </article>
+
+                            <!-- SLIDE 5: INTENCIÓN → "quiero ayudar" -->
+                            <article class="intro-slide">
+                                <img 
+                                    src="assets/img/ayuda.png"
+                                    alt="Madre buscando ayudar a su hijo"
+                                    class="intro-slide-bg"
+                                    loading="lazy"
+                                >
+                                <div class="intro-slide-overlay"></div>
+                                <div class="intro-slide-content">
+                                    <h3 class="intro-slide-title">Querés ayudarlo, pero no sabés por dónde empezar</h3>
+                                    <p class="intro-slide-subtitle">No tenés que hacerlo solo</p>
+                                    <a 
+                                        href="https://wa.me/5493425004018?text=Hola!%20Necesito%20acompa%C3%B1amiento%20para%20mi%20hijo" 
+                                        class="btn-intro"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Quiero acompañamiento
+                                    </a>
+                                </div>
+                            </article>
+
+                            <!-- SLIDE 6: CIERRE/RESOLUCIÓN → "quiero esto" -->
+                            <article class="intro-slide">
+                                <img 
+                                    src="assets/img/Cierre.png" 
+                                    alt="Familia feliz tras intervención temprana"
+                                    class="intro-slide-bg"
+                                    loading="lazy"
+                                >
+                                <div class="intro-slide-overlay"></div>
+                                <div class="intro-slide-content">
+                                    <h3 class="intro-slide-title">Podés mejorar su bienestar y tu tranquilidad</h3>
+                                    <p class="intro-slide-subtitle">Con orientación a tiempo, los cambios son reales</p>
+                                    <a 
+                                        href="https://wa.me/5493425004018?text=Hola!%20Quiero%20reservar%20un%20turno" 
+                                        class="btn-intro btn-intro-final"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Reservar turno por WhatsApp
+                                    </a>
+                                </div>
+                            </article>
+
+                        </div>
+                    </div>
+
+                    <button class="intro-slider-btn next" id="introNextBtn" aria-label="Diapositiva siguiente">
+                        <i data-lucide="chevron-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <!-- Indicadores de progreso (dots) -->
+                <div class="intro-slider-dots" id="introSliderDots" role="tablist" aria-label="Navegación de diapositivas"></div>
+
+                <!-- Estado para lectores de pantalla -->
+                <p class="sr-only" id="introSliderStatus" aria-live="polite" aria-atomic="true"></p>
+
             </div>
         </section>
 
         <!-- Sección Tu hij@ y vos -->
         <section id="tu-hijo-y-vos" class="tu-hijo-y-vos-section" aria-labelledby="tu-hijo-heading">
             <div class="container">
-                <h2 id="tu-hijo-heading">Tu hij@ y vos</h2>
-                <p class="section-subtitle">Una guía para acompañarte en el cuidado y bienestar de tu familia</p>
-
+                <h2 id="tu-hijo-heading">tu hij@ y vos</h2>
+    
                 <div class="tu-hijo-y-vos-content">
                     <ul class="check-list">
-                        <li>Mirada integral del niño y su entorno</li>
-                        <li>Trabajo respetuoso, sin forzar procesos</li>
-                        <li>Espacio de escucha para madres y padres</li>
-                        <li>Orientaciones claras y aplicables en casa</li>
+                        <li>Miramos al niño en su totalidad, no solo sus dificultades</li>
+                        <li>Trabajamos desde el respeto, sin forzar procesos ni etiquetas</li>
+                        <li>Creamos un espacio donde podés hablar sin sentirte juzgada</li>
+                        <li>Te damos orientaciones claras que podés aplicar hoy mismo</li>
                     </ul>
                     
                     <div class="tu-hijo-y-vos-cards">
                         <article class="tu-hijo-y-vos-card" data-number="01">
                             <h3>Momentos de conexión</h3>
-                            <p>Rutinas y rituales para crear vínculos profundos con tus hijos</p>
+                            <p>Rituales simples para fortalecer el vínculo con tu hijo cada día</p>
                         </article>
                         <article class="tu-hijo-y-vos-card" data-number="02">
                             <h3>Bienestar familiar</h3>
-                            <p>Herramientas para cultivar la armonía y el equilibrio en casa</p>
+                            <p>Estrategias para cultivar la calma y el equilibrio en casa</p>
                         </article>
                     </div>
                 </div>
@@ -233,16 +387,15 @@
         <!-- Sección Servicios -->
         <section id="servicios" class="service-section" aria-labelledby="servicios-heading">
             <div class="container">
-                <h2 id="servicios-heading">Descubrí cómo acompañamos cada etapa</h2>
-
+                <h2 id="servicios-heading">Te acompañamos en cada etapa</h2>
                 <div class="service-grid">
                     <article class="service-card">
                         <div class="service-icon" aria-hidden="true">
                             <i data-lucide="heart-handshake"></i>
                         </div>
                         <h3>Estimulación temprana</h3>
-                        <p>Potenciamos el desarrollo integral de tu hijo con actividades adaptadas a su edad.</p>
-                        <a href="#consulta" class="btn link">Quiero saber más</a>
+                        <p>Actividades personalizadas para potenciar el desarrollo integral de tu hijo según su edad y necesidades.</p>
+                        <a href="#consulta" class="btn link">Conocer más</a>
                     </article>
 
                     <article class="service-card">
@@ -250,8 +403,8 @@
                             <i data-lucide="sparkles"></i>
                         </div>
                         <h3>Acompañamiento emocional</h3>
-                        <p>Brindamos herramientas para acompañar al niño en su regulación emocional.</p>
-                        <a href="#consulta" class="btn link">Quiero saber más</a>
+                        <p>Herramientas para que tu hijo aprenda a identificar y gestionar sus emociones de forma saludable.</p>
+                        <a href="#consulta" class="btn link">Conocer más</a>
                     </article>
 
                     <article class="service-card">
@@ -259,17 +412,17 @@
                             <i data-lucide="brain"></i>
                         </div>
                         <h3>Neurodesarrollo infantil</h3>
-                        <p>Identificamos señales de alerta e intervenimos tempranamente.</p>
-                        <a href="#consulta" class="btn link">Quiero saber más</a>
+                        <p>Detección temprana de señales de alerta e intervención oportuna para optimizar su desarrollo.</p>
+                        <a href="#consulta" class="btn link">Conocer más</a>
                     </article>
 
                     <article class="service-card">
                         <div class="service-icon" aria-hidden="true">
                             <i data-lucide="users"></i>
                         </div>
-                        <h3>Acompañamiento Familiar</h3>
-                        <p>Orientamos y acompañamos una crianza consciente y respetuosa de los vínculos.</p>
-                        <a href="#consulta" class="btn link">Quiero saber más</a>
+                        <h3>Acompañamiento familiar</h3>
+                        <p>Orientación para madres y padres que buscan una crianza consciente, respetuosa y conectada.</p>
+                        <a href="#consulta" class="btn link">Conocer más</a>
                     </article>
                 </div>
             </div>
@@ -278,7 +431,7 @@
         <!-- Sección Testimonios -->
         <section id="testimonios" class="testimonios-section" aria-labelledby="testimonios-heading">
             <div class="container">
-                <h2 id="testimonios-heading" class="sr-only">Testimonios de familias</h2>
+                <h2 id="testimonios-heading" class="sr-only">Lo que dicen las familias</h2>
 
                 <div class="carousel-wrapper" role="region" aria-label="Testimonios de familias">
 
@@ -380,9 +533,7 @@
         <!-- Sección Recursos -->
         <section id="recursos" class="resources-section" aria-labelledby="recursos-heading">
             <div class="container">
-                <h2 id="recursos-heading">Recursos profesionales para acompañar el desarrollo</h2>
-                <p class="section-subtitle">Contenido basado en evidencia, diseñado para brindarte información que podés aplicar hoy.</p>
-
+                <h2 id="recursos-heading">Recursos gratuitos para acompañar el desarrollo</h2>
                 <div class="resources-cards-container">
 
                     <!-- Tarjeta 1: Temáticas -->
@@ -394,7 +545,7 @@
                                 </div>
                                 <div class="option-content">
                                     <strong>Desarrollo infantil</strong>
-                                    <span>Hitos del desarrollo, señales de alerta y acompañamiento por etapa</span>
+                                    <span>Hitos esperables, señales de alerta y cómo acompañar cada etapa</span>
                                 </div>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
@@ -405,7 +556,7 @@
                                 </div>
                                 <div class="option-content">
                                     <strong>Crianza respetuosa</strong>
-                                    <span>Herramientas para criar desde el respeto y la empatía</span>
+                                    <span>Estrategias para criar desde el respeto mutuo y la conexión genuina</span>
                                 </div>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
@@ -416,7 +567,7 @@
                                 </div>
                                 <div class="option-content">
                                     <strong>Regulación emocional</strong>
-                                    <span>Estrategias para ayudar a gestionar emociones</span>
+                                    <span>Herramientas para ayudar a tu hijo a gestionar lo que siente</span>
                                 </div>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
@@ -426,8 +577,8 @@
                                     <i data-lucide="puzzle"></i>
                                 </div>
                                 <div class="option-content">
-                                    <strong>Juego y Estimulación</strong>
-                                    <span>Actividades y juegos para estimular sin sobreexigir</span>
+                                    <strong>Juego y estimulación</strong>
+                                    <span>Actividades simples para estimular sin sobreexigir ni presionar</span>
                                 </div>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
@@ -443,7 +594,7 @@
                                 </div>
                                 <div class="option-content">
                                     <strong>Videos educativos</strong>
-                                    <span>Tutoriales y explicaciones en nuestro canal de YouTube</span>
+                                    <span>Explicaciones breves y prácticas en nuestro canal de YouTube</span>
                                 </div>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
@@ -465,7 +616,7 @@
                                 </div>
                                 <div class="option-content">
                                     <strong>Guías descargables</strong>
-                                    <span>PDFs, plantillas y herramientas listas para usar <em>(próximamente)</em></span>
+                                    <span>Materiales en PDF listos para descargar e imprimir <em>(próximamente)</em></span>
                                 </div>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </span>
@@ -475,8 +626,8 @@
                                     <i data-lucide="lightbulb"></i>
                                 </div>
                                 <div class="option-content">
-                                    <strong>Tips prácticos</strong>
-                                    <span>Consejos rápidos para aplicar en el día a día <em>(próximamente)</em></span>
+                                    <strong>Tips rápidos</strong>
+                                    <span>Consejos breves para aplicar en situaciones del día a día <em>(próximamente)</em></span>
                                 </div>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </span>
@@ -489,16 +640,13 @@
         <!-- Sección Consulta (antes Turnos) -->
         <section id="consulta" class="consultation-section" aria-labelledby="consulta-heading">
             <div class="container">
-                <h2 id="consulta-heading">Reservá tu consulta</h2>
-                <p class="consultation-intro">Elegí el momento que mejor se adapte a vos y coordinamos juntos</p>
-
                 <div class="consultation-container">
 
                     <!-- Columna izquierda: Imagen -->
                     <div class="consultation-image">
                         <img 
                             src="assets/img/familia en consullta.png" 
-                            alt="Familia feliz consultando" 
+                            alt="Familia feliz durante una consulta" 
                             width="600" 
                             height="500"
                             loading="lazy"
@@ -511,22 +659,22 @@
                             <div class="consultation-icon" aria-hidden="true">
                                 <i data-lucide="calendar-check"></i>
                             </div>
-                            <h3>Contactanos para coordinar</h3>
-                            <p>Escribinos por WhatsApp y encontramos el mejor horario para vos. Respondemos consultas de lunes a viernes de 9 a 18 hs.</p>
+                            <h3>Te atendemos hoy</h3>
+                            <p>Mandanos un mensaje por WhatsApp y te respondemos en el día para encontrar el mejor horario.</p>
                             
                             <a 
-                                href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20consultar%20disponibilidad%20para%20una%20sesi%C3%B3n" 
+                                href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20agendar%20una%20consulta%20para%20mi%20hijo/a" 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
                                 class="btn primary btn-whatsapp"
                             >
                                 <i data-lucide="message-circle" aria-hidden="true"></i>
-                                Consultar disponibilidad
+                                Agendar por WhatsApp
                             </a>
 
                             <p class="consultation-note">
                                 <i data-lucide="info" aria-hidden="true"></i>
-                                Las consultas pueden ser presenciales o virtuales
+                                Podés elegir consulta presencial en Esperanza o virtual por videollamada
                             </p>
                         </div>
                     </div>
@@ -538,8 +686,7 @@
         <!-- Sección Contacto -->
         <section id="contacto" class="contact-section" aria-labelledby="contacto-heading">
             <div class="container">
-                <h2 id="contacto-heading">Conectemos</h2>
-                <p class="section-subtitle">Estamos acá para escucharte y acompañarte</p>
+                <h2 id="contacto-heading">Hablemos</h2>
 
                 <div class="contact-container">
 
@@ -558,22 +705,37 @@
                     <!-- Columna derecha: Información de contacto -->
                     <div class="contact-info">
 
+                        
+                        <!-- WhatsApp -->
+                        <div class="contact-card">
+                            <div class="contact-icon whatsapp" aria-hidden="true">
+                                <i data-lucide="message-circle"></i>
+                            </div>
+                            <div class="contact-content">
+                                <p>La forma más rápida de contactarnos</p>
+                                <a href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20informaci%C3%B3n%20sobre%20Piel%20de%20Mar"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="contact-link whatsapp-link">
+                                    +54 9 3425 004018
+                                    <i data-lucide="external-link" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
                         <!-- Dirección -->
                         <div class="contact-card">
                             <div class="contact-icon" aria-hidden="true">
                                 <i data-lucide="map-pin"></i>
                             </div>
                             <div class="contact-content">
-                                <h3>Dirección</h3>
                                 <address>
-                                    Cullen 1619<br>
-                                    Esperanza, Santa Fe
+                                    Cullen 1619, Esperanza, Santa Fe.
                                 </address>
                                 <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Cullen+1619,+Esperanza,+Santa+Fe,+Argentina"
                                    target="_blank"
                                    rel="noopener noreferrer"
                                    class="contact-link">
-                                    Cómo llegar
+                                    Ver indicaciones
                                     <i data-lucide="external-link" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -585,28 +747,9 @@
                                 <i data-lucide="mail"></i>
                             </div>
                             <div class="contact-content">
-                                <h3>Email</h3>
-                                <p>Envianos tu consulta por correo</p>
-                                <a href="/cdn-cgi/l/email-protection#83e0ecedf7e2e0f7ecc3f3eae6efe7e6eee2f1ade0ecee" class="contact-link">
-                                    <span class="__cf_email__" data-cfemail="73101c1d071210071c33031a161f17161e12015d101c1e">[email&#160;protected]</span>
-                                    <i data-lucide="external-link" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- WhatsApp -->
-                        <div class="contact-card">
-                            <div class="contact-icon whatsapp" aria-hidden="true">
-                                <i data-lucide="message-circle"></i>
-                            </div>
-                            <div class="contact-content">
-                                <h3>WhatsApp</h3>
-                                <p>Escribinos para agendar tu consulta</p>
-                                <a href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20informaci%C3%B3n%20sobre%20los%20servicios%20de%20Piel%20de%20Mar"
-                                   target="_blank"
-                                   rel="noopener noreferrer"
-                                   class="contact-link whatsapp-link">
-                                    +54 9 3425 004018
+                                <p>También podés escribirnos por correo</p>
+                                <a href="mailto:contacto@pieldemar.com" class="contact-link">
+                                    contacto@pieldemar.com
                                     <i data-lucide="external-link" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -618,8 +761,7 @@
                                 <i data-lucide="clock"></i>
                             </div>
                             <div class="contact-content">
-                                <h3>Horarios</h3>
-                                <p>Lunes a Viernes<br>9:00 a 18:00 hs</p>
+                                <p>Lunes a viernes<br>9:00 a 18:00 hs</p>
                             </div>
                         </div>
 
@@ -648,17 +790,17 @@
 
     <!-- BOTÓN FLOTANTE DE WHATSAPP -->
     <a 
-        href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20informaci%C3%B3n%20sobre%20Piel%20de%20Mar" 
+        href="https://wa.me/5493425004018?text=Hola!%20Quiero%20agendar%20una%20consulta" 
         class="whatsapp-float" 
         target="_blank" 
         rel="noopener noreferrer"
-        aria-label="Contactar por WhatsApp"
+        aria-label="Agendar consulta por WhatsApp"
     >
         <i data-lucide="message-circle"></i>
     </a>
 
     <!-- JavaScript -->
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.js" defer></script>
+    <script src="js/main.js" defer></script>
 
     <!-- Inicializar Lucide Icons -->
     <script>
