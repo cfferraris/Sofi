@@ -16,7 +16,7 @@
         img-src 'self' data: https:;
         font-src 'self';
         connect-src 'self';
-        frame-src https://www.youtube.com https://www.google.com;
+        frame-src https://www.youtube.com;
         upgrade-insecure-requests;
     ">
 
@@ -36,7 +36,6 @@
     <meta property="og:title" content="Piel de Mar | Estimulación Temprana · Esperanza, Santa Fe">
     <meta property="og:description" content="Acompañamiento profesional en estimulación temprana, neurodesarrollo y crianza respetuosa. Orientación para familias en Esperanza, Santa Fe y de forma virtual.">
     <meta property="og:image" content="https://www.pieldemar.com/assets/img/logos/Isotipo2/Azul.png">
-    <!-- ✅ AGREGADO: dimensiones de imagen OG para previsualizadores -->
     <meta property="og:image:width" content="512">
     <meta property="og:image:height" content="512">
     <meta property="og:locale" content="es_AR">
@@ -46,8 +45,6 @@
     <meta name="twitter:title" content="Piel de Mar | Estimulación Temprana · Esperanza, Santa Fe">
     <meta name="twitter:description" content="Acompañamiento profesional en estimulación temprana, neurodesarrollo y crianza respetuosa en Esperanza, Santa Fe y de forma virtual.">
     <meta name="twitter:image" content="https://www.pieldemar.com/assets/img/logos/Isotipo2/Azul.png">
-
-    <!-- Título ajustado a ~60 caracteres para evitar truncado en Google -->
 
     <title>Piel de Mar | Estimulación Temprana · Acompañando familias</title>
 
@@ -88,19 +85,9 @@
     }
     </script>
 
-    <!--Lucide con versión fija (no @latest) y URL correcta al archivo UMD.
-        IMPORTANTE: El hash SRI debe calcularse con:
-        curl -s https://unpkg.com/lucide@0.263.1/dist/umd/lucide.min.js | openssl dgst -sha384 -binary | openssl base64 -A
-        y reemplazar el valor de integrity antes de subir a producción.  -->
-    <!--<script 
-    src="https://unpkg.com/lucide@0.263.1/dist/umd/lucide.min.js"
-    integrity="sha384-cmdVzp/LNswnLRGK6j6+cMUsn7jTxO+fX9W5jw6A+4iaSvhkiSdj8/B9nJyBgtKQ"
-    crossorigin="anonymous"
-    defer>
-    </script>-->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" 
-    defer>
-    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+    
     <!-- CSS -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -151,7 +138,7 @@
                 <li role="none"><a href="#tu-hijo-y-vos" class="nav-link" role="menuitem">Tu hij@ y vos</a></li>
                 <li role="none"><a href="#servicios" class="nav-link" role="menuitem">Servicios</a></li>
                 <li role="none"><a href="#recursos" class="nav-link" role="menuitem">Recursos</a></li>
-                <li role="none"><a href="#turnos" class="nav-link" role="menuitem">Turnos</a></li>
+                <li role="none"><a href="#consulta" class="nav-link" role="menuitem">Consulta</a></li>
                 <li role="none"><a href="#contacto" class="nav-link" role="menuitem">Contacto</a></li>
 
                 <!-- Redes sociales SOLO PARA MOBILE -->
@@ -211,9 +198,10 @@
                     <li>Querés ayudarlo, pero no sabés por dónde empezar</li>
                 </ul>
                 <p class="section-close">Buscar orientación a tiempo puede generar cambios significativos en el bienestar de tu hijo y en la tranquilidad de toda la familia.</p>
-                <a href="#turnos" class="btn primary">Quiero orientación profesional</a>
+                <a href="#consulta" class="btn primary">Quiero orientación profesional</a>
             </div>
         </section>
+
         <!-- Sección Tu hij@ y vos -->
         <section id="tu-hijo-y-vos" class="tu-hijo-y-vos-section" aria-labelledby="tu-hijo-heading">
             <div class="container">
@@ -227,113 +215,20 @@
                         <li>Espacio de escucha para madres y padres</li>
                         <li>Orientaciones claras y aplicables en casa</li>
                     </ul>
-                    <article class="tu-hijo-y-vos-card" data-number="01">
-                        <h3>Momentos de conexión</h3>
-                        <p>Rutinas y rituales para crear vínculos profundos con tus hijos</p>
-                    </article>
-                    <article class="tu-hijo-y-vos-card" data-number="02">
-                        <h3>Bienestar familiar</h3>
-                        <p>Herramientas para cultivar la armonía y el equilibrio en casa</p>
-                    </article>
+                    
+                    <div class="tu-hijo-y-vos-cards">
+                        <article class="tu-hijo-y-vos-card" data-number="01">
+                            <h3>Momentos de conexión</h3>
+                            <p>Rutinas y rituales para crear vínculos profundos con tus hijos</p>
+                        </article>
+                        <article class="tu-hijo-y-vos-card" data-number="02">
+                            <h3>Bienestar familiar</h3>
+                            <p>Herramientas para cultivar la armonía y el equilibrio en casa</p>
+                        </article>
+                    </div>
                 </div>
             </div>
         </section>
-        <!-- Sección Diferencial- Desactivada temporalmente -->
-        <!--
-        <section id="diferencial" class="diferencial-section" aria-labelledby="diferencial-heading">
-            <div class="container">
-                <h2 id="diferencial-heading">¿Por qué elegir Piel de Mar?</h2>
-                <p class="section-subtitle">Un enfoque diferente que marca la diferencia</p>
-
-                <table class="comparativa-table" aria-label="Comparativa entre Piel de Mar y otros centros">
-                    <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">Otros centros</th>
-                            <th scope="col">
-                                Piel de Mar
-                                <i data-lucide="waves" aria-hidden="true"></i>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Enfoque del tratamiento</th>
-                            <td>
-                                <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
-                                <span>Protocolos estandarizados</span>
-                            </td>
-                            <td>
-                                <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
-                                <span>Personalizado según cada niño</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Respeto por los tiempos</th>
-                            <td>
-                                <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
-                                <span>Sesiones con objetivos fijos</span>
-                            </td>
-                            <td>
-                                <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
-                                <span>Sin forzar procesos naturales</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Acompañamiento familiar</th>
-                            <td>
-                                <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
-                                <span>Solo trabajan con el niño</span>
-                            </td>
-                            <td>
-                                <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
-                                <span>Incluimos y escuchamos a los padres</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Mirada del desarrollo</th>
-                            <td>
-                                <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
-                                <span>Enfoque fragmentado por áreas</span>
-                            </td>
-                            <td>
-                                <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
-                                <span>Visión integral del niño y su entorno</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Herramientas para el hogar</th>
-                            <td>
-                                <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
-                                <span>Solo sesiones en consultorio</span>
-                            </td>
-                            <td>
-                                <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
-                                <span>Orientación aplicable en casa</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Comunicación</th>
-                            <td>
-                                <i data-lucide="x" class="icon-no" aria-hidden="true"></i>
-                                <span>Informes técnicos impersonales</span>
-                            </td>
-                            <td>
-                                <i data-lucide="check" class="icon-yes" aria-hidden="true"></i>
-                                <span>Diálogo cercano y comprensible</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="diferencial-cta">
-                    <p>Descubrí un acompañamiento que respeta y potencia el desarrollo natural de tu hijo</p>
-                    <a href="#turnos" class="btn primary">Quiero conocer más</a>
-                </div>
-            </div>
-        </section>
-    -->
-
 
         <!-- Sección Servicios -->
         <section id="servicios" class="service-section" aria-labelledby="servicios-heading">
@@ -347,7 +242,7 @@
                         </div>
                         <h3>Estimulación temprana</h3>
                         <p>Potenciamos el desarrollo integral de tu hijo con actividades adaptadas a su edad.</p>
-                        <a href="#turnos" class="btn link">Quiero saber más</a>
+                        <a href="#consulta" class="btn link">Quiero saber más</a>
                     </article>
 
                     <article class="service-card">
@@ -356,7 +251,7 @@
                         </div>
                         <h3>Acompañamiento emocional</h3>
                         <p>Brindamos herramientas para acompañar al niño en su regulación emocional.</p>
-                        <a href="#turnos" class="btn link">Quiero saber más</a>
+                        <a href="#consulta" class="btn link">Quiero saber más</a>
                     </article>
 
                     <article class="service-card">
@@ -365,7 +260,7 @@
                         </div>
                         <h3>Neurodesarrollo infantil</h3>
                         <p>Identificamos señales de alerta e intervenimos tempranamente.</p>
-                        <a href="#turnos" class="btn link">Quiero saber más</a>
+                        <a href="#consulta" class="btn link">Quiero saber más</a>
                     </article>
 
                     <article class="service-card">
@@ -374,11 +269,12 @@
                         </div>
                         <h3>Acompañamiento Familiar</h3>
                         <p>Orientamos y acompañamos una crianza consciente y respetuosa de los vínculos.</p>
-                        <a href="#turnos" class="btn link">Quiero saber más</a>
+                        <a href="#consulta" class="btn link">Quiero saber más</a>
                     </article>
                 </div>
             </div>
         </section>
+
         <!-- Sección Testimonios -->
         <section id="testimonios" class="testimonios-section" aria-labelledby="testimonios-heading">
             <div class="container">
@@ -476,11 +372,11 @@
                     </button>
                 </div>
 
-                <!-- ✅ CORREGIDO: aria-live solo en el anuncio de posición, no en todo el carrusel -->
                 <p class="sr-only" id="carouselStatus" aria-live="polite" aria-atomic="true"></p>
                 <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Navegación de testimonios"></div>
             </div>
         </section>
+
         <!-- Sección Recursos -->
         <section id="recursos" class="resources-section" aria-labelledby="recursos-heading">
             <div class="container">
@@ -552,11 +448,6 @@
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
                             </a>
 
-                            <!--
-                                ✅ CORREGIDO: Secciones inexistentes marcadas como "próximamente"
-                                con aria-disabled para no romper navegación ni engañar a buscadores.
-                                Reemplazar href="#" por el link real cuando las secciones existan.
-                            -->
                             <span class="resource-option resource-option--disabled" aria-disabled="true" title="Próximamente">
                                 <div class="option-icon" aria-hidden="true">
                                     <i data-lucide="book-open"></i>
@@ -594,129 +485,56 @@
                 </div>
             </div>
         </section>
-        <!-- Sección Turnos -->
-        <section id="turnos" class="appointments-section" aria-labelledby="turnos-heading">
+
+        <!-- Sección Consulta (antes Turnos) -->
+        <section id="consulta" class="consultation-section" aria-labelledby="consulta-heading">
             <div class="container">
-                <h2 id="turnos-heading">Reservá tu consulta</h2>
-                <p class="appointments-intro">Elegí el día y horario que mejor se adapte a tu agenda</p>
+                <h2 id="consulta-heading">Reservá tu consulta</h2>
+                <p class="consultation-intro">Elegí el momento que mejor se adapte a vos y coordinamos juntos</p>
 
-                <div class="appointments-container">
+                <div class="consultation-container">
 
-                    <!-- Columna izquierda: Calendario -->
-                    <div class="calendar-wrapper">
-                        <div class="calendar-header">
-                            <button id="prevMonth" class="calendar-nav" aria-label="Mes anterior">
-                                <i data-lucide="chevron-left" aria-hidden="true"></i>
-                            </button>
-                            <h3 id="currentMonth" class="calendar-month"></h3>
-                            <button id="nextMonth" class="calendar-nav" aria-label="Mes siguiente">
-                                <i data-lucide="chevron-right" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                        <div class="calendar-grid" id="calendarGrid" role="grid" aria-label="Calendario de turnos">
-                            <!-- Días de la semana -->
-                            <div class="calendar-weekdays" role="row">
-                                <div role="columnheader" abbr="Lunes">Lun</div>
-                                <div role="columnheader" abbr="Martes">Mar</div>
-                                <div role="columnheader" abbr="Miércoles">Mié</div>
-                                <div role="columnheader" abbr="Jueves">Jue</div>
-                                <div role="columnheader" abbr="Viernes">Vie</div>
-                                <div role="columnheader" abbr="Sábado">Sáb</div>
-                                <div role="columnheader" abbr="Domingo">Dom</div>
-                            </div>
-                            <!-- Los días se generan dinámicamente con JS -->
-                            <div class="calendar-days" id="calendarDays" role="rowgroup"></div>
-                        </div>
+                    <!-- Columna izquierda: Imagen -->
+                    <div class="consultation-image">
+                        <img 
+                            src="assets/img/familia en consullta.png" 
+                            alt="Familia feliz consultando" 
+                            width="600" 
+                            height="500"
+                            loading="lazy"
+                        >
                     </div>
 
-                    <!-- Columna derecha: Horarios y Formulario -->
-                    <div class="appointments-right">
+                    <!-- Columna derecha: Contenido -->
+                    <div class="consultation-content">
+                        <div class="consultation-card">
+                            <div class="consultation-icon" aria-hidden="true">
+                                <i data-lucide="calendar-check"></i>
+                            </div>
+                            <h3>Contactanos para coordinar</h3>
+                            <p>Escribinos por WhatsApp y encontramos el mejor horario para vos. Respondemos consultas de lunes a viernes de 9 a 18 hs.</p>
+                            
+                            <a 
+                                href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20consultar%20disponibilidad%20para%20una%20sesi%C3%B3n" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                class="btn primary btn-whatsapp"
+                            >
+                                <i data-lucide="message-circle" aria-hidden="true"></i>
+                                Consultar disponibilidad
+                            </a>
 
-                        <!-- Selector de horarios (oculto hasta seleccionar fecha) -->
-                        <div class="time-selector" id="timeSelector" style="display: none;" aria-live="polite">
-                            <h4>Horarios disponibles</h4>
-                            <p class="selected-date-display" id="selectedDateDisplay"></p>
-                            <div class="time-slots" id="timeSlots"></div>
+                            <p class="consultation-note">
+                                <i data-lucide="info" aria-hidden="true"></i>
+                                Las consultas pueden ser presenciales o virtuales
+                            </p>
                         </div>
-
-                        <!-- Formulario de reserva (oculto hasta seleccionar horario) -->
-                        <div class="appointment-form" id="appointmentForm" style="display: none;">
-                            <h4>Completá tus datos</h4>
-                            <p class="form-subtitle">Para confirmar tu turno necesitamos algunos datos</p>
-
-                            <!--
-                                ✅ AGREGADO: autocomplete en campos para mejorar UX.
-                                ✅ AGREGADO: novalidate en form para manejar validación desde JS
-                                con mensajes en español en lugar de los mensajes nativos del browser.
-                                ✅ AGREGADO: honeypot anti-spam oculto (campo "_gotcha").
-                            -->
-                            <form id="reservationForm" novalidate>
-
-                                <!-- Honeypot anti-spam: oculto visualmente, los bots lo completan -->
-                                <div class="form-group" style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
-                                    <label for="_gotcha">No completar este campo</label>
-                                    <input type="text" id="_gotcha" name="_gotcha" tabindex="-1" autocomplete="off">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="patientName">Nombre completo <span class="required" aria-label="requerido">*</span></label>
-                                    <input type="text" id="patientName" name="patientName" required placeholder="Ej: María González" autocomplete="name" aria-required="true">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="patientEmail">Email <span class="required" aria-label="requerido">*</span></label>
-                                    <input type="email" id="patientEmail" name="patientEmail" required placeholder="tu@email.com" autocomplete="email" aria-required="true">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="patientPhone">Teléfono <span class="required" aria-label="requerido">*</span></label>
-                                    <input type="tel" id="patientPhone" name="patientPhone" required placeholder="+54 9 11 1234-5678" autocomplete="tel" aria-required="true">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="childName">Nombre del niño/a</label>
-                                    <input type="text" id="childName" name="childName" placeholder="Opcional" autocomplete="off">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="childAge">Edad del niño/a</label>
-                                    <input type="text" id="childAge" name="childAge" placeholder="Ej: 3 años" autocomplete="off">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="consultReason">Motivo de la consulta</label>
-                                    <textarea id="consultReason" name="consultReason" rows="3" placeholder="Opcional: Contanos brevemente por qué buscás orientación"></textarea>
-                                </div>
-
-                                <div class="appointment-summary" id="appointmentSummary">
-                                    <i data-lucide="calendar" aria-hidden="true"></i>
-                                    <span id="summaryText"></span>
-                                </div>
-
-                                <div class="form-actions">
-                                    <button type="button" class="btn link" id="cancelBtn">Cancelar</button>
-                                    <button type="submit" class="btn primary">Confirmar turno</button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- Estado inicial: placeholder -->
-                        <div class="appointments-placeholder" id="appointmentsPlaceholder">
-                            <i data-lucide="calendar-check" aria-hidden="true"></i>
-                            <p>Seleccioná una fecha en el calendario para ver los horarios disponibles</p>
-                        </div>
-
                     </div>
 
                 </div>
-
-                <!--
-                    ✅ CORREGIDO: <small> reemplazado por <p> con clase.
-                    <small> es para disclaimers legales, no para notas informativas.
-                -->
-                <p class="appointments-note">Las consultas pueden ser presenciales o virtuales</p>
             </div>
         </section>
+
         <!-- Sección Contacto -->
         <section id="contacto" class="contact-section" aria-labelledby="contacto-heading">
             <div class="container">
@@ -725,14 +543,16 @@
 
                 <div class="contact-container">
 
-                    <!-- Columna izquierda: Mapa -->
+                    <!-- Columna izquierda: Imagen del mapa -->
                     <div class="contact-map">
-                        <div id="map" class="map-container" role="region" aria-label="Mapa de ubicación"></div>
-                        <div class="map-placeholder" id="mapPlaceholder">
-                            <i data-lucide="map-pin" aria-hidden="true"></i>
-                            <p>Cullen 1619, Esperanza<br>Santa Fe, Argentina</p>
-                            <small>El mapa se cargará cuando esté disponible</small>
-                        </div>
+                        <img 
+                            src="assets/img/ubicacion.png" 
+                            alt="Mapa de ubicación: Cullen 1619, Esperanza, Santa Fe" 
+                            width="600" 
+                            height="500"
+                            loading="lazy"
+                            class="map-image"
+                        >
                     </div>
 
                     <!-- Columna derecha: Información de contacto -->
@@ -767,8 +587,8 @@
                             <div class="contact-content">
                                 <h3>Email</h3>
                                 <p>Envianos tu consulta por correo</p>
-                                <a href="mailto:contacto@pieldemar.com" class="contact-link">
-                                    contacto@pieldemar.com
+                                <a href="/cdn-cgi/l/email-protection#83e0ecedf7e2e0f7ecc3f3eae6efe7e6eee2f1ade0ecee" class="contact-link">
+                                    <span class="__cf_email__" data-cfemail="73101c1d071210071c33031a161f17161e12015d101c1e">[email&#160;protected]</span>
                                     <i data-lucide="external-link" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -811,10 +631,6 @@
     </main>
 
     <!-- FOOTER -->
-    <!--Links de aviso legal y política de privacidad: Reemplazar los href con las URLs reales cuando existan las páginas.
-        IMPORTANTE: La Política de Privacidad es obligatoria por Ley 25.326 ya que
-        el formulario recopila datos personales (nombre, email, teléfono, datos del niño).
-    -->
     <footer class="footer" role="contentinfo">
         <div class="container">
             <nav class="footer-nav" aria-label="Links del footer">
@@ -824,23 +640,25 @@
                 <span aria-hidden="true">|</span>
                 <a href="https://instagram.com/pieldemar" target="_blank" rel="noopener noreferrer">Redes sociales</a>
             </nav>
-            <nav class="footer-legal" aria-label="Links legales">
-                <!--
-                    IMPORTANTE: Crear estas páginas y actualizar los href.
-                    Son requeridas legalmente por la Ley 25.326 de Protección de Datos Personales.
-                -->
-                <a href="/aviso-legal">Aviso legal</a>
-                <span aria-hidden="true">|</span>
-                <a href="/politica-de-privacidad">Política de privacidad</a>
-            </nav>
             <p class="footer-copy">
                 <small>&copy; <span id="currentYear"></span> Piel de Mar. Todos los derechos reservados.</small>
             </p>
         </div>
     </footer>
 
+    <!-- BOTÓN FLOTANTE DE WHATSAPP -->
+    <a 
+        href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20informaci%C3%B3n%20sobre%20Piel%20de%20Mar" 
+        class="whatsapp-float" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        aria-label="Contactar por WhatsApp"
+    >
+        <i data-lucide="message-circle"></i>
+    </a>
+
     <!-- JavaScript -->
-    <script src="js/main.js" defer></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.js" defer></script>
 
     <!-- Inicializar Lucide Icons -->
     <script>
@@ -852,30 +670,7 @@
         }
     });
     document.getElementById('currentYear').textContent = new Date().getFullYear();
-</script>
-
-    <!--
-        ✅ NOTA PARA PRODUCCIÓN — Clase sr-only requerida en CSS:
-        Asegurarse de que styles.css incluya:
-
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        .resource-option--disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-    -->
+    </script>
 
 </body>
 </html>
