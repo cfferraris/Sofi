@@ -2463,6 +2463,7 @@ body:has(.navbar.visible) .whatsapp-float {
 }
 
 .appointment-field input,
+.appointment-field select,
 .appointment-field textarea,
 .appointment-result textarea {
     box-sizing: border-box;
@@ -2477,6 +2478,7 @@ body:has(.navbar.visible) .whatsapp-float {
 }
 
 .appointment-field input:focus-visible,
+.appointment-field select:focus-visible,
 .appointment-field textarea:focus-visible,
 .appointment-result textarea:focus-visible,
 .appointment-consent input:focus-visible,
