@@ -34,7 +34,7 @@ jobs:
       - name: Run desktop and mobile browser tests
         run: npm run test:e2e
       - name: Audit published site without submitting forms
-        if: always() && github.event_name == 'push'
+        if: success() && github.event_name == 'push'
         run: node tests/production-audit.mjs
       - name: Verify deployed appointment flow without sending WhatsApp
         if: always() && github.event_name == 'push'

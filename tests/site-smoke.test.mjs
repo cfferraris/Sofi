@@ -146,11 +146,10 @@ test('JSON-LD is valid structured data and remains separate from executable Java
   assert.doesNotMatch(match[1], /<\/script/i);
 });
 
-test('Instagram icon references match the repository filename case', () => {
+test('unverified social icon assets retain exact filename case but are not linked from the page', () => {
   const iconPath = resolve(root, 'assets/icons/Instagram.svg');
-  assert.ok(existsSync(iconPath), 'Expected assets/icons/Instagram.svg to exist');
-  assert.doesNotMatch(html, /assets\/icons\/instagram\.svg/);
-  assert.match(html, /assets\/icons\/Instagram\.svg/);
+  assert.ok(existsSync(iconPath), 'Expected the Instagram SVG asset to retain its exact filename');
+  assert.doesNotMatch(html, /assets\/icons\/(?:Instagram|facebook|youtube|twitch|x)\.svg/);
 });
 
 test('keyboard focus indicators use a high-contrast dual ring', () => {
