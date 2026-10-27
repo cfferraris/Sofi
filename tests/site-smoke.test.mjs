@@ -69,7 +69,6 @@ test('intro slider keyboard navigation is scoped to its section', () => {
   assert.doesNotMatch(js, /document\.addEventListener\('keydown', \(e\) => \{\s*\/\/ Solo responder si el slider está en viewport/);
 });
 
-
 test('appointment request form collects required fields and links to privacy policy', () => {
   assert.ok(html.includes('id="appointmentRequestForm"'));
   for (const id of ['appointmentName', 'appointmentInsurance', 'appointmentReason', 'appointmentDate', 'appointmentPeriod', 'appointmentTime', 'appointmentConsent']) {
@@ -80,25 +79,27 @@ test('appointment request form collects required fields and links to privacy pol
   assert.match(html, /turno queda sujeto a confirmación/i);
 });
 
-test('appointment result explains manual WhatsApp sending and pending confirmation', () => {
-  assert.ok(html.includes('id="appointmentWhatsAppLink"'));
-  assert.ok(html.includes('id="appointmentMessagePreview"'));
-  assert.ok(html.includes('id="appointmentCopyButton"'));
+test('appointment result shows only pending confirmation and free resources', () => {
+  assert.ok(html.includes('id="appointmentRequestResult"'));
+  assert.match(html, /Ver recursos gratuitos/i);
+  assert.doesNotMatch(html, /appointmentWhatsAppLink|appointmentMessagePreview|appointmentCopyButton/);
   assert.match(js, /turno todavía no está confirmado/i);
   assert.match(js, /window\.open\(url, '_blank'/);
   assert.match(js, /https:\/\/wa\.me\/\$\{WHATSAPP_NUMBER\}\?text=\$\{encodeURIComponent\(message\)\}/);
   assert.match(js, /únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp/i);
+  assert.doesNotMatch(js, /appointmentMessagePreview|appointmentCopyButton|appointmentWhatsAppLink/);
 });
 
-test('appointment period dynamically displays the correct half-hour time slots', () => {
+test('appointment selector keeps period and time in the same control', () => {
+  assert.match(js, /renderTimeOptions\(timeInput\.value\)/);
+  assert.match(js, /renderPeriodOptions\(\)/);
+  assert.match(js, /selectedPeriod\.times\.includes\(payload\.time\)/);
+  assert.match(html, /<input[^>]*type="hidden"[^>]*id="appointmentPeriod"/);
+  assert.match(html, /id="appointmentTime"/);
+  assert.doesNotMatch(html, /<label for="appointmentPeriod"/);
+  assert.doesNotMatch(html, /id="appointmentTime"[^>]*disabled/);
   assert.match(js, /morning:\s*\{[\s\S]*?'08:00'[\s\S]*?'11:30'/);
   assert.match(js, /afternoon:\s*\{[\s\S]*?'16:00'[\s\S]*?'19:30'/);
-  assert.match(js, /periodInput\.addEventListener\('change', updateTimeOptions\)/);
-  assert.match(js, /timeInput\.disabled = !period/);
-  assert.match(js, /selectedPeriod\.times\.includes\(payload\.time\)/);
-  assert.match(html, /id="appointmentPeriod"/);
-  assert.match(html, /id="appointmentTime"[^>]*disabled/);
-  assert.doesNotMatch(js, /fetch\s*\(['"]\/api\/appointments/);
 });
 
 test('privacy policy exists and describes the WhatsApp flow without claiming database storage', () => {
