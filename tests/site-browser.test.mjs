@@ -228,14 +228,14 @@ test('home page and privacy policy have no automated WCAG 2.2 A/AA violations', 
     const homeResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
-    assert.deepEqual(homeResults.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help })),
+    assert.deepEqual(homeResults.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, html: n.html, summary: n.failureSummary })), help: v.help })),
       [], 'Home page WCAG automated findings');
 
     await page.goto(baseURL + '/privacidad.html', { waitUntil: 'domcontentloaded' });
     const privacyResults = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
-    assert.deepEqual(privacyResults.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help })),
+    assert.deepEqual(privacyResults.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, html: n.html, summary: n.failureSummary })), help: v.help })),
       [], 'Privacy page WCAG automated findings');
   } finally {
     await browser.close();
