@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `Horario deseado: ${payload.time}`,
                 '',
                 'Entiendo que este mensaje es una solicitud y que el turno queda confirmado únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp.'
-            ].join('\\n');
+            ].join('\n');
 
             const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
             statusText.textContent = 'Tu solicitud fue preparada para WhatsApp. El turno todavía no está confirmado: quedará confirmado cuando Piel de Mar responda tu mensaje.';
