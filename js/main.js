@@ -87,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const whatsappLink = document.getElementById('appointmentWhatsAppLink');
         const messagePreview = document.getElementById('appointmentMessagePreview');
         const copyButton = document.getElementById('appointmentCopyButton');
-        const submitButton = appointmentForm.querySelector('[type="submit"]');
         const WHATSAPP_NUMBER = '5493425004018';
 
         function localDateString(date = new Date()) {
