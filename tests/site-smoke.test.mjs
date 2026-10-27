@@ -57,3 +57,14 @@ test('referenced local icon path matches the versioned filename case', () => {
   assert.ok(existsSync(resolve(root, 'assets/icons/Instagram.svg')));
   assert.doesNotMatch(html, /assets\/icons\/instagram\.svg/);
 });
+
+test('autoplay pauses while either carousel is hovered or keyboard-focused', () => {
+  assert.match(js, /carouselRegion\?\.addEventListener\('focusin', stopAutoPlay\)/);
+  assert.match(js, /introRegion\?\.addEventListener\('focusin', stopIntroAutoPlay\)/);
+  assert.match(js, /reducedMotion \|\| document\.hidden/g);
+});
+
+test('intro slider keyboard navigation is scoped to its section', () => {
+  assert.match(js, /introRegion\?\.addEventListener\('keydown'/);
+  assert.doesNotMatch(js, /document\.addEventListener\('keydown', \(e\) => \{\s*\/\/ Solo responder si el slider está en viewport/);
+});
