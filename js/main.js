@@ -72,6 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
+    const currentYear = document.getElementById('currentYear');
+    if (currentYear) {
+        currentYear.textContent = String(new Date().getFullYear());
+    }
 
     // ========================================
     // ELEMENTOS DEL DOM — HERO Y NAVBAR
