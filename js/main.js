@@ -421,7 +421,7 @@ if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
     // Actualizar botones
     function updateIntroButtons() {
         introPrevBtn.disabled = introCurrentIndex === 0;
-        nextBtn.disabled = introCurrentIndex >= introSlides.length - 1;
+        introNextBtn.disabled = introCurrentIndex >= introSlides.length - 1;
     }
 
     // Ir a slide específico
