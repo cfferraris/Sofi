@@ -407,6 +407,24 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentIndex = 0;
         let visibleCards = getVisibleCards();
         let autoPlayId   = null;
+        let autoPlayPaused = false;
+        const autoPlayToggle = document.createElement('button');
+        const autoPlayMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+        autoPlayToggle.type = 'button';
+        autoPlayToggle.id = 'carouselAutoplayToggle';
+        autoPlayToggle.className = 'btn link carousel-autoplay-toggle';
+        autoPlayToggle.textContent = 'Pausar rotación automática';
+        autoPlayToggle.setAttribute('aria-label', 'Pausar rotación automática de testimonios');
+        autoPlayToggle.setAttribute('aria-controls', 'carouselTrack');
+        autoPlayToggle.setAttribute('aria-pressed', 'false');
+        dotsContainer.insertAdjacentElement('afterend', autoPlayToggle);
+
+        function syncAutoPlayToggleVisibility() {
+            autoPlayToggle.hidden = autoPlayMotionPreference.matches;
+            autoPlayToggle.style.display = autoPlayMotionPreference.matches ? 'none' : '';
+        }
+        syncAutoPlayToggleVisibility();
+        autoPlayMotionPreference.addEventListener('change', syncAutoPlayToggleVisibility);
 
         function getVisibleCards() {
             if (window.innerWidth <= 768)  return 1;
@@ -467,8 +485,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function startAutoPlay() {
-            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (reducedMotion || document.hidden) return;
+            const reducedMotion = autoPlayMotionPreference.matches;
+            if (reducedMotion || document.hidden || autoPlayPaused) return;
             stopAutoPlay();
             autoPlayId = setInterval(() => {
                 const maxIndex = cards.length - visibleCards;
@@ -480,6 +498,20 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(autoPlayId);
             autoPlayId = null;
         }
+
+        autoPlayToggle.addEventListener('click', () => {
+            autoPlayPaused = !autoPlayPaused;
+            const label = autoPlayPaused
+                ? 'Reanudar rotación automática de testimonios'
+                : 'Pausar rotación automática de testimonios';
+            autoPlayToggle.textContent = autoPlayPaused
+                ? 'Reanudar rotación automática'
+                : 'Pausar rotación automática';
+            autoPlayToggle.setAttribute('aria-label', label);
+            autoPlayToggle.setAttribute('aria-pressed', String(autoPlayPaused));
+            if (autoPlayPaused) stopAutoPlay();
+            else startAutoPlay();
+        });
 
         prevBtn.addEventListener('click', () => {
             stopAutoPlay();
@@ -558,7 +590,25 @@ if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
     const introSlides = Array.from(introTrack.querySelectorAll('.intro-slide'));
     let introCurrentIndex = 0;
     let introAutoPlayId = null;
-    const INTRO_AUTOPLAY_MS = 5000; // 5 segundos (≥ 4s para no bajar conversión)
+    let introAutoPlayPaused = false;
+    const INTRO_AUTOPLAY_MS = 5000;
+    const introAutoPlayToggle = document.createElement('button');
+    const introAutoPlayMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    introAutoPlayToggle.type = 'button';
+    introAutoPlayToggle.id = 'introAutoplayToggle';
+    introAutoPlayToggle.className = 'btn link intro-autoplay-toggle';
+    introAutoPlayToggle.textContent = 'Pausar cambio automático';
+    introAutoPlayToggle.setAttribute('aria-label', 'Pausar cambio automático de diapositivas');
+    introAutoPlayToggle.setAttribute('aria-controls', 'introSliderTrack');
+    introAutoPlayToggle.setAttribute('aria-pressed', 'false');
+    introDotsContainer.insertAdjacentElement('afterend', introAutoPlayToggle);
+
+    function syncIntroAutoPlayToggleVisibility() {
+        introAutoPlayToggle.hidden = introAutoPlayMotionPreference.matches;
+        introAutoPlayToggle.style.display = introAutoPlayMotionPreference.matches ? 'none' : '';
+    }
+    syncIntroAutoPlayToggleVisibility();
+    introAutoPlayMotionPreference.addEventListener('change', syncIntroAutoPlayToggleVisibility);
 
     // Obtener ancho de slide
     function getIntroSlideWidth() {
@@ -622,9 +672,9 @@ if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
 
     // Autoplay (se detiene al llegar al final - no hace loop)
     function startIntroAutoPlay() {
-        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reducedMotion || document.hidden) return;
-        
+        const reducedMotion = introAutoPlayMotionPreference.matches;
+        if (reducedMotion || document.hidden || introAutoPlayPaused) return;
+
         stopIntroAutoPlay();
         
         // Solo iniciar si no estamos en la última slide
@@ -644,6 +694,19 @@ if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
         clearInterval(introAutoPlayId);
         introAutoPlayId = null;
     }
+
+    introAutoPlayToggle.addEventListener('click', () => {
+        introAutoPlayPaused = !introAutoPlayPaused;
+        introAutoPlayToggle.textContent = introAutoPlayPaused
+            ? 'Reanudar cambio automático'
+            : 'Pausar cambio automático';
+        introAutoPlayToggle.setAttribute('aria-label', introAutoPlayPaused
+            ? 'Reanudar cambio automático de diapositivas'
+            : 'Pausar cambio automático de diapositivas');
+        introAutoPlayToggle.setAttribute('aria-pressed', String(introAutoPlayPaused));
+        if (introAutoPlayPaused) stopIntroAutoPlay();
+        else startIntroAutoPlay();
+    });
 
     // Event listeners
     introPrevBtn.addEventListener('click', () => {
