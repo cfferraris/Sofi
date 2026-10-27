@@ -108,11 +108,9 @@ test('primary appointment CTAs route through the validated request form', () => 
   assert.match(html, /href="#consulta"[\s\S]{0,200}class="whatsapp-float"/);
 });
 
-  assert.match(js, /\.join\('\\n'\)/);
-});
-
 test('appointment form does not store personal data in the browser or read stale JSON', () => {
-  assert.doesNotMatch(js, /localStorage|sessionStorage|appointments\\.json|navigator\\.clipboard/);
+  assert.doesNotMatch(js, /localStorage|sessionStorage|navigator/);
+  assert.ok(!js.includes('appointments.json'));
   assert.ok(js.includes("fetch('/api/appointments'"));
 });
 
