@@ -99,3 +99,13 @@ test('appointment form requires acknowledgement and rejects past dates', () => {
   assert.match(html, /sujetos a confirmación/i);
   assert.doesNotMatch(html, /horarios disponibles en tiempo real/i);
 });
+
+
+test('primary appointment CTAs route through the validated request form', () => {
+  assert.match(html, /href="#consulta"[\s\S]{0,250}class="btn-intro btn-intro-final"/);
+  assert.match(html, /href="#consulta"[\s\S]{0,200}class="whatsapp-float"/);
+});
+
+test('WhatsApp request text uses actual newline separators rather than literal backslash-n', () => {
+  assert.match(js, /\.join\('\\n'\)/);
+});
