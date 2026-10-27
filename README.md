@@ -11,7 +11,7 @@ Sitio institucional estático de Piel de Mar, orientado a presentar los servicio
 - `assets/icons/`: iconos SVG.
 - `assets/tipografias/`: fuentes locales.
 - `data/appointments.json`: datos históricos de disponibilidad de 2025; no son consumidos por el sitio y no deben mostrarse como horarios actuales.
-- `docs/ESPECIFICACION-TURNOS.md`: requisito funcional confirmado para solicitar turnos mediante WhatsApp, con confirmación manual de la propietaria.
+- `server.js`: API de solicitudes, persistencia PostgreSQL y notificación por correo.\n- `privacidad.html`: aviso sobre el uso y la retención de los datos de solicitud.\n- `docs/ESPECIFICACION-TURNOS.md`: flujo funcional y criterios de aceptación de turnos.
 
 ## Ejecución local
 
@@ -28,7 +28,7 @@ Abrir `http://localhost:8000`. Para una validación real, probar también en un 
 Con Node.js instalado, ejecutar desde la raíz:
 
 ```bash
-node --test tests/site-smoke.test.mjs
+node --test tests/*.test.mjs
 ```
 
 Las pruebas comprueban rutas locales, referencias internas, IDs duplicados y regresiones concretas de los controles del slider y del año del footer. No reemplazan las pruebas visuales y funcionales en navegador.
@@ -40,4 +40,4 @@ Las pruebas comprueban rutas locales, referencias internas, IDs duplicados y reg
 
 ## Estado de calidad
 
-Consultar [la auditoría inicial y el plan de remediación](docs/AUDITORIA-BASE.md). El análisis estático no equivale a una validación funcional completa: no se debe declarar listo para producción sin probar navegación, carruseles, enlaces, responsive, accesibilidad y carga de recursos en navegador.
+Consultar [la auditoría inicial y el plan de remediación](docs/AUDITORIA-BASE.md). Las pruebas estáticas no reemplazan las pruebas de navegador ni la verificación del servicio PostgreSQL, SMTP, notificaciones y retención. No publicar a producción hasta realizar esas comprobaciones y validar el aviso de privacidad.

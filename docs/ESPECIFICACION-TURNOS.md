@@ -1,4 +1,4 @@
-# Especificación funcional — Solicitud de turnos por WhatsApp
+# Especificación funcional — Solicitud y registro de turnos
 
 **Estado:** requisito confirmado; implementación pendiente de auditoría técnica y validación en navegador.  
 **Objetivo:** reemplazar el enlace genérico de WhatsApp y el archivo de horarios legado por un flujo claro para solicitar un turno, sin dar a entender que la cita está confirmada automáticamente.

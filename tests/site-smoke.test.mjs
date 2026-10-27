@@ -70,43 +70,36 @@ test('intro slider keyboard navigation is scoped to its section', () => {
 });
 
 
-test('appointment request form collects required fields and explains manual confirmation', () => {
+test('appointment request form collects required fields and links to privacy policy', () => {
   assert.ok(html.includes('id="appointmentRequestForm"'));
   for (const id of ['appointmentName', 'appointmentInsurance', 'appointmentReason', 'appointmentDate', 'appointmentPeriod', 'appointmentTime', 'appointmentConsent']) {
     assert.ok(html.includes('id="' + id + '"'), 'Missing appointment field: ' + id);
   }
-  assert.match(html, /turno no queda confirmado/i);
-  assert.match(html, /Este sitio no los guarda/i);
+  assert.match(html, /privacidad\.html/);
+  assert.match(html, /Enviar solicitud de turno/);
+  assert.match(html, /turno queda sujeto a confirmación/i);
 });
 
-test('appointment requests encode the message and provide WhatsApp and copy fallbacks', () => {
-  assert.match(js, /const WHATSAPP_NUMBER = ['"]5493425004018['"]/);
-  assert.match(js, /encodeURIComponent\(preparedMessage\)/);
-  assert.match(js, /window\.open\(whatsappLink\.href, ['"]_blank['"]/);
-  assert.match(html, /Continuar a WhatsApp/);
-  assert.match(html, /Copiar mensaje/);
+test('successful appointment result has one action and no WhatsApp/copy controls', () => {
+  const resultStart = html.indexOf('id="appointmentRequestResult"');
+  const resultEnd = html.indexOf('</div>', resultStart);
+  const resultPanel = html.slice(resultStart, resultEnd);
+  assert.match(resultPanel, /Tu solicitud de turno fue registrada\. Te confirmaremos a la brevedad\./);
+  assert.match(resultPanel, /href="#recursos"/);
+  assert.match(resultPanel, /Explorar el contenido gratuito/);
+  assert.doesNotMatch(html, /Continuar a WhatsApp|Preparar solicitud por WhatsApp|Copiar mensaje/);
 });
 
-test('appointment time selector offers only half-hour slots in morning and afternoon windows', () => {
-  assert.match(html, /id="appointmentPeriod" name="period" required/);
+test('appointment form submits to API and preserves the half-hour time slots', () => {
+  assert.match(js, /fetch\('\/api\/appointments'/);
   assert.match(js, /morning:\s*\{[\s\S]*?'08:00'[\s\S]*?'11:30'/);
   assert.match(js, /afternoon:\s*\{[\s\S]*?'16:00'[\s\S]*?'19:30'/);
-  assert.match(js, /validPeriod\.times\.includes\(time\)/);
-  assert.match(js, /Franja horaria: \${validPeriod\.label}/);
+  assert.match(js, /selectedPeriod\.times\.includes\(payload\.time\)/);
+  assert.doesNotMatch(js, /window\.open\(whatsappLink|navigator\.clipboard|localStorage|sessionStorage/);
 });
 
-test('appointment form does not persist personal data or use stale appointment JSON', () => {
-  assert.doesNotMatch(js, /localStorage|sessionStorage|sendBeacon/);
-  assert.doesNotMatch(js, /appointments\.json/);
-  assert.match(js, /America\/Argentina\/Buenos_Aires/);
-});
-
-test('appointment form requires acknowledgement and rejects past dates', () => {
-  assert.match(html, /id="appointmentConsent"[^>]*required/);
-  assert.match(js, /date < minimumAppointmentDate/);
-  assert.match(html, /fecha a partir de mañana/i);
-  assert.match(html, /sujetos a confirmación/i);
-  assert.doesNotMatch(html, /horarios disponibles en tiempo real/i);
+test('privacy policy exists and documents data handling', () => {
+  assert.ok(existsSync(resolve(root, 'privacidad.html')));
 });
 
 

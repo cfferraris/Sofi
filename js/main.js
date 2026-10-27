@@ -73,23 +73,19 @@ document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
     }
     // ========================================
-    // SOLICITUD DE TURNOS POR WHATSAPP
-    // No hay backend: los datos sólo se usan en memoria para preparar el mensaje.
+    // SOLICITUD DE TURNOS — API propia
+    // El backend registra la solicitud y notifica a Piel de Mar.
     // ========================================
     const appointmentForm = document.getElementById('appointmentRequestForm');
     if (appointmentForm) {
-        const WHATSAPP_NUMBER = '5493425004018';
         const dateInput = document.getElementById('appointmentDate');
         const periodInput = document.getElementById('appointmentPeriod');
         const timeInput = document.getElementById('appointmentTime');
         const resultPanel = document.getElementById('appointmentRequestResult');
         const statusText = document.getElementById('appointmentRequestStatus');
-        const whatsappLink = document.getElementById('appointmentOpenWhatsApp');
-        const copyButton = document.getElementById('appointmentCopyMessage');
-        const messagePreview = document.getElementById('appointmentMessagePreview');
-        let preparedMessage = '';
+        const errorText = document.getElementById('appointmentRequestError');
+        const submitButton = appointmentForm.querySelector('[type="submit"]');
 
-        // Usa la fecha local del dispositivo, no UTC, para evitar desfases de día.
         function localDateString(date = new Date()) {
             const parts = new Intl.DateTimeFormat('en-CA', {
                 timeZone: 'America/Argentina/Buenos_Aires',
@@ -102,8 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const [todayYear, todayMonth, todayDay] = localDateString().split('-').map(Number);
-        const minimumAppointmentDate = new Date(Date.UTC(todayYear, todayMonth - 1, todayDay + 1)).toISOString().slice(0, 10);
-        dateInput.min = minimumAppointmentDate;
+        dateInput.min = new Date(Date.UTC(todayYear, todayMonth - 1, todayDay + 1)).toISOString().slice(0, 10);
 
         const APPOINTMENT_SLOTS = {
             morning: {
@@ -124,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
             placeholder.textContent = period ? 'Elegí un horario' : 'Primero elegí una franja';
             timeInput.appendChild(placeholder);
             timeInput.disabled = !period;
-
             if (!period) return;
             period.times.forEach((time) => {
                 const option = document.createElement('option');
@@ -137,96 +131,67 @@ document.addEventListener('DOMContentLoaded', () => {
         periodInput.addEventListener('change', updateTimeOptions);
         updateTimeOptions();
 
-        function clearPreparedRequest() {
-            preparedMessage = '';
+        function resetFeedback() {
             resultPanel.hidden = true;
-            messagePreview.value = '';
-            whatsappLink.href = '#';
+            errorText.hidden = true;
+            errorText.textContent = '';
         }
+        appointmentForm.addEventListener('input', resetFeedback);
+        appointmentForm.addEventListener('change', resetFeedback);
 
-        appointmentForm.addEventListener('input', clearPreparedRequest);
-        appointmentForm.addEventListener('change', clearPreparedRequest);
-
-        appointmentForm.addEventListener('submit', (event) => {
+        appointmentForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-
+            resetFeedback();
             if (!appointmentForm.reportValidity()) return;
 
             const formData = new FormData(appointmentForm);
-            const name = String(formData.get('name') || '').trim();
-            const insurance = String(formData.get('insurance') || '').trim();
-            const reason = String(formData.get('reason') || '').trim();
-            const date = String(formData.get('date') || '');
-            const period = String(formData.get('period') || '');
-            const time = String(formData.get('time') || '');
-            const validPeriod = APPOINTMENT_SLOTS[period];
-            const validTime = Boolean(validPeriod && validPeriod.times.includes(time));
-            const consent = document.getElementById('appointmentConsent').checked;
-
-            if (!name || !insurance || !reason || !date || !validTime || !consent) {
-                statusText.textContent = 'Revisá los campos obligatorios antes de continuar.';
-                resultPanel.hidden = false;
+            const payload = {
+                name: String(formData.get('name') || '').trim(),
+                insurance: String(formData.get('insurance') || '').trim(),
+                reason: String(formData.get('reason') || '').trim(),
+                date: String(formData.get('date') || ''),
+                period: String(formData.get('period') || ''),
+                time: String(formData.get('time') || ''),
+                consent: formData.get('consent') === 'on',
+                website: String(formData.get('website') || '')
+            };
+            const selectedPeriod = APPOINTMENT_SLOTS[payload.period];
+            if (!selectedPeriod || !selectedPeriod.times.includes(payload.time)) {
+                errorText.textContent = 'Elegí una franja y un horario válido.';
+                errorText.hidden = false;
                 return;
             }
-
-            if (date < minimumAppointmentDate) {
-                dateInput.setCustomValidity('Elegí hoy o una fecha futura.');
+            if (payload.date < dateInput.min) {
+                dateInput.setCustomValidity('Elegí una fecha a partir de mañana.');
                 dateInput.reportValidity();
                 dateInput.setCustomValidity('');
                 return;
             }
 
-            const [year, month, day] = date.split('-').map(Number);
-            const dateLabel = new Date(year, month - 1, day).toLocaleDateString('es-AR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            });
-
-            preparedMessage = [
-                'Hola, quiero solicitar un turno con Piel de Mar.',
-                '',
-                `- Nombre: ${name}`,
-                `- Obra social o cobertura: ${insurance}`,
-                `- Motivo de la consulta: ${reason}`,
-                `- Fecha deseada: ${dateLabel}`,
-                `- Franja horaria: ${validPeriod.label}`,
-                `- Horario deseado: ${time}`,
-                '',
-                'Entiendo que esta es una solicitud y que el turno queda confirmado únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp.'
-            ].join('\n');
-
-            // Codifica el mensaje completo para preservar tildes, símbolos y saltos de línea.
-            whatsappLink.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(preparedMessage)}`;
-            messagePreview.value = preparedMessage;
-            resultPanel.hidden = false;
-            statusText.textContent = 'Solicitud preparada. WhatsApp puede abrirse automáticamente; si no ocurre, usá “Continuar a WhatsApp” o copiá el mensaje.';
-            resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-            // La acción ocurre dentro del envío del formulario. El enlace y la copia quedan como alternativas.
-            window.open(whatsappLink.href, '_blank', 'noopener,noreferrer');
-        });
-
-        copyButton.addEventListener('click', async () => {
-            if (!preparedMessage) {
-                statusText.textContent = 'Primero prepará la solicitud.';
-                return;
-            }
-
+            submitButton.disabled = true;
+            submitButton.textContent = 'Enviando solicitud…';
             try {
-                if (navigator.clipboard && window.isSecureContext) {
-                    await navigator.clipboard.writeText(preparedMessage);
-                } else {
-                    messagePreview.focus();
-                    messagePreview.select();
-                    const copied = document.execCommand('copy');
-                    if (!copied) throw new Error('Clipboard fallback unavailable');
+                const response = await fetch('/api/appointments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok || !result.ok) {
+                    throw new Error(result.message || 'No pudimos registrar la solicitud. Intentá nuevamente o contactanos por los medios del sitio.');
                 }
-                statusText.textContent = 'Mensaje copiado. Pegalo en el chat de WhatsApp y enviálo si estás de acuerdo.';
-            } catch {
-                messagePreview.focus();
-                messagePreview.select();
-                statusText.textContent = 'No se pudo copiar automáticamente. Seleccioná el texto del mensaje y copialo manualmente.';
+                appointmentForm.reset();
+                dateInput.min = new Date(Date.UTC(...localDateString().split('-').map(Number).map((v, i) => i === 1 ? v - 1 : v))).toISOString().slice(0,10);
+                updateTimeOptions();
+                statusText.textContent = 'Tu solicitud de turno fue registrada. Te confirmaremos a la brevedad.';
+                resultPanel.hidden = false;
+                resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } catch (error) {
+                errorText.textContent = error.message || 'No pudimos registrar la solicitud. Revisá tu conexión e intentá nuevamente.';
+                errorText.hidden = false;
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Enviar solicitud de turno';
             }
         });
     }

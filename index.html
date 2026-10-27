@@ -657,7 +657,7 @@
                             <h3 id="consulta-heading">Solicitá un turno</h3>
                             <p>Completá tus datos y elegí una fecha y un horario de preferencia. Te vamos a derivar a WhatsApp para que revises y envíes la solicitud.</p>
 
-                            <form id="appointmentRequestForm" class="appointment-form" novalidate>
+                            <form id="appointmentRequestForm" class="appointment-form">
                                 <div class="appointment-field">
                                     <label for="appointmentName">Nombre y apellido</label>
                                     <input id="appointmentName" name="name" type="text" autocomplete="name" maxlength="120" required>
@@ -698,24 +698,22 @@
                                 </div>
 
                                 <div class="appointment-privacy">
-                                    <p>Los datos se usan para preparar el mensaje que vos decidís abrir y enviar por WhatsApp. Este sitio no los guarda. Al abrir WhatsApp, podés revisar el texto antes de enviarlo. No incluyas información clínica innecesaria.</p>
+                                    <p>Usaremos estos datos para gestionar tu solicitud de turno y contactarte. Evitá incluir información clínica innecesaria. Consultá nuestra <a href="privacidad.html" target="_blank" rel="noopener noreferrer">política de privacidad</a>.</p>
                                     <label class="appointment-consent" for="appointmentConsent">
                                         <input id="appointmentConsent" name="consent" type="checkbox" required>
-                                        <span>Entiendo que esto es una solicitud, no una reserva confirmada, y que debo esperar la respuesta de Piel de Mar.</span>
+                                        <span>Acepto que Piel de Mar use estos datos para gestionar mi solicitud y contactarme. Entiendo que el turno queda sujeto a confirmación.</span>
                                     </label>
                                 </div>
 
-                                <button type="submit" class="btn primary appointment-submit">Preparar solicitud por WhatsApp</button>
+                                <label class="appointment-honeypot" aria-hidden="true">Dejá este campo vacío<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+                                <button type="submit" class="btn primary appointment-submit">Enviar solicitud de turno</button>
                             </form>
 
                             <div id="appointmentRequestResult" class="appointment-result" hidden>
-                                <p id="appointmentRequestStatus" class="appointment-status" role="status" aria-live="polite"></p>
-                                <a id="appointmentOpenWhatsApp" class="btn primary appointment-action" href="#" target="_blank" rel="noopener noreferrer">Continuar a WhatsApp</a>
-                                <button id="appointmentCopyMessage" class="btn appointment-copy" type="button">Copiar mensaje</button>
-                                <label for="appointmentMessagePreview">Mensaje preparado (podés revisarlo antes de enviarlo)</label>
-                                <textarea id="appointmentMessagePreview" rows="8" readonly></textarea>
-                                <p class="appointment-confirmation-note">El turno no queda confirmado al abrir WhatsApp ni al enviar el mensaje. La confirmación llega únicamente cuando Piel de Mar te responde.</p>
+                                <p id="appointmentRequestStatus" class="appointment-status" role="status" aria-live="polite">Tu solicitud de turno fue registrada. Te confirmaremos a la brevedad.</p>
+                                <a id="appointmentResourcesLink" class="btn primary appointment-action" href="#recursos">Explorar el contenido gratuito</a>
                             </div>
+                            <p id="appointmentRequestError" class="appointment-error" role="alert" hidden></p>
 
                             <p class="consultation-note">
                                 <i data-lucide="info" aria-hidden="true"></i>
