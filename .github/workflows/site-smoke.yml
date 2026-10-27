@@ -36,10 +36,13 @@ jobs:
       - name: Audit published site without submitting forms
         if: always() && github.event_name == 'push'
         run: node tests/production-audit.mjs
+      - name: Verify deployed appointment flow without sending WhatsApp
+        if: always() && github.event_name == 'push'
+        run: node tests/production-flow-audit.mjs
       - name: Upload published-site audit report
         if: always() && github.event_name == 'push'
         uses: actions/upload-artifact@v4
         with:
           name: production-audit-${{ github.sha }}
-          path: artifacts/production-audit.json
+          path: artifacts/*.json
           if-no-files-found: warn
