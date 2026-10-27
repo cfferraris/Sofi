@@ -425,8 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dot = document.createElement('button');
                 dot.classList.add('carousel-dot');
                 dot.setAttribute('aria-label', `Ir al testimonio ${i + 1}`);
-                dot.setAttribute('role', 'tab');
-                dot.setAttribute('aria-selected', String(i === 0));
+                dot.setAttribute('aria-pressed', String(i === 0));
                 if (i === 0) dot.classList.add('active');
                 dot.addEventListener('click', () => goToSlide(i));
                 dotsContainer.appendChild(dot);
@@ -437,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, i) => {
                 const active = i === currentIndex;
                 dot.classList.toggle('active', active);
-                dot.setAttribute('aria-selected', String(active));
+                dot.setAttribute('aria-pressed', String(active));
             });
         }
 
@@ -573,7 +572,7 @@ if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
             dot.classList.add('intro-slider-dot');
             dot.setAttribute('aria-label', `Ir a diapositiva ${i + 1}`);
             dot.setAttribute('role', 'tab');
-            dot.setAttribute('aria-selected', String(i === 0));
+            dot.setAttribute('aria-pressed', String(i === 0));
             if (i === 0) dot.classList.add('active');
             dot.addEventListener('click', () => goToIntroSlide(i));
             introDotsContainer.appendChild(dot);
@@ -585,7 +584,7 @@ if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
         introDotsContainer.querySelectorAll('.intro-slider-dot').forEach((dot, i) => {
             const active = i === introCurrentIndex;
             dot.classList.toggle('active', active);
-            dot.setAttribute('aria-selected', String(active));
+            dot.setAttribute('aria-pressed', String(active));
         });
     }
 
