@@ -49,8 +49,8 @@
 8. **Testimonios.** Hay nombres y referencias a menores. Verificar que sean reales, que exista autorización de publicación y que el contenido sea fiel; no inventar reseñas ni atribuciones.
    - Aceptación: cada testimonio publicado cuenta con aprobación de la persona responsable o se reemplaza por contenido aprobado.
 
-9. **Disponibilidad de turnos.** `data/appointments.json` parece legado y no es usado por el sitio actual.
-   - Aceptación: confirmar el flujo de negocio. Si WhatsApp es definitivo, documentar que no hay reserva automática y retirar sólo el dato legado tras confirmar que no lo necesita otro proceso. Si se requiere agenda real, especificar proveedor, zona horaria, disponibilidad, privacidad y confirmación antes de implementarla.
+9. **Disponibilidad de turnos.** Requisito confirmado: permitir que el cliente elija fecha y hora deseadas, complete nombre, obra social y motivo, y abra WhatsApp con una solicitud precargada. El sitio debe aclarar que el turno sólo se confirma cuando la propietaria responde por WhatsApp. `data/appointments.json` contiene fechas antiguas de 2025 y no debe presentarse como disponibilidad actual. La especificación completa está en `docs/ESPECIFICACION-TURNOS.md`.
+   - Aceptación: validar el flujo, el número de WhatsApp y la fuente de disponibilidad con la propietaria. Como el sitio es estático, el formulario no puede bloquear horarios ni confirmar disponibilidad real. Elegir una fuente de calendario actualizada antes de prometer disponibilidad. No guardar datos personales en el repositorio ni en el navegador.
 
 10. **Perfiles sociales y datos comerciales.** Revisar que los enlaces de redes, dirección, teléfono, correo, horarios y URLs canónicas sean correctos y estén controlados por el titular.
 
@@ -62,7 +62,7 @@
 4. Optimizar recursos visuales y medir rendimiento antes/después.
 5. Consolidar CSS de manera incremental y con comprobación visual.
 6. Validar SEO técnico, JSON-LD, enlaces externos, privacidad y contenido.
-7. Confirmar mecanismo de contacto y decisión de turnos.
+7. Implementar y validar el flujo de solicitud por WhatsApp según `docs/ESPECIFICACION-TURNOS.md`, y definir la fuente de disponibilidad real.
 8. Publicar un checklist de lanzamiento con resultados, bloqueantes y evidencia.
 
 ## Limitaciones de esta auditoría
