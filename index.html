@@ -681,19 +681,14 @@
                                         <small id="appointmentDateHelp">Elegí una fecha a partir de mañana; el horario queda sujeto a confirmación.</small>
                                     </div>
                                     <div>
-                                        <label for="appointmentPeriod">Franja horaria</label>
-                                        <select id="appointmentPeriod" name="period" required>
+                                        <label for="appointmentTime">Franja y horario</label>
+                                        <input type="hidden" id="appointmentPeriod" name="period" value="">
+                                        <select id="appointmentTime" name="time" required aria-describedby="appointmentTimeHelp">
                                             <option value="">Elegí mañana o tarde</option>
-                                            <option value="morning">Mañana (08:00–12:00)</option>
-                                            <option value="afternoon">Tarde (16:00–20:00)</option>
+                                            <option value="morning">Mañana</option>
+                                            <option value="afternoon">Tarde</option>
                                         </select>
-                                    </div>
-                                    <div>
-                                        <label for="appointmentTime">Horario deseado</label>
-                                        <select id="appointmentTime" name="time" required disabled>
-                                            <option value="">Primero elegí una franja</option>
-                                        </select>
-                                        <small id="appointmentTimeHelp">Turnos cada 30 minutos. Últimos horarios de inicio: 11:30 y 19:30.</small>
+                                        <small id="appointmentTimeHelp">Primero elegí una franja; después seleccioná uno de los horarios disponibles.</small>
                                     </div>
                                 </div>
 
@@ -707,13 +702,10 @@
 
                                 <button type="submit" class="btn primary appointment-submit">Preparar solicitud por WhatsApp</button>
                             </form>
-
                             <div id="appointmentRequestResult" class="appointment-result" aria-labelledby="appointmentRequestStatus" hidden>
                                 <p id="appointmentRequestStatus" class="appointment-status" role="status" aria-live="polite"></p>
-                                <a id="appointmentWhatsAppLink" class="btn primary appointment-action" href="https://wa.me/5493425004018" target="_blank" rel="noopener noreferrer">Abrir WhatsApp para enviar la solicitud</a>
-                                <label for="appointmentMessagePreview">Mensaje preparado (alternativa si WhatsApp no se abre)</label>
-                                <textarea id="appointmentMessagePreview" rows="8" readonly aria-describedby="appointmentRequestStatus"></textarea>
-                                <button id="appointmentCopyButton" type="button" class="appointment-copy">Copiar mensaje</button>
+                                <p class="appointment-followup">El turno debe ser confirmado por Piel de Mar después de recibir y revisar tu mensaje.</p>
+                                <a class="btn primary appointment-resource-action" href="#recursos">Ver recursos gratuitos</a>
                             </div>
                             <p id="appointmentRequestError" class="appointment-error" role="alert" hidden></p>
 

@@ -84,9 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultPanel = document.getElementById('appointmentRequestResult');
         const statusText = document.getElementById('appointmentRequestStatus');
         const errorText = document.getElementById('appointmentRequestError');
-        const whatsappLink = document.getElementById('appointmentWhatsAppLink');
-        const messagePreview = document.getElementById('appointmentMessagePreview');
-        const copyButton = document.getElementById('appointmentCopyButton');
         const WHATSAPP_NUMBER = '5493425004018';
 
         function localDateString(date = new Date()) {
@@ -117,15 +114,42 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        function updateTimeOptions() {
-            const period = APPOINTMENT_SLOTS[periodInput.value];
+        function renderPeriodOptions() {
+            periodInput.value = '';
             timeInput.replaceChildren();
             const placeholder = document.createElement('option');
             placeholder.value = '';
-            placeholder.textContent = period ? 'Elegí un horario' : 'Primero elegí una franja';
+            placeholder.textContent = 'Elegí mañana o tarde';
             timeInput.appendChild(placeholder);
-            timeInput.disabled = !period;
-            if (!period) return;
+            Object.entries(APPOINTMENT_SLOTS).forEach(([value, period]) => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = period.label;
+                timeInput.appendChild(option);
+            });
+        }
+
+        function renderTimeOptions(periodKey) {
+            const period = APPOINTMENT_SLOTS[periodKey];
+            if (!period) {
+                renderPeriodOptions();
+                return;
+            }
+
+            periodInput.value = periodKey;
+            timeInput.replaceChildren();
+
+            const changeOption = document.createElement('option');
+            changeOption.value = '__change-period__';
+            changeOption.textContent = '← Cambiar franja';
+            timeInput.appendChild(changeOption);
+
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = `Elegí un horario de ${period.label.toLowerCase()}`;
+            placeholder.disabled = true;
+            placeholder.selected = true;
+            timeInput.appendChild(placeholder);
 
             period.times.forEach((time) => {
                 const option = document.createElement('option');
@@ -135,14 +159,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        periodInput.addEventListener('change', updateTimeOptions);
-        updateTimeOptions();
+        renderPeriodOptions();
+        timeInput.addEventListener('change', () => {
+            if (timeInput.value === 'morning' || timeInput.value === 'afternoon') {
+                renderTimeOptions(timeInput.value);
+            } else if (timeInput.value === '__change-period__') {
+                renderPeriodOptions();
+            }
+        });
 
         function resetFeedback() {
             resultPanel.hidden = true;
             errorText.hidden = true;
             errorText.textContent = '';
-            copyButton.textContent = 'Copiar mensaje';
         }
         appointmentForm.addEventListener('input', resetFeedback);
         appointmentForm.addEventListener('change', resetFeedback);
@@ -191,36 +220,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 `Horario deseado: ${payload.time}`,
                 '',
                 'Entiendo que este mensaje es una solicitud y que el turno queda confirmado únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp.'
-            ].join('\n');
+            ].join('\\n');
 
             const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-            whatsappLink.href = url;
-            messagePreview.value = message;
+            statusText.textContent = 'Tu solicitud fue preparada para WhatsApp. El turno todavía no está confirmado: quedará confirmado cuando Piel de Mar responda tu mensaje.';
             resultPanel.hidden = false;
-            statusText.textContent = 'Se preparó tu solicitud. Revisá el mensaje en WhatsApp y envialo manualmente. El turno todavía no está confirmado.';
             resultPanel.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
 
-            // La apertura es síncrona para reducir bloqueos de ventanas emergentes.
-            // El enlace y el mensaje visible quedan como alternativa si no se abre.
             window.open(url, '_blank', 'noopener,noreferrer');
-        });
-
-        copyButton.addEventListener('click', async () => {
-            const message = messagePreview.value;
-            try {
-                if (navigator.clipboard && window.isSecureContext) {
-                    await navigator.clipboard.writeText(message);
-                } else {
-                    messagePreview.focus();
-                    messagePreview.select();
-                    if (!document.execCommand('copy')) throw new Error('copy-unavailable');
-                }
-                copyButton.textContent = 'Mensaje copiado';
-            } catch {
-                messagePreview.focus();
-                messagePreview.select();
-                copyButton.textContent = 'Seleccioná y copiá el mensaje';
-            }
         });
     }
 
