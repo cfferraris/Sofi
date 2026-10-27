@@ -79,6 +79,10 @@ test('appointment request form collects required fields and links to privacy pol
   assert.match(html, /turno queda sujeto a confirmación/i);
 });
 
+test('submitted appointment form is actually hidden by the stylesheet', () => {
+  assert.match(css, /\.appointment-form\[hidden\]\s*\{\s*display:\s*none;\s*\}/);
+});
+
 test('appointment result shows only pending confirmation and free resources', () => {
   assert.ok(html.includes('id="appointmentRequestResult"'));
   assert.match(html, /Ver recursos gratuitos/i);

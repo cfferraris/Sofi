@@ -2565,6 +2565,10 @@ body:has(.navbar.visible) .whatsapp-float {
     overflow-wrap: anywhere;
 }
 
+.appointment-form[hidden] {
+    display: none;
+}
+
 .appointment-result[hidden] {
     display: none;
 }
