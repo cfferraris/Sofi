@@ -158,3 +158,12 @@ La inspección del repositorio permite verificar archivos, referencias y lógica
 8. Ejecutar checklist de lanzamiento y dejar evidencia reproducible por requisito.
 
 **Criterio de cierre:** no declarar el sitio listo por tener código o por pasar pruebas estáticas. Cada requisito debe contar con evidencia de funcionamiento y la propietaria debe validar datos comerciales, testimonios y el flujo de turnos.
+
+
+## Actualización P0 — formulario de solicitud por WhatsApp
+
+**Implementado en la rama de auditoría:** formulario con nombre, obra social/cobertura, motivo breve, fecha y hora deseadas; validación de campos; fecha mínima calculada en zona horaria de Argentina; generación de mensaje codificado para WhatsApp; alternativa de abrir el enlace y copiar el mensaje; aviso explícito de que el turno no se confirma hasta recibir respuesta. Los datos no se guardan en localStorage/sessionStorage ni se envían a un backend desde el sitio. El JSON de marzo de 2025 sigue sin usarse como disponibilidad.
+
+**Control de errores incorporado:** campos obligatorios y consentimiento verificados; fecha pasada rechazada incluso si se manipula el HTML; fallback visible si el navegador bloquea la apertura de WhatsApp; fallback de copia manual si la Clipboard API no está disponible; el mensaje se prepara en memoria y no se envía automáticamente por el formulario.
+
+**Pendiente antes de producción:** la dirección de WhatsApp se tomó del número ya publicado en el sitio y necesita confirmación de la propietaria; la política formal de privacidad sigue pendiente de aprobación y publicación; la prueba funcional real en móvil/escritorio, navegador con bloqueador de ventanas emergentes y disponibilidad de WhatsApp no puede certificarse con tests estáticos. El formulario está en la rama draft y no se ha fusionado ni desplegado a producción.
