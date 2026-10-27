@@ -122,7 +122,8 @@ test('appointment flow works on desktop and mobile without sending WhatsApp mess
 
       const time = page.locator('#appointmentTime');
       await time.selectOption('morning');
-      await time.locator('option[value="08:00"]').waitFor();
+      assert.equal(await time.locator('option[value="08:00"]').count(), 1,
+        'Morning selection must populate its time options');
       await time.selectOption('08:00');
       await time.selectOption('__change-period__');
       await time.selectOption('afternoon');
