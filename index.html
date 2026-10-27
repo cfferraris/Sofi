@@ -681,8 +681,19 @@
                                         <small id="appointmentDateHelp">Elegí una fecha a partir de mañana; el horario queda sujeto a confirmación.</small>
                                     </div>
                                     <div>
+                                        <label for="appointmentPeriod">Franja horaria</label>
+                                        <select id="appointmentPeriod" name="period" required>
+                                            <option value="">Elegí mañana o tarde</option>
+                                            <option value="morning">Mañana (08:00–12:00)</option>
+                                            <option value="afternoon">Tarde (16:00–20:00)</option>
+                                        </select>
+                                    </div>
+                                    <div>
                                         <label for="appointmentTime">Horario deseado</label>
-                                        <input id="appointmentTime" name="time" type="time" step="900" required>
+                                        <select id="appointmentTime" name="time" required disabled>
+                                            <option value="">Primero elegí una franja</option>
+                                        </select>
+                                        <small id="appointmentTimeHelp">Turnos cada 30 minutos. Últimos horarios de inicio: 11:30 y 19:30.</small>
                                     </div>
                                 </div>
 
