@@ -108,13 +108,12 @@ test('primary appointment CTAs route through the validated request form', () => 
   assert.match(html, /href="#consulta"[\s\S]{0,200}class="whatsapp-float"/);
 });
 
-test('WhatsApp request text uses actual newline separators rather than literal backslash-n', () => {
   assert.match(js, /\.join\('\\n'\)/);
 });
 
 test('appointment form does not store personal data in the browser or read stale JSON', () => {
   assert.doesNotMatch(js, /localStorage|sessionStorage|appointments\\.json|navigator\\.clipboard/);
-  assert.match(js, /fetch\\('\/api\/appointments'/);
+  assert.ok(js.includes("fetch('/api/appointments'"));
 });
 
 test('backend does not expose source, tests, docs, or historical data as static files', () => {
