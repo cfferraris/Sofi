@@ -175,3 +175,12 @@ La inspección del repositorio permite verificar archivos, referencias y lógica
 - GitHub Actions: https://github.com/cfferraris/Sofi/actions/runs/40530134842 — **éxito**.
 - Verificaciones completadas: sintaxis de `js/main.js`, parseo de `data/appointments.json` y **14 pruebas estáticas aprobadas**.
 - Estas pruebas no sustituyen una prueba end-to-end en navegador. El despliegue de Render, el bloqueo de ventanas emergentes, el envío real a WhatsApp, el comportamiento móvil y la lectura con tecnologías de asistencia siguen pendientes de comprobación manual.
+
+
+## Corrección de arquitectura del formulario — 2026-10-27
+
+La propuesta intermedia de API, PostgreSQL, SMTP y despliegue Blueprint de Render quedó **descartada**: no corresponde al requisito aprobado. El flujo vigente es estático y prepara una solicitud para WhatsApp; no registra datos en el servidor ni envía notificaciones por correo. Las instrucciones anteriores de backend se marcaron como obsoletas en `docs/DEPLOY-RENDER.md`.
+
+La rama de auditoría incorpora selector de franja (mañana/tarde) y, según la selección, horarios de inicio cada 30 minutos: 08:00–11:30 o 16:00–19:30. Se trata de preferencias, no de disponibilidad real. El formulario abre WhatsApp con el mensaje codificado y deja visible un enlace y un control de copia alternativos. La persona debe enviar el mensaje y esperar respuesta para confirmar el turno.
+
+GitHub Actions: la ejecución de la rama posterior a esta corrección debe validar las pruebas estáticas del sitio y del flujo de WhatsApp. Aun con pruebas aprobadas, falta probar el comportamiento real en navegador de escritorio y móvil. `main` permanece sin modificar; el PR continúa abierto y sin fusionar.
