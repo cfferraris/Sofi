@@ -72,7 +72,7 @@ test('intro slider keyboard navigation is scoped to its section', () => {
 
 test('appointment request form collects required fields and explains manual confirmation', () => {
   assert.ok(html.includes('id="appointmentRequestForm"'));
-  for (const id of ['appointmentName', 'appointmentInsurance', 'appointmentReason', 'appointmentDate', 'appointmentTime', 'appointmentConsent']) {
+  for (const id of ['appointmentName', 'appointmentInsurance', 'appointmentReason', 'appointmentDate', 'appointmentPeriod', 'appointmentTime', 'appointmentConsent']) {
     assert.ok(html.includes('id="' + id + '"'), 'Missing appointment field: ' + id);
   }
   assert.match(html, /turno no queda confirmado/i);
@@ -85,6 +85,14 @@ test('appointment requests encode the message and provide WhatsApp and copy fall
   assert.match(js, /window\.open\(whatsappLink\.href, ['"]_blank['"]/);
   assert.match(html, /Continuar a WhatsApp/);
   assert.match(html, /Copiar mensaje/);
+});
+
+test('appointment time selector offers only half-hour slots in morning and afternoon windows', () => {
+  assert.match(html, /id="appointmentPeriod" name="period" required/);
+  assert.match(js, /morning:\s*\{[\s\S]*?'08:00'[\s\S]*?'11:30'/);
+  assert.match(js, /afternoon:\s*\{[\s\S]*?'16:00'[\s\S]*?'19:30'/);
+  assert.match(js, /validPeriod\.times\.includes\(time\)/);
+  assert.match(js, /Franja horaria: \${validPeriod\.label}/);
 });
 
 test('appointment form does not persist personal data or use stale appointment JSON', () => {
