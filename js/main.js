@@ -571,7 +571,6 @@ if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
             const dot = document.createElement('button');
             dot.classList.add('intro-slider-dot');
             dot.setAttribute('aria-label', `Ir a diapositiva ${i + 1}`);
-            dot.setAttribute('role', 'tab');
             dot.setAttribute('aria-pressed', String(i === 0));
             if (i === 0) dot.classList.add('active');
             dot.addEventListener('click', () => goToIntroSlide(i));
