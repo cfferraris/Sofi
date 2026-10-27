@@ -698,20 +698,22 @@
                                 </div>
 
                                 <div class="appointment-privacy">
-                                    <p>Usaremos estos datos para gestionar tu solicitud de turno y contactarte. Evitá incluir información clínica innecesaria. Consultá nuestra <a href="privacidad.html" target="_blank" rel="noopener noreferrer">política de privacidad</a>.</p>
+                                    <p>Los datos se incorporarán al mensaje de WhatsApp solo cuando decidas enviarlo. Evitá incluir información clínica innecesaria. Consultá nuestra <a href="privacidad.html" target="_blank" rel="noopener noreferrer">política de privacidad</a>.</p>
                                     <label class="appointment-consent" for="appointmentConsent">
                                         <input id="appointmentConsent" name="consent" type="checkbox" required>
-                                        <span>Acepto que Piel de Mar use estos datos para gestionar mi solicitud y contactarme. Entiendo que el turno queda sujeto a confirmación.</span>
+                                        <span>Entiendo que estos datos se incluirán en un mensaje de WhatsApp que debo enviar manualmente y que el turno queda sujeto a confirmación.</span>
                                     </label>
                                 </div>
 
-                                <label class="appointment-honeypot" aria-hidden="true">Dejá este campo vacío<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
-                                <button type="submit" class="btn primary appointment-submit">Enviar solicitud de turno</button>
+                                <button type="submit" class="btn primary appointment-submit">Preparar solicitud por WhatsApp</button>
                             </form>
 
-                            <div id="appointmentRequestResult" class="appointment-result" hidden>
-                                <p id="appointmentRequestStatus" class="appointment-status" role="status" aria-live="polite">Tu solicitud de turno fue registrada. Te confirmaremos a la brevedad.</p>
-                                <a id="appointmentResourcesLink" class="btn primary appointment-action" href="#recursos">Explorar el contenido gratuito</a>
+                            <div id="appointmentRequestResult" class="appointment-result" aria-labelledby="appointmentRequestStatus" hidden>
+                                <p id="appointmentRequestStatus" class="appointment-status" role="status" aria-live="polite"></p>
+                                <a id="appointmentWhatsAppLink" class="btn primary appointment-action" href="https://wa.me/5493425004018" target="_blank" rel="noopener noreferrer">Abrir WhatsApp para enviar la solicitud</a>
+                                <label for="appointmentMessagePreview">Mensaje preparado (alternativa si WhatsApp no se abre)</label>
+                                <textarea id="appointmentMessagePreview" rows="8" readonly aria-describedby="appointmentRequestStatus"></textarea>
+                                <button id="appointmentCopyButton" type="button" class="appointment-copy">Copiar mensaje</button>
                             </div>
                             <p id="appointmentRequestError" class="appointment-error" role="alert" hidden></p>
 
