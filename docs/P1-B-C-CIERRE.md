@@ -18,7 +18,7 @@
 - Los tests automatizados no certifican por sí solos WCAG 2.2 AA. Requieren revisión manual de teclado, orden de foco, zoom/reflow, lector de pantalla, contraste en todos los estados y dispositivos reales.
 
 ### Hallazgo automatizado corregido
-La primera ejecución de axe-core detectó contraste insuficiente en el enlace de WhatsApp verde (#25D366 sobre blanco; ratio 1,98:1). Se cambió el color del texto a #107568, con contraste calculado superior a 4,5:1 sobre blanco. La suite debe repetirse para confirmar que no queden otros hallazgos.
+La primera ejecución de axe-core detectó contraste insuficiente en el enlace de WhatsApp verde (#25D366 sobre blanco; ratio 1,98:1). Se cambió el color del texto a #107568, con contraste calculado superior a 4,5:1 sobre blanco. La suite se volvió a ejecutar después de la corrección y pasó sin hallazgos automáticos de axe-core en ambas páginas.
 
 ### Estado
 **Remediación técnica implementada; cierre integral condicionado a pruebas automatizadas exitosas y revisión manual.** No se declara conformidad WCAG completa sólo por ejecutar axe-core.
