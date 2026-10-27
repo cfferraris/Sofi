@@ -24,6 +24,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html js/main.js
-          git diff --cached --check
           git commit -m "fix: refine appointment WhatsApp UX"
           git push origin HEAD:audit/fix-site-baseline
