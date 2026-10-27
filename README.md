@@ -46,3 +46,10 @@ Las pruebas comprueban rutas locales, referencias internas, IDs duplicados y reg
 ## Estado de calidad
 
 Consultar [la auditoría inicial y el plan de remediación](docs/AUDITORIA-BASE.md). Las pruebas estáticas no reemplazan las pruebas de navegador. Antes de publicar, verificar en escritorio y móvil el selector de franja y horario, el número de WhatsApp, el enlace precargado y la alternativa de copia.
+
+
+## SEO y publicación
+
+- `robots.txt` y `sitemap.xml` describen las URLs previstas del dominio final.
+- Mientras se trabaja únicamente en la URL de staging, la página principal y la política de privacidad llevan `noindex, follow`.
+- Antes de habilitar el dominio final, revisar las instrucciones de lanzamiento y verificación en [DEPLOY-RENDER.md](docs/DEPLOY-RENDER.md). No quitar `noindex` hasta que el dominio final esté listo.
