@@ -197,7 +197,7 @@ replacement = r'''    const appointmentForm = document.getElementById('appointme
 js.write_text(source[:start] + replacement + source[end:], encoding='utf-8')
 
 text = tests.read_text(encoding='utf-8')
-text = re.sub(r"test\('appointment result explains manual WhatsApp sending and pending confirmation',[\s\S]*?\n\}\);", '''test('appointment result shows only pending confirmation and free resources', () => {
+text = re.sub(r"test\('appointment result explains manual WhatsApp sending and pending confirmation',[\s\S]*?\n\}\);", lambda m: '''test('appointment result shows only pending confirmation and free resources', () => {
   assert.ok(html.includes('id="appointmentRequestResult"'));
   assert.match(html, /Ver recursos gratuitos/i);
   assert.doesNotMatch(html, /appointmentWhatsAppLink|appointmentMessagePreview|appointmentCopyButton/);
@@ -207,7 +207,7 @@ text = re.sub(r"test\('appointment result explains manual WhatsApp sending and p
   assert.match(js, /únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp/i);
   assert.doesNotMatch(js, /appointmentMessagePreview|appointmentCopyButton|appointmentWhatsAppLink/);
 });''', text, count=1)
-text = re.sub(r"test\('appointment period dynamically displays the correct half-hour time slots',[\s\S]*?\n\}\);", '''test('appointment selector keeps period and time in the same control', () => {
+text = re.sub(r"test\('appointment period dynamically displays the correct half-hour time slots',[\s\S]*?\n\}\);", lambda m: '''test('appointment selector keeps period and time in the same control', () => {
   assert.match(js, /renderTimeOptions\\(timeInput\\.value\\)/);
   assert.match(js, /renderPeriodOptions\\(\\)/);
   assert.match(js, /selectedPeriod\\.times\\.includes\\(payload\\.time\\)/);
