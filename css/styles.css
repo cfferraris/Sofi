@@ -2428,3 +2428,168 @@ body:has(.navbar.visible) .whatsapp-float {
         transition: none; 
     } 
 }
+
+
+/* ========================================
+   FORMULARIO DE SOLICITUD DE TURNOS
+   ======================================== */
+.appointment-card {
+    text-align: left;
+}
+
+.appointment-card > h3,
+.appointment-card > p,
+.appointment-card > .consultation-icon {
+    text-align: center;
+}
+
+.appointment-form {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.appointment-field {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 0;
+}
+
+.appointment-field label,
+.appointment-result > label {
+    color: var(--profundo);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.appointment-field input,
+.appointment-field textarea,
+.appointment-result textarea {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid rgba(5, 73, 84, 0.35);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--oceano);
+    font: inherit;
+}
+
+.appointment-field input:focus-visible,
+.appointment-field textarea:focus-visible,
+.appointment-result textarea:focus-visible,
+.appointment-consent input:focus-visible,
+.appointment-action:focus-visible,
+.appointment-copy:focus-visible,
+.appointment-submit:focus-visible {
+    outline: 3px solid var(--agua);
+    outline-offset: 3px;
+}
+
+.appointment-field textarea,
+.appointment-result textarea {
+    resize: vertical;
+}
+
+.appointment-field small {
+    color: var(--oceano);
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+.appointment-field-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.8rem;
+}
+
+.appointment-privacy {
+    padding: 0.9rem;
+    border-radius: 10px;
+    background: rgba(148, 209, 216, 0.18);
+}
+
+.appointment-privacy p,
+.appointment-confirmation-note {
+    font-size: 0.85rem;
+    line-height: 1.55;
+    margin: 0 0 0.8rem;
+}
+
+.appointment-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    color: var(--oceano);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.appointment-consent input {
+    flex: 0 0 auto;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: 0.2rem;
+    accent-color: var(--profundo);
+}
+
+.appointment-submit,
+.appointment-action,
+.appointment-copy {
+    width: 100%;
+    margin-top: 0.25rem;
+}
+
+.appointment-copy {
+    display: inline-block;
+    padding: 0.8rem 1.25rem;
+    border: 1px solid var(--profundo);
+    border-radius: 50px;
+    background: transparent;
+    color: var(--profundo);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.appointment-result {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+    padding: 1rem;
+    border: 1px solid rgba(5, 73, 84, 0.25);
+    border-radius: 12px;
+    overflow-wrap: anywhere;
+}
+
+.appointment-result[hidden] {
+    display: none;
+}
+
+.appointment-status {
+    margin: 0;
+    color: var(--profundo);
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.appointment-confirmation-note {
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .appointment-field-row {
+        grid-template-columns: 1fr;
+    }
+
+    .appointment-result {
+        padding: 0.8rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .appointment-result {
+        scroll-behavior: auto;
+    }
+}
