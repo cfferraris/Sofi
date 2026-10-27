@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `- Horario deseado: ${time}`,
                 '',
                 'Entiendo que esta es una solicitud y que el turno queda confirmado únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp.'
-            ].join('\\n');
+            ].join('\n');
 
             // Codifica el mensaje completo para preservar tildes, símbolos y saltos de línea.
             whatsappLink.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(preparedMessage)}`;
