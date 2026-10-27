@@ -87,6 +87,10 @@ test('appointment flow works on desktop and mobile without sending WhatsApp mess
 
       const response = await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
       assert.equal(response?.status(), 200, `${viewport.name}: homepage must respond with HTTP 200`);
+      assert.equal(await page.locator('#introAutoplayToggle').isHidden(), true,
+        `${viewport.name}: intro autoplay control is hidden when reduced motion is requested`);
+      assert.equal(await page.locator('#carouselAutoplayToggle').isHidden(), true,
+        `${viewport.name}: testimonial autoplay control is hidden when reduced motion is requested`);
 
       const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
       assert.doesNotThrow(() => JSON.parse(jsonLd || ''), 'JSON-LD must parse in browser');
@@ -169,4 +173,40 @@ test('appointment flow works on desktop and mobile without sending WhatsApp mess
   }
 
   assert.deepEqual(failures, [], 'No uncaught JavaScript errors should occur');
+});
+
+
+test('auto-rotating sliders expose working pause and resume controls', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({
+      viewport: { width: 1365, height: 900 },
+      reducedMotion: 'no-preference'
+    });
+    await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+    await page.locator('#hero').click({ position: { x: 3, y: 3 } });
+    await page.waitForFunction(() => {
+      const hero = document.querySelector('#hero');
+      return hero && getComputedStyle(hero).display === 'none';
+    });
+
+    for (const [selector, pausedLabel, resumedLabel] of [
+      ['#introAutoplayToggle', 'Reanudar cambio automático', 'Pausar cambio automático'],
+      ['#carouselAutoplayToggle', 'Reanudar rotación automática', 'Pausar rotación automática']
+    ]) {
+      const toggle = page.locator(selector);
+      await toggle.scrollIntoViewIfNeeded();
+      assert.equal(await toggle.isVisible(), true, `${selector} must be visible without reduced-motion preference`);
+      assert.equal(await toggle.getAttribute('aria-pressed'), 'false');
+      await toggle.click();
+      assert.equal(await toggle.getAttribute('aria-pressed'), 'true');
+      assert.equal((await toggle.innerText()).trim(), pausedLabel);
+      await toggle.click();
+      assert.equal(await toggle.getAttribute('aria-pressed'), 'false');
+      assert.equal((await toggle.innerText()).trim(), resumedLabel);
+    }
+    await page.close();
+  } finally {
+    await browser.close();
+  }
 });
