@@ -68,3 +68,34 @@ test('intro slider keyboard navigation is scoped to its section', () => {
   assert.match(js, /introRegion\?\.addEventListener\('keydown'/);
   assert.doesNotMatch(js, /document\.addEventListener\('keydown', \(e\) => \{\s*\/\/ Solo responder si el slider está en viewport/);
 });
+
+
+test('appointment request form collects required fields and explains manual confirmation', () => {
+  assert.ok(html.includes('id="appointmentRequestForm"'));
+  for (const id of ['appointmentName', 'appointmentInsurance', 'appointmentReason', 'appointmentDate', 'appointmentTime', 'appointmentConsent']) {
+    assert.ok(html.includes('id="' + id + '"'), 'Missing appointment field: ' + id);
+  }
+  assert.match(html, /turno no queda confirmado/i);
+  assert.match(html, /Este sitio no los guarda/i);
+});
+
+test('appointment requests encode the message and provide WhatsApp and copy fallbacks', () => {
+  assert.match(js, /const WHATSAPP_NUMBER = ['"]5493425004018['"]/);
+  assert.match(js, /encodeURIComponent\(preparedMessage\)/);
+  assert.match(js, /window\.open\(whatsappLink\.href, ['"]_blank['"]/);
+  assert.match(html, /Continuar a WhatsApp/);
+  assert.match(html, /Copiar mensaje/);
+});
+
+test('appointment form does not persist personal data or use stale appointment JSON', () => {
+  assert.doesNotMatch(js, /localStorage|sessionStorage|sendBeacon/);
+  assert.doesNotMatch(js, /appointments\.json/);
+  assert.match(js, /America\/Argentina\/Buenos_Aires/);
+});
+
+test('appointment form requires acknowledgement and rejects past dates', () => {
+  assert.match(html, /id="appointmentConsent"[^>]*required/);
+  assert.match(js, /date < localDateString\(\)/);
+  assert.match(html, /sujetos a confirmación/i);
+  assert.doesNotMatch(html, /horarios disponibles en tiempo real/i);
+});
