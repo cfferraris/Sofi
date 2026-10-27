@@ -120,3 +120,29 @@ test('appointment flow does not call an API or persist personal data', () => {
   assert.ok(!existsSync(resolve(root, 'server.js')));
   assert.ok(!existsSync(resolve(root, 'render.yaml')));
 });
+
+test('CSP explicitly permits only the script sources used by the page', () => {
+  const match = html.match(/<meta\\s+http-equiv=["']Content-Security-Policy["']\\s+content=["']([\\s\\S]*?)["']\\s*>/i);
+  assert.ok(match, 'Missing Content-Security-Policy meta');
+  const policy = match[1].replace(/\\s+/g, ' ').trim();
+  assert.match(policy, /(?:^|; )default-src 'self'(?:;|$)/);
+  assert.match(policy, /(?:^|; )script-src 'self' https:\\/\\/unpkg\\.com(?:;|$)/);
+  assert.doesNotMatch(policy, /script-src[^;]*'unsafe-inline'|script-src[^;]*'unsafe-eval'/);
+  assert.match(html, /<script src=["']https:\\/\\/unpkg\\.com\\/lucide@0\\.468\\.0\\/dist\\/umd\\/lucide\\.min\\.js["'] defer><\\/script>/);
+  assert.doesNotMatch(html, /lucide@latest/i);
+});
+
+test('JSON-LD is valid structured data and remains separate from executable JavaScript', () => {
+  const match = html.match(/<script\\s+type=["']application\\/ld\\+json["']>([\\s\\S]*?)<\\/script>/i);
+  assert.ok(match, 'Missing JSON-LD structured data block');
+  assert.doesNotThrow(() => JSON.parse(match[1]), 'JSON-LD must remain valid JSON');
+  assert.doesNotMatch(match[1], /<\\/script/i);
+});
+
+test('Instagram icon references match the repository filename case', () => {
+  const iconPath = resolve(root, 'assets/icons/Instagram.svg');
+  assert.ok(existsSync(iconPath), 'Expected assets/icons/Instagram.svg to exist');
+  assert.doesNotMatch(html, /assets\\/icons\\/instagram\\.svg/);
+  assert.match(html, /assets\\/icons\\/Instagram\\.svg/);
+});
+
