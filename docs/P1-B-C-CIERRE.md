@@ -14,7 +14,7 @@
 - Se añadieron verificaciones de regresión para asegurar que no se reintroduzca autoplay ni controles de pausa.
 
 ### Evidencia
-- La ejecución de GitHub Actions asociada a este commit debe consultarse para confirmar los resultados reales de la suite.
+- Evidencia CI final: commit `da4f98f5ea7c4bc9831e1cd7faa1598161a21ad3`; [workflow completo](https://github.com/cfferraris/Sofi/actions/runs/40588918915). Sintaxis JavaScript, pruebas estáticas, Playwright escritorio/móvil y axe-core pasaron. axe-core no reportó violaciones WCAG 2.0/2.1/2.2 A/AA en la página principal ni en `privacidad.html`.
 - Los tests automatizados no certifican por sí solos WCAG 2.2 AA. Requieren revisión manual de teclado, orden de foco, zoom/reflow, lector de pantalla, contraste en todos los estados y dispositivos reales.
 
 ### Hallazgo automatizado corregido
@@ -38,6 +38,11 @@ La primera ejecución de axe-core detectó contraste insuficiente en el enlace d
 - Titularidad y vigencia de los enlaces externos de YouTube que aparecen en la sección de recursos.
 - Confirmación de afirmaciones operativas/comerciales sobre modalidades de atención y horarios de respuesta.
 - Revisión legal final de la política de privacidad conforme a la actividad y al tratamiento real de datos. Esta auditoría técnica no sustituye asesoramiento legal.
+
+### Evidencia de publicación
+La auditoría de solo lectura de `https://sofi-ywgo.onrender.com/` del commit `da4f98f5ea7c4bc9831e1cd7faa1598161a21ad3` observó HTTP 200, coincidencia exacta del HTML publicado con la rama, cabeceras de seguridad sin hallazgos, cero errores de consola/página/solicitudes/recursos y JSON-LD válido. [Workflow y artefacto de auditoría](https://github.com/cfferraris/Sofi/actions/runs/40588918915).
+
+**Límite de alcance:** la URL de producción comprobada por el workflow es `sofi-ywgo.onrender.com`. Esta evidencia no demuestra por sí sola que el dominio personalizado `www.pieldemar.com` sirva la misma versión; ese dominio requiere verificación independiente.
 
 ### Estado
 **Remediación de exposición no verificada implementada; P1-C no puede cerrarse al 100% sin evidencia de identidad/responsable y confirmación de los datos comerciales pendientes.**
