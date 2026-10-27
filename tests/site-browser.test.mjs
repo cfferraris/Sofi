@@ -220,7 +220,8 @@ test('page remains accessible when JavaScript is disabled', async () => {
 test('home page and privacy policy have no automated WCAG 2.2 A/AA violations', async () => {
   const browser = await chromium.launch({ headless: true });
   try {
-    const page = await browser.newPage({ viewport: { width: 1365, height: 900 }, reducedMotion: 'reduce' });
+    const context = await browser.newContext({ viewport: { width: 1365, height: 900 }, reducedMotion: 'reduce' });
+    const page = await context.newPage();
     await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
     await page.locator('#hero').click({ position: { x: 3, y: 3 } });
     await page.waitForFunction(() => getComputedStyle(document.querySelector('#hero')).display === 'none');
