@@ -146,3 +146,17 @@ test('Instagram icon references match the repository filename case', () => {
   assert.match(html, /assets\/icons\/Instagram\.svg/);
 });
 
+test('keyboard focus indicators use a high-contrast dual ring', () => {
+  assert.doesNotMatch(css, /outline: [23]px solid var\\(--agua\\);/);
+  assert.equal(
+    [...css.matchAll(/outline: 3px solid var\\(--profundo\\); box-shadow: 0 0 0 2px var\\(--arena\\);/g)].length,
+    3,
+    'Global, intro-slider and appointment focus indicators must use the accessible dual ring'
+  );
+});
+
+test('navigation and carousel controls use native semantics', () => {
+  assert.doesNotMatch(html, /role=["'](?:menubar|menuitem|none|tablist|tab)["']/);
+  assert.equal([...js.matchAll(/setAttribute\\('aria-pressed'/g)].length, 4);
+  assert.doesNotMatch(js, /setAttribute\\('role', 'tab'\\)|aria-selected/);
+});
