@@ -132,8 +132,12 @@ app.post('/api/appointments', rateLimit, async (req, res) => {
 });
 
 app.use((req, res, next) => {
-  const pathname = decodeURIComponent((req.path || '/').replace(/\\\\/g, '/'));
-  if (/^\\/(?:server\\.js|package(?:-lock)?\\.json|render\\.yaml|README\\.md|\.env(?:\\.|$)|data(?:\\/|$)|docs(?:\\/|$)|tests(?:\\/|$)|lib(?:\\/|$)|node_modules(?:\\/|$)|\.github(?:\\/|$))/i.test(pathname)) {
+  const pathname = req.path || '/';
+  const blockedRoots = [
+    '/server.js', '/package.json', '/package-lock.json', '/render.yaml', '/README.md',
+    '/.env', '/.env.example', '/data', '/docs', '/tests', '/lib', '/node_modules', '/.github'
+  ];
+  if (blockedRoots.some((root) => pathname === root || pathname.startsWith(root + '/'))) {
     return res.status(404).send('Not found');
   }
   next();

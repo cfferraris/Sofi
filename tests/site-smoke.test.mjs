@@ -116,3 +116,10 @@ test('appointment form does not store personal data in the browser or read stale
   assert.doesNotMatch(js, /localStorage|sessionStorage|appointments\\.json|navigator\\.clipboard/);
   assert.match(js, /fetch\\('\/api\/appointments'/);
 });
+
+test('backend does not expose source, tests, docs, or historical data as static files', () => {
+  const server = readFileSync(resolve(root, 'server.js'), 'utf8');
+  for (const path of ['/server.js', '/.env', '/data', '/docs', '/tests', '/lib', '/node_modules']) {
+    assert.ok(server.includes("'" + path + "'"), 'Expected private path protection for ' + path);
+  }
+});
