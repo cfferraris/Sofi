@@ -76,47 +76,46 @@ test('appointment request form collects required fields and links to privacy pol
     assert.ok(html.includes('id="' + id + '"'), 'Missing appointment field: ' + id);
   }
   assert.match(html, /privacidad\.html/);
-  assert.match(html, /Enviar solicitud de turno/);
+  assert.match(html, /Preparar solicitud por WhatsApp/);
   assert.match(html, /turno queda sujeto a confirmación/i);
 });
 
-test('successful appointment result has one action and no WhatsApp/copy controls', () => {
-  const resultStart = html.indexOf('id="appointmentRequestResult"');
-  const resultEnd = html.indexOf('</div>', resultStart);
-  const resultPanel = html.slice(resultStart, resultEnd);
-  assert.match(resultPanel, /Tu solicitud de turno fue registrada\. Te confirmaremos a la brevedad\./);
-  assert.match(resultPanel, /href="#recursos"/);
-  assert.match(resultPanel, /Explorar el contenido gratuito/);
-  assert.doesNotMatch(html, /Continuar a WhatsApp|Preparar solicitud por WhatsApp|Copiar mensaje/);
+test('appointment result explains manual WhatsApp sending and pending confirmation', () => {
+  assert.ok(html.includes('id="appointmentWhatsAppLink"'));
+  assert.ok(html.includes('id="appointmentMessagePreview"'));
+  assert.ok(html.includes('id="appointmentCopyButton"'));
+  assert.match(html, /turno todavía no está confirmado/i);
+  assert.match(js, /window\.open\(url, '_blank'/);
+  assert.match(js, /https:\/\/wa\.me\/\$\{WHATSAPP_NUMBER\}\?text=\$\{encodeURIComponent\(message\)\}/);
+  assert.match(js, /únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp/i);
 });
 
-test('appointment form submits to API and preserves the half-hour time slots', () => {
-  assert.ok(js.includes("fetch('/api/appointments'"));
+test('appointment period dynamically displays the correct half-hour time slots', () => {
   assert.match(js, /morning:\s*\{[\s\S]*?'08:00'[\s\S]*?'11:30'/);
   assert.match(js, /afternoon:\s*\{[\s\S]*?'16:00'[\s\S]*?'19:30'/);
+  assert.match(js, /periodInput\.addEventListener\('change', updateTimeOptions\)/);
+  assert.match(js, /timeInput\.disabled = !period/);
   assert.match(js, /selectedPeriod\.times\.includes\(payload\.time\)/);
-  assert.doesNotMatch(js, /window\.open\(whatsappLink|navigator\.clipboard|localStorage|sessionStorage/);
+  assert.match(html, /id="appointmentPeriod"/);
+  assert.match(html, /id="appointmentTime"[^>]*disabled/);
+  assert.doesNotMatch(js, /fetch\s*\(['"]\/api\/appointments/);
 });
 
-test('privacy policy exists and documents data handling', () => {
+test('privacy policy exists and describes the WhatsApp flow without claiming database storage', () => {
   assert.ok(existsSync(resolve(root, 'privacidad.html')));
+  const privacy = readFileSync(resolve(root, 'privacidad.html'), 'utf8');
+  assert.match(privacy, /prepara un mensaje para WhatsApp/i);
+  assert.doesNotMatch(privacy, /se registra en una base de datos privada/i);
 });
-
 
 test('primary appointment CTAs route through the validated request form', () => {
   assert.match(html, /href="#consulta"[\s\S]{0,250}class="btn-intro btn-intro-final"/);
   assert.match(html, /href="#consulta"[\s\S]{0,200}class="whatsapp-float"/);
 });
 
-test('appointment form does not store personal data in the browser or read stale JSON', () => {
-  assert.doesNotMatch(js, /localStorage|sessionStorage|navigator/);
+test('appointment flow does not call an API or persist personal data', () => {
+  assert.doesNotMatch(js, /fetch\s*\(|localStorage|sessionStorage/);
   assert.ok(!js.includes('appointments.json'));
-  assert.ok(js.includes("fetch('/api/appointments'"));
-});
-
-test('backend does not expose source, tests, docs, or historical data as static files', () => {
-  const server = readFileSync(resolve(root, 'server.js'), 'utf8');
-  for (const path of ['/server.js', '/.env', '/data', '/docs', '/tests', '/lib', '/node_modules']) {
-    assert.ok(server.includes("'" + path + "'"), 'Expected private path protection for ' + path);
-  }
+  assert.ok(!existsSync(resolve(root, 'server.js')));
+  assert.ok(!existsSync(resolve(root, 'render.yaml')));
 });
