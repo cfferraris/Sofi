@@ -1,0 +1,13 @@
+name: P0 correction runner
+on:
+  push:
+    branches:
+      - audit/fix-site-baseline
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo P0-runner-ok
