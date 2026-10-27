@@ -99,7 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return `${values.year}-${values.month}-${values.day}`;
         }
 
-        dateInput.min = localDateString();
+        const [todayYear, todayMonth, todayDay] = localDateString().split('-').map(Number);
+        const minimumAppointmentDate = new Date(Date.UTC(todayYear, todayMonth - 1, todayDay + 1)).toISOString().slice(0, 10);
+        dateInput.min = minimumAppointmentDate;
 
         function clearPreparedRequest() {
             preparedMessage = '';
@@ -130,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            if (date < localDateString()) {
+            if (date < minimumAppointmentDate) {
                 dateInput.setCustomValidity('Elegí hoy o una fecha futura.');
                 dateInput.reportValidity();
                 dateInput.setCustomValidity('');
