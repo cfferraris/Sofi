@@ -5,7 +5,7 @@
 
 ## Flujo del paciente
 
-1. En la sección «Consulta», el usuario elige una fecha y un horario deseados entre las opciones que el sitio ofrece.
+1. En la sección «Consulta», el usuario elige una fecha futura y un horario deseados mediante controles de fecha y hora. Esos controles registran una preferencia de horario; no deben presentarse como una confirmación ni como disponibilidad verificada.
 2. Completa los campos requeridos:
    - Nombre.
    - Obra social.
@@ -32,7 +32,7 @@ Entiendo que este mensaje es una solicitud y que el turno queda confirmado únic
 ## Reglas de producto
 
 - No marcar un turno como reservado o confirmado al seleccionar fecha/hora, ni al abrir WhatsApp, ni al enviar el mensaje.
-- No afirmar que un horario está disponible en tiempo real a menos que exista una fuente de disponibilidad fiable y actualizada.
+- No afirmar que un horario está disponible en tiempo real a menos que exista una fuente de disponibilidad fiable y actualizada. En la primera versión, el cliente solicita el día y la hora que prefiere, sujetos a confirmación.
 - Las fechas y horarios deben mostrarse en la zona horaria local de la atención (Argentina, salvo que la propietaria indique otra).
 - Mostrar fechas y horas en formato local legible; no depender de la interpretación de formatos ambiguos.
 - Validar campos obligatorios y prevenir que texto ingresado rompa la URL de WhatsApp; codificar el mensaje completo con el mecanismo estándar de URL encoding.
@@ -61,11 +61,8 @@ Este flujo elimina la necesidad de revisar el JSON para interpretar solicitudes 
 - Se prueba en móvil y escritorio, con teclado y con WhatsApp instalado y no instalado.
 - La propietaria valida el texto, el número de destino, la forma de mostrar disponibilidad y el mensaje de confirmación antes de publicar.
 
-## Decisión pendiente antes de implementación
+## Alcance de la primera versión
 
-Definir quién mantiene el calendario de fechas y horarios que el sitio permite solicitar. Opciones:
-1. Lista editable por la propietaria (fácil de implementar, pero no evita solapamientos por sí sola).
-2. Agenda/calendario integrado como fuente real de disponibilidad.
-3. Backend de turnos que gestione disponibilidad, solicitudes y confirmaciones.
+La primera versión usa un selector de fecha futura y un selector de hora deseada, sin consultar ni prometer disponibilidad en tiempo real. La propietaria verifica la solicitud al recibir el mensaje y responde por WhatsApp confirmando el horario o proponiendo otro. Así se elimina la necesidad de auditar manualmente `data/appointments.json` para leer solicitudes, aunque la confirmación y la prevención de superposiciones siguen siendo manuales.
 
-No implementar una falsa «disponibilidad en tiempo real» con un JSON estático desactualizado.
+Si más adelante se necesita mostrar únicamente horarios realmente disponibles o evitar reservas superpuestas, deberá añadirse una agenda centralizada o backend. No implementar una falsa «disponibilidad en tiempo real» con un JSON estático desactualizado.
