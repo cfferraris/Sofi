@@ -243,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (track && prevBtn && nextBtn && dotsContainer) {
         const cards      = Array.from(track.querySelectorAll('.testimonio-card'));
+        const carouselRegion = track.closest('.testimonios-section');
         let currentIndex = 0;
         let visibleCards = getVisibleCards();
         let autoPlayId   = null;
@@ -308,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function startAutoPlay() {
             const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (reducedMotion) return;
+            if (reducedMotion || document.hidden) return;
             stopAutoPlay();
             autoPlayId = setInterval(() => {
                 const maxIndex = cards.length - visibleCards;
@@ -332,9 +333,15 @@ document.addEventListener('DOMContentLoaded', () => {
             startAutoPlay();
         });
 
-        // Pausar al hover
-        track.addEventListener('mouseenter', stopAutoPlay);
-        track.addEventListener('mouseleave', startAutoPlay);
+        // Pausar mientras el usuario interactúa con el carrusel.
+        carouselRegion?.addEventListener('mouseenter', stopAutoPlay);
+        carouselRegion?.addEventListener('mouseleave', startAutoPlay);
+        carouselRegion?.addEventListener('focusin', stopAutoPlay);
+        carouselRegion?.addEventListener('focusout', (event) => {
+            if (!event.relatedTarget || !carouselRegion.contains(event.relatedTarget)) {
+                startAutoPlay();
+            }
+        });
 
         // Soporte táctil (swipe)
         let touchStartX = 0;
@@ -386,6 +393,7 @@ const introPrevBtn = document.getElementById('introPrevBtn');
 const introNextBtn = document.getElementById('introNextBtn');
 const introDotsContainer = document.getElementById('introSliderDots');
 const introSliderStatus = document.getElementById('introSliderStatus');
+const introRegion = introTrack?.closest('.intro-section');
 
 if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
     const introSlides = Array.from(introTrack.querySelectorAll('.intro-slide'));
@@ -457,7 +465,7 @@ if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
     // Autoplay (se detiene al llegar al final - no hace loop)
     function startIntroAutoPlay() {
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reducedMotion) return;
+        if (reducedMotion || document.hidden) return;
         
         stopIntroAutoPlay();
         
@@ -492,9 +500,15 @@ if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
         startIntroAutoPlay();
     });
 
-    // Pausar al hover
-    introTrack.addEventListener('mouseenter', stopIntroAutoPlay);
-    introTrack.addEventListener('mouseleave', startIntroAutoPlay);
+    // Pausar mientras el usuario interactúa con el slider.
+    introRegion?.addEventListener('mouseenter', stopIntroAutoPlay);
+    introRegion?.addEventListener('mouseleave', startIntroAutoPlay);
+    introRegion?.addEventListener('focusin', stopIntroAutoPlay);
+    introRegion?.addEventListener('focusout', (event) => {
+        if (!event.relatedTarget || !introRegion.contains(event.relatedTarget)) {
+            startIntroAutoPlay();
+        }
+    });
 
     // Soporte táctil (swipe)
     let introTouchStartX = 0;
@@ -535,12 +549,8 @@ if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
     });
 
     // Teclado (accesibilidad)
-    document.addEventListener('keydown', (e) => {
-        // Solo responder si el slider está en viewport
-        const rect = introTrack.getBoundingClientRect();
-        const inView = rect.top < window.innerHeight && rect.bottom > 0;
-        
-        if (!inView) return;
+    introRegion?.addEventListener('keydown', (e) => {
+        if (e.altKey || e.ctrlKey || e.metaKey) return;
 
         if (e.key === 'ArrowLeft') {
             e.preventDefault();
