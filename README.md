@@ -22,6 +22,16 @@ python -m http.server 8000
 
 Abrir `http://localhost:8000`. Para una validación real, probar también en un navegador móvil y en uno de escritorio. Abrir el HTML directamente mediante `file://` no reemplaza la prueba con servidor HTTP.
 
+## Pruebas estáticas
+
+Con Node.js instalado, ejecutar desde la raíz:
+
+```bash
+node --test tests/site-smoke.test.mjs
+```
+
+Las pruebas comprueban rutas locales, referencias internas, IDs duplicados y regresiones concretas de los controles del slider y del año del footer. No reemplazan las pruebas visuales y funcionales en navegador.
+
 ## Dependencias externas
 
 - Lucide se carga desde unpkg. Si el proveedor externo no está disponible, los iconos pueden no inicializarse.
