@@ -122,7 +122,7 @@ test('appointment flow does not call an API or persist personal data', () => {
 });
 
 test('CSP explicitly permits only the script sources used by the page', () => {
-  const match = html.match(/<meta\s+http-equiv=["']Content-Security-Policy["']\s+content=["']([\s\S]*?)["']\s*>/i);
+  const match = html.match(/<meta\s+http-equiv=["']Content-Security-Policy["']\s+content="([\s\S]*?)"\s*>/i);
   assert.ok(match, 'Missing Content-Security-Policy meta');
   const policy = match[1].replace(/\s+/g, ' ').trim();
   assert.match(policy, /(?:^|; )default-src 'self'(?:;|$)/);
