@@ -9,6 +9,7 @@ const report = {
   mode: 'read-only; no form submission and no WhatsApp message sending',
   overall: 'BLOCKED',
   mainDocument: null,
+  page: { title: null, metaCsp: null },
   redirectChain: [],
   securityHeaders: {},
   consoleErrors: [],
@@ -88,6 +89,10 @@ try {
       }
 
       await page.waitForTimeout(1200);
+      report.page = await page.evaluate(() => ({
+        title: document.title,
+        metaCsp: document.querySelector('meta[http-equiv="Content-Security-Policy"]')?.content || null
+      }));
       report.jsonLd = await page.evaluate(() => {
         const element = document.querySelector('script[type="application/ld+json"]');
         if (!element) return { present: false, valid: false, error: 'JSON-LD block not found' };
@@ -116,10 +121,14 @@ try {
         fahkwangAvailable: document.fonts.check('16px Fahkwang')
       }));
       report.overall = response.status() >= 400
+        || report.pageErrors.length
+        || report.cspViolations.length
+        || report.failedRequests.length
+        || report.resourceFailures.length
+        || (report.icons.lucideScriptResponse && report.icons.lucideScriptResponse.status !== 200)
+        || report.icons.inlineLucidePlaceholders > 0
         ? 'REVIEW'
-        : report.pageErrors.length || report.cspViolations.length
-          ? 'REVIEW'
-          : 'OBSERVED';
+        : 'OBSERVED';
     } else {
       report.limitation = 'Browser navigation returned no main-document response.';
     }
