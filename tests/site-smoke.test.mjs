@@ -84,7 +84,7 @@ test('appointment result explains manual WhatsApp sending and pending confirmati
   assert.ok(html.includes('id="appointmentWhatsAppLink"'));
   assert.ok(html.includes('id="appointmentMessagePreview"'));
   assert.ok(html.includes('id="appointmentCopyButton"'));
-  assert.match(html, /turno todavía no está confirmado/i);
+  assert.match(js, /turno todavía no está confirmado/i);
   assert.match(js, /window\.open\(url, '_blank'/);
   assert.match(js, /https:\/\/wa\.me\/\$\{WHATSAPP_NUMBER\}\?text=\$\{encodeURIComponent\(message\)\}/);
   assert.match(js, /únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp/i);
