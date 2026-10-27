@@ -709,8 +709,8 @@ section {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: rgba(5, 73, 84, 0.25);
-    border: none;
+    background: var(--arena);
+    border: 2px solid var(--profundo);
     cursor: pointer;
     transition: all 0.3s ease;
     padding: 0;
@@ -1464,8 +1464,8 @@ section {
     width: 10px;  /* ✨ FASE 1: aumentado */
     height: 10px;
     border-radius: 50%;
-    background: rgba(148, 209, 216, 0.4);
-    border: none;
+    background: var(--arena);
+    border: 2px solid var(--profundo);
     cursor: pointer;
     transition: var(--transition-fast);
     padding: 0;

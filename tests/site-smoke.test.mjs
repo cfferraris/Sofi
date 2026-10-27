@@ -155,6 +155,13 @@ test('keyboard focus indicators use a high-contrast dual ring', () => {
   );
 });
 
+test('inactive slider and carousel dots have solid high-contrast boundaries', () => {
+  assert.doesNotMatch(css, /background:\s*rgba\(5,\s*73,\s*84,\s*0\.25\)/);
+  assert.doesNotMatch(css, /background:\s*rgba\(148,\s*209,\s*216,\s*0\.4\)/);
+  assert.equal([...css.matchAll(/border: 2px solid var\(--profundo\);/g)].length, 2,
+    'Both sets of inactive interactive indicators must have a solid dark boundary');
+});
+
 test('navigation and carousel controls use native semantics', () => {
   assert.doesNotMatch(html, /role=["'](?:menubar|menuitem|none|tablist|tab)["']/);
   assert.equal([...js.matchAll(/setAttribute\('aria-pressed'/g)].length, 4);

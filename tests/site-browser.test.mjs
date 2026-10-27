@@ -133,6 +133,10 @@ test('appointment flow works on desktop and mobile without sending WhatsApp mess
 
       await page.locator('.appointment-submit').click();
       await page.locator('#appointmentRequestResult').waitFor({ state: 'visible' });
+      assert.equal(await form.isHidden(), true,
+        `${viewport.name}: the form and its submit button must disappear after opening WhatsApp`);
+      assert.equal(await page.locator('.appointment-submit:visible').count(), 0,
+        `${viewport.name}: the WhatsApp submit button must not remain visible after submission`);
 
       const status = await page.locator('#appointmentRequestStatus').innerText();
       assert.match(status, /todavía no está confirmado/i);

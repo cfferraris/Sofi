@@ -228,6 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resultPanel.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
 
             window.open(url, '_blank', 'noopener,noreferrer');
+            appointmentForm.hidden = true;
         });
     }
 
