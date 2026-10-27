@@ -1,4 +1,4 @@
-name: Site and appointment API tests
+name: Static site and WhatsApp appointment tests
 
 on:
   push:
@@ -23,11 +23,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Install dependencies
-        run: npm install
       - name: Check JavaScript syntax
         run: npm run check
-      - name: Validate legacy appointments JSON syntax
-        run: node -e "JSON.parse(require('node:fs').readFileSync('data/appointments.json', 'utf8'))"
-      - name: Run static and API validation tests
+      - name: Run static site and WhatsApp flow tests
         run: npm test
