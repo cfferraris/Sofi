@@ -5,7 +5,7 @@
 
 ## Flujo del paciente
 
-1. En la sección «Consulta», el usuario elige una fecha futura y un horario deseados mediante controles de fecha y hora. Esos controles registran una preferencia de horario; no deben presentarse como una confirmación ni como disponibilidad verificada.
+1. En la sección «Consulta», el usuario elige una fecha futura y una franja horaria (mañana o tarde). Luego elige un horario en intervalos de 30 minutos: mañana de 08:00 a 11:30 (último inicio dentro de la franja 08:00–12:00) o tarde de 16:00 a 19:30 (último inicio dentro de la franja 16:00–20:00). Esos controles registran una preferencia; no representan disponibilidad verificada ni una confirmación.
 2. Completa los campos requeridos:
    - Nombre.
    - Obra social.
@@ -25,7 +25,7 @@ Hola, quiero solicitar un turno con Piel de Mar.
 - Obra social: [obra social]
 - Motivo de la consulta: [motivo]
 - Fecha deseada: [fecha]
-- Horario deseado: [hora]
+- Franja horaria: [mañana/tarde]\n- Horario deseado: [hora]
 
 Entiendo que este mensaje es una solicitud y que el turno queda confirmado únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp.
 
@@ -63,7 +63,7 @@ Este flujo elimina la necesidad de revisar el JSON para interpretar solicitudes 
 
 ## Alcance de la primera versión
 
-La primera versión usa un selector de fecha futura y un selector de hora deseada, sin consultar ni prometer disponibilidad en tiempo real. La propietaria verifica la solicitud al recibir el mensaje y responde por WhatsApp confirmando el horario o proponiendo otro. Así se elimina la necesidad de auditar manualmente `data/appointments.json` para leer solicitudes, aunque la confirmación y la prevención de superposiciones siguen siendo manuales.
+La primera versión usa un selector de fecha futura, un selector de franja (mañana/tarde) y un selector de horario con intervalos de 30 minutos: 08:00–11:30 y 16:00–19:30. No consulta ni promete disponibilidad en tiempo real. La propietaria verifica la solicitud al recibir el mensaje y responde por WhatsApp confirmando el horario o proponiendo otro. Así se elimina la necesidad de auditar manualmente `data/appointments.json` para leer solicitudes, aunque la confirmación y la prevención de superposiciones siguen siendo manuales.
 
 Si más adelante se necesita mostrar únicamente horarios realmente disponibles o evitar reservas superpuestas, deberá añadirse una agenda centralizada o backend. No implementar una falsa «disponibilidad en tiempo real» con un JSON estático desactualizado.
 
@@ -73,3 +73,8 @@ Si más adelante se necesita mostrar únicamente horarios realmente disponibles 
 La primera implementación está en `index.html`, `js/main.js` y `css/styles.css` en la rama `audit/fix-site-baseline`. Incluye campos obligatorios, validación de fecha no pasada usando la zona horaria `America/Argentina/Buenos_Aires`, texto precargado y codificado, confirmación manual, enlace de respaldo a WhatsApp y copia del mensaje. No se persisten los datos en el navegador.
 
 No se considera listo para producción hasta verificar el número de destino, aprobar/publicar la política de privacidad y realizar pruebas reales de navegador en escritorio y móvil. La disponibilidad de horarios no se consulta ni se promete.
+
+
+## Ajuste de selector horario — 2026-10-27
+
+Requisito confirmado: separar la elección en franja horaria (mañana o tarde) y horario. Los turnos comienzan cada 30 minutos, entre 08:00 y 11:30 por la mañana y entre 16:00 y 19:30 por la tarde. El último turno puede comenzar a las 11:30 o 19:30, respectivamente. El formulario no afirma que esos horarios estén disponibles; quedan sujetos a confirmación manual.
