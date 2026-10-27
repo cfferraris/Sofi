@@ -17,6 +17,7 @@ const report = {
   page: { title: null, metaCsp: null },
   redirectChain: [],
   securityHeaders: {},
+  securityHeaderFindings: [],
   consoleErrors: [],
   pageErrors: [],
   failedRequests: [],
@@ -117,6 +118,21 @@ try {
       ]) {
         report.securityHeaders[name] = headers[name] || null;
       }
+      report.securityHeaderFindings = [
+        ['content-security-policy', 'High', 'The page has a CSP meta policy, but an HTTP CSP header is absent.'],
+        ['referrer-policy', 'Medium', 'The HTTP Referrer-Policy header is absent; the HTML meta tag is recorded separately.'],
+        ['x-frame-options', 'Medium', 'The X-Frame-Options header is absent; review a CSP frame-ancestors directive as the preferred complementary control.'],
+        ['permissions-policy', 'Low', 'The Permissions-Policy header is absent; restrict browser features not needed by this static site.']
+      ]
+        .filter(([name]) => !report.securityHeaders[name])
+        .map(([header, severity, finding]) => ({ header, severity, finding }));
+      if (report.sourceComparison && !report.sourceComparison.exactHtmlMatch) {
+        report.securityHeaderFindings.push({
+          header: 'published-html-match',
+          severity: 'High',
+          finding: 'Published HTML differs from the audited branch HTML.'
+        });
+      }
 
       await page.waitForTimeout(1200);
       report.page = await page.evaluate(() => ({
@@ -158,6 +174,7 @@ try {
         || (report.icons.lucideScriptResponse && report.icons.lucideScriptResponse.status !== 200)
         || report.icons.inlineLucidePlaceholders > 0
         || report.publishedFeatures.appointmentFormPresent === false
+        || report.securityHeaderFindings.length > 0
         ? 'REVIEW'
         : 'OBSERVED';
     } else {
