@@ -95,7 +95,8 @@ test('appointment form does not persist personal data or use stale appointment J
 
 test('appointment form requires acknowledgement and rejects past dates', () => {
   assert.match(html, /id="appointmentConsent"[^>]*required/);
-  assert.match(js, /date < localDateString\(\)/);
+  assert.match(js, /date < minimumAppointmentDate/);
+  assert.match(html, /fecha a partir de mañana/i);
   assert.match(html, /sujetos a confirmación/i);
   assert.doesNotMatch(html, /horarios disponibles en tiempo real/i);
 });
