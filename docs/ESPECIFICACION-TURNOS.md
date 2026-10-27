@@ -70,9 +70,11 @@ Si más adelante se necesita mostrar únicamente horarios realmente disponibles 
 
 ## Estado de implementación — rama de auditoría (2026-10-27)
 
-La primera implementación está en `index.html`, `js/main.js` y `css/styles.css` en la rama `audit/fix-site-baseline`. Incluye campos obligatorios, validación de fecha no pasada usando la zona horaria `America/Argentina/Buenos_Aires`, texto precargado y codificado, confirmación manual, enlace de respaldo a WhatsApp y copia del mensaje. No se persisten los datos en el navegador.
+El flujo debe ser completamente estático y funcionar en el navegador: no se envían datos a una API, base de datos ni correo electrónico. La persona elige fecha futura, franja (mañana o tarde) y luego un horario de inicio en intervalos de 30 minutos; el formulario prepara un mensaje codificado para el WhatsApp configurado, muestra el mensaje y ofrece enlaces de apertura y copia como respaldo. La persona debe enviarlo manualmente.
 
-No se considera listo para producción hasta verificar el número de destino, aprobar/publicar la política de privacidad y realizar pruebas reales de navegador en escritorio y móvil. La disponibilidad de horarios no se consulta ni se promete.
+La lista de horarios es una preferencia solicitada, no disponibilidad real. El turno solo se confirma cuando Piel de Mar responde. El número configurado es el que ya utiliza el sitio (`5493425004018`) y debe ser confirmado por la propietaria antes del lanzamiento. No se persisten los datos del formulario en el navegador ni en un backend del sitio.
+
+La validación final requiere pruebas de navegador en escritorio y móvil, incluido el caso en que WhatsApp no se abra, además de confirmar el número y publicar la política de privacidad.
 
 
 ## Ajuste de selector horario — 2026-10-27
