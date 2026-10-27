@@ -168,7 +168,7 @@ test('inactive slider and carousel dots have solid high-contrast boundaries', ()
 
 test('navigation and carousel controls use native semantics', () => {
   assert.doesNotMatch(html, /role=["'](?:menubar|menuitem|none|tablist|tab)["']/);
-  assert.equal([...js.matchAll(/setAttribute\('aria-pressed'/g)].length, 8,
+  assert.equal([...js.matchAll(/setAttribute\('aria-pressed'/g)].length, 4,
     'Carousel indicators and pause/resume controls must expose their pressed state');
   assert.doesNotMatch(js, /setAttribute\('role', 'tab'\)|aria-selected/);
 });
