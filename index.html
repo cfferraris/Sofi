@@ -637,48 +637,82 @@
             </div>
         </section>
 
-        <!-- Sección Consulta (antes Turnos) -->
+        <!-- Sección de solicitud de turnos: la confirmación es manual por WhatsApp -->
         <section id="consulta" class="consultation-section" aria-labelledby="consulta-heading">
             <div class="container">
                 <div class="consultation-container">
-
-                    <!-- Columna izquierda: Imagen -->
                     <div class="consultation-image">
-                        <img 
-                            src="assets/img/familia en consullta.png" 
-                            alt="Familia feliz durante una consulta" 
-                            width="600" 
+                        <img
+                            src="assets/img/familia en consullta.png"
+                            alt="Familia durante una consulta"
+                            width="600"
                             height="500"
                             loading="lazy"
                         >
                     </div>
 
-                    <!-- Columna derecha: Contenido -->
                     <div class="consultation-content">
-                        <div class="consultation-card">
+                        <div class="consultation-card appointment-card">
                             <div class="consultation-icon" aria-hidden="true">
                                 <i data-lucide="calendar-check"></i>
                             </div>
-                            <h3>Te atendemos hoy</h3>
-                            <p>Mandanos un mensaje por WhatsApp y te respondemos en el día para encontrar el mejor horario.</p>
-                            
-                            <a 
-                                href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20agendar%20una%20consulta%20para%20mi%20hijo/a" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                class="btn primary btn-whatsapp"
-                            >
-                                <i data-lucide="message-circle" aria-hidden="true"></i>
-                                Agendar por WhatsApp
-                            </a>
+                            <h3 id="consulta-heading">Solicitá un turno</h3>
+                            <p>Completá tus datos y elegí una fecha y un horario de preferencia. Te vamos a derivar a WhatsApp para que revises y envíes la solicitud.</p>
+
+                            <form id="appointmentRequestForm" class="appointment-form" novalidate>
+                                <div class="appointment-field">
+                                    <label for="appointmentName">Nombre y apellido</label>
+                                    <input id="appointmentName" name="name" type="text" autocomplete="name" maxlength="120" required>
+                                </div>
+
+                                <div class="appointment-field">
+                                    <label for="appointmentInsurance">Obra social o cobertura</label>
+                                    <input id="appointmentInsurance" name="insurance" type="text" maxlength="120" placeholder="Si no tenés, escribí “Particular”" required>
+                                </div>
+
+                                <div class="appointment-field">
+                                    <label for="appointmentReason">Motivo de la consulta</label>
+                                    <textarea id="appointmentReason" name="reason" rows="3" maxlength="500" aria-describedby="appointmentReasonHelp" required></textarea>
+                                    <small id="appointmentReasonHelp">Contanos brevemente qué necesitás. Evitá incluir diagnósticos u otros detalles clínicos sensibles.</small>
+                                </div>
+
+                                <div class="appointment-field appointment-field-row">
+                                    <div>
+                                        <label for="appointmentDate">Fecha deseada</label>
+                                        <input id="appointmentDate" name="date" type="date" required>
+                                    </div>
+                                    <div>
+                                        <label for="appointmentTime">Horario deseado</label>
+                                        <input id="appointmentTime" name="time" type="time" step="900" required>
+                                    </div>
+                                </div>
+
+                                <div class="appointment-privacy">
+                                    <p>Los datos se usan para preparar el mensaje que vos decidís abrir y enviar por WhatsApp. Este sitio no los guarda. Al abrir WhatsApp, podés revisar el texto antes de enviarlo. No incluyas información clínica innecesaria.</p>
+                                    <label class="appointment-consent" for="appointmentConsent">
+                                        <input id="appointmentConsent" name="consent" type="checkbox" required>
+                                        <span>Entiendo que esto es una solicitud, no una reserva confirmada, y que debo esperar la respuesta de Piel de Mar.</span>
+                                    </label>
+                                </div>
+
+                                <button type="submit" class="btn primary appointment-submit">Preparar solicitud por WhatsApp</button>
+                            </form>
+
+                            <div id="appointmentRequestResult" class="appointment-result" hidden>
+                                <p id="appointmentRequestStatus" class="appointment-status" role="status" aria-live="polite"></p>
+                                <a id="appointmentOpenWhatsApp" class="btn primary appointment-action" href="#" target="_blank" rel="noopener noreferrer">Continuar a WhatsApp</a>
+                                <button id="appointmentCopyMessage" class="btn appointment-copy" type="button">Copiar mensaje</button>
+                                <label for="appointmentMessagePreview">Mensaje preparado (podés revisarlo antes de enviarlo)</label>
+                                <textarea id="appointmentMessagePreview" rows="8" readonly></textarea>
+                                <p class="appointment-confirmation-note">El turno no queda confirmado al abrir WhatsApp ni al enviar el mensaje. La confirmación llega únicamente cuando Piel de Mar te responde.</p>
+                            </div>
 
                             <p class="consultation-note">
                                 <i data-lucide="info" aria-hidden="true"></i>
-                                Podés elegir consulta presencial en Esperanza o virtual por videollamada
+                                Podés solicitar una consulta presencial en Esperanza o virtual por videollamada. La fecha y el horario quedan sujetos a confirmación.
                             </p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
