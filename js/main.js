@@ -72,6 +72,121 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
+    // ========================================
+    // SOLICITUD DE TURNOS POR WHATSAPP
+    // No hay backend: los datos sólo se usan en memoria para preparar el mensaje.
+    // ========================================
+    const appointmentForm = document.getElementById('appointmentRequestForm');
+    if (appointmentForm) {
+        const WHATSAPP_NUMBER = '5493425004018';
+        const dateInput = document.getElementById('appointmentDate');
+        const resultPanel = document.getElementById('appointmentRequestResult');
+        const statusText = document.getElementById('appointmentRequestStatus');
+        const whatsappLink = document.getElementById('appointmentOpenWhatsApp');
+        const copyButton = document.getElementById('appointmentCopyMessage');
+        const messagePreview = document.getElementById('appointmentMessagePreview');
+        let preparedMessage = '';
+
+        // Usa la fecha local del dispositivo, no UTC, para evitar desfases de día.
+        function localDateString(date = new Date()) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        dateInput.min = localDateString();
+
+        function clearPreparedRequest() {
+            preparedMessage = '';
+            resultPanel.hidden = true;
+            messagePreview.value = '';
+            whatsappLink.href = '#';
+        }
+
+        appointmentForm.addEventListener('input', clearPreparedRequest);
+        appointmentForm.addEventListener('change', clearPreparedRequest);
+
+        appointmentForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            if (!appointmentForm.reportValidity()) return;
+
+            const formData = new FormData(appointmentForm);
+            const name = String(formData.get('name') || '').trim();
+            const insurance = String(formData.get('insurance') || '').trim();
+            const reason = String(formData.get('reason') || '').trim();
+            const date = String(formData.get('date') || '');
+            const time = String(formData.get('time') || '');
+            const consent = document.getElementById('appointmentConsent').checked;
+
+            if (!name || !insurance || !reason || !date || !time || !consent) {
+                statusText.textContent = 'Revisá los campos obligatorios antes de continuar.';
+                resultPanel.hidden = false;
+                return;
+            }
+
+            if (date < localDateString()) {
+                dateInput.setCustomValidity('Elegí hoy o una fecha futura.');
+                dateInput.reportValidity();
+                dateInput.setCustomValidity('');
+                return;
+            }
+
+            const [year, month, day] = date.split('-').map(Number);
+            const dateLabel = new Date(year, month - 1, day).toLocaleDateString('es-AR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+
+            preparedMessage = [
+                'Hola, quiero solicitar un turno con Piel de Mar.',
+                '',
+                `- Nombre: ${name}`,
+                `- Obra social o cobertura: ${insurance}`,
+                `- Motivo de la consulta: ${reason}`,
+                `- Fecha deseada: ${dateLabel}`,
+                `- Horario deseado: ${time}`,
+                '',
+                'Entiendo que esta es una solicitud y que el turno queda confirmado únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp.'
+            ].join('\\n');
+
+            // Codifica el mensaje completo para preservar tildes, símbolos y saltos de línea.
+            whatsappLink.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(preparedMessage)}`;
+            messagePreview.value = preparedMessage;
+            resultPanel.hidden = false;
+            statusText.textContent = 'Solicitud preparada. WhatsApp puede abrirse automáticamente; si no ocurre, usá “Continuar a WhatsApp” o copiá el mensaje.';
+            resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            // La acción ocurre dentro del envío del formulario. El enlace y la copia quedan como alternativas.
+            window.open(whatsappLink.href, '_blank', 'noopener,noreferrer');
+        });
+
+        copyButton.addEventListener('click', async () => {
+            if (!preparedMessage) {
+                statusText.textContent = 'Primero prepará la solicitud.';
+                return;
+            }
+
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(preparedMessage);
+                } else {
+                    messagePreview.focus();
+                    messagePreview.select();
+                    const copied = document.execCommand('copy');
+                    if (!copied) throw new Error('Clipboard fallback unavailable');
+                }
+                statusText.textContent = 'Mensaje copiado. Pegalo en el chat de WhatsApp y enviálo si estás de acuerdo.';
+            } catch {
+                messagePreview.focus();
+                messagePreview.select();
+                statusText.textContent = 'No se pudo copiar automáticamente. Seleccioná el texto del mensaje y copialo manualmente.';
+            }
+        });
+    }
+
     const currentYear = document.getElementById('currentYear');
     if (currentYear) {
         currentYear.textContent = String(new Date().getFullYear());
