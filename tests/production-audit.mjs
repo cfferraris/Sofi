@@ -1,4 +1,5 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { chromium } from 'playwright';
 
@@ -6,6 +7,10 @@ const targetUrl = process.env.PRODUCTION_URL || 'https://sofi-ywgo.onrender.com/
 const report = {
   generatedAt: new Date().toISOString(),
   url: targetUrl,
+  auditedBranchSha: process.env.GITHUB_SHA || null,
+  auditedGitRef: process.env.GITHUB_REF || null,
+  sourceComparison: null,
+  publishedFeatures: null,
   mode: 'read-only; no form submission and no WhatsApp message sending',
   overall: 'BLOCKED',
   mainDocument: null,
@@ -74,6 +79,31 @@ try {
         request = request.redirectedFrom();
       }
       report.redirectChain = requestChain.reverse();
+      const publishedHtml = await response.text();
+      const checkedOutHtml = await readFile(resolve('index.html'), 'utf8');
+      const sha256 = (value) => createHash('sha256').update(value).digest('hex');
+      report.sourceComparison = {
+        publishedHtmlSha256: sha256(publishedHtml),
+        checkedOutBranchHtmlSha256: sha256(checkedOutHtml),
+        exactHtmlMatch: publishedHtml === checkedOutHtml,
+        note: 'A mismatch proves the HTML bodies differ, but does not by itself identify the deployed commit.'
+      };
+      report.publishedFeatures = await page.evaluate(() => {
+        const result = document.querySelector('#appointmentRequestResult');
+        const oldControls = [
+          '#appointmentMessagePreview',
+          '#appointmentCopyButton',
+          '#appointmentWhatsAppLink'
+        ];
+        return {
+          appointmentFormPresent: Boolean(document.querySelector('#appointmentRequestForm')),
+          timeSelectorPresent: Boolean(document.querySelector('#appointmentTime')),
+          periodFieldPresent: Boolean(document.querySelector('#appointmentPeriod')),
+          resultPanelPresent: Boolean(result),
+          freeResourcesLinkPresent: Boolean(result?.querySelector('a[href="#recursos"]')),
+          obsoletePreviewControlsPresent: oldControls.some((selector) => document.querySelector(selector))
+        };
+      });
       const headers = response.headers();
       for (const name of [
         'content-security-policy',
@@ -127,6 +157,7 @@ try {
         || report.resourceFailures.length
         || (report.icons.lucideScriptResponse && report.icons.lucideScriptResponse.status !== 200)
         || report.icons.inlineLucidePlaceholders > 0
+        || report.publishedFeatures.appointmentFormPresent === false
         ? 'REVIEW'
         : 'OBSERVED';
     } else {
