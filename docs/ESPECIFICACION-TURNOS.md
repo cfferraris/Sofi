@@ -66,3 +66,10 @@ Este flujo elimina la necesidad de revisar el JSON para interpretar solicitudes 
 La primera versión usa un selector de fecha futura y un selector de hora deseada, sin consultar ni prometer disponibilidad en tiempo real. La propietaria verifica la solicitud al recibir el mensaje y responde por WhatsApp confirmando el horario o proponiendo otro. Así se elimina la necesidad de auditar manualmente `data/appointments.json` para leer solicitudes, aunque la confirmación y la prevención de superposiciones siguen siendo manuales.
 
 Si más adelante se necesita mostrar únicamente horarios realmente disponibles o evitar reservas superpuestas, deberá añadirse una agenda centralizada o backend. No implementar una falsa «disponibilidad en tiempo real» con un JSON estático desactualizado.
+
+
+## Estado de implementación — rama de auditoría (2026-10-27)
+
+La primera implementación está en `index.html`, `js/main.js` y `css/styles.css` en la rama `audit/fix-site-baseline`. Incluye campos obligatorios, validación de fecha no pasada usando la zona horaria `America/Argentina/Buenos_Aires`, texto precargado y codificado, confirmación manual, enlace de respaldo a WhatsApp y copia del mensaje. No se persisten los datos en el navegador.
+
+No se considera listo para producción hasta verificar el número de destino, aprobar/publicar la política de privacidad y realizar pruebas reales de navegador en escritorio y móvil. La disponibilidad de horarios no se consulta ni se promete.
