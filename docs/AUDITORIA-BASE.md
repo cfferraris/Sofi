@@ -167,3 +167,11 @@ La inspección del repositorio permite verificar archivos, referencias y lógica
 **Control de errores incorporado:** campos obligatorios y consentimiento verificados; fecha pasada rechazada incluso si se manipula el HTML; fallback visible si el navegador bloquea la apertura de WhatsApp; fallback de copia manual si la Clipboard API no está disponible; el mensaje se prepara en memoria y no se envía automáticamente por el formulario.
 
 **Pendiente antes de producción:** la dirección de WhatsApp se tomó del número ya publicado en el sitio y necesita confirmación de la propietaria; la política formal de privacidad sigue pendiente de aprobación y publicación; la prueba funcional real en móvil/escritorio, navegador con bloqueador de ventanas emergentes y disponibilidad de WhatsApp no puede certificarse con tests estáticos. El formulario está en la rama draft y no se ha fusionado ni desplegado a producción.
+
+
+## Verificación posterior a la implementación P0 — 2026-10-27
+
+- Commit de código y pruebas: `ac53a34a6ee189c6eef0401f1997d30034b3fb94`.
+- GitHub Actions: https://github.com/cfferraris/Sofi/actions/runs/40530134842 — **éxito**.
+- Verificaciones completadas: sintaxis de `js/main.js`, parseo de `data/appointments.json` y **14 pruebas estáticas aprobadas**.
+- Estas pruebas no sustituyen una prueba end-to-end en navegador. El despliegue de Render, el bloqueo de ventanas emergentes, el envío real a WhatsApp, el comportamiento móvil y la lectura con tecnologías de asistencia siguen pendientes de comprobación manual.
