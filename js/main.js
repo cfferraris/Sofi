@@ -97,8 +97,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return `${values.year}-${values.month}-${values.day}`;
         }
 
-        const [todayYear, todayMonth, todayDay] = localDateString().split('-').map(Number);
-        dateInput.min = new Date(Date.UTC(todayYear, todayMonth - 1, todayDay + 1)).toISOString().slice(0, 10);
+        function setMinimumAppointmentDate() {
+            const [year, month, day] = localDateString().split('-').map(Number);
+            dateInput.min = new Date(Date.UTC(year, month - 1, day + 1)).toISOString().slice(0, 10);
+        }
+        setMinimumAppointmentDate();
 
         const APPOINTMENT_SLOTS = {
             morning: {
@@ -181,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(result.message || 'No pudimos registrar la solicitud. Intentá nuevamente o contactanos por los medios del sitio.');
                 }
                 appointmentForm.reset();
-                dateInput.min = new Date(Date.UTC(...localDateString().split('-').map(Number).map((v, i) => i === 1 ? v - 1 : v))).toISOString().slice(0,10);
+                setMinimumAppointmentDate();
                 updateTimeOptions();
                 statusText.textContent = 'Tu solicitud de turno fue registrada. Te confirmaremos a la brevedad.';
                 resultPanel.hidden = false;

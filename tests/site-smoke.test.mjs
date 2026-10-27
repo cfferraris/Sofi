@@ -111,3 +111,8 @@ test('primary appointment CTAs route through the validated request form', () => 
 test('WhatsApp request text uses actual newline separators rather than literal backslash-n', () => {
   assert.match(js, /\.join\('\\n'\)/);
 });
+
+test('appointment form does not store personal data in the browser or read stale JSON', () => {
+  assert.doesNotMatch(js, /localStorage|sessionStorage|appointments\\.json|navigator\\.clipboard/);
+  assert.match(js, /fetch\\('\/api\/appointments'/);
+});

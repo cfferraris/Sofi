@@ -131,6 +131,14 @@ app.post('/api/appointments', rateLimit, async (req, res) => {
   return res.status(201).json({ ok: true });
 });
 
+app.use((req, res, next) => {
+  const pathname = decodeURIComponent((req.path || '/').replace(/\\\\/g, '/'));
+  if (/^\\/(?:server\\.js|package(?:-lock)?\\.json|render\\.yaml|README\\.md|\.env(?:\\.|$)|data(?:\\/|$)|docs(?:\\/|$)|tests(?:\\/|$)|lib(?:\\/|$)|node_modules(?:\\/|$)|\.github(?:\\/|$))/i.test(pathname)) {
+    return res.status(404).send('Not found');
+  }
+  next();
+});
+
 app.use(express.static('.', {
   dotfiles: 'deny',
   index: 'index.html',
