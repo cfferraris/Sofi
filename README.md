@@ -23,6 +23,10 @@ python -m http.server 8000
 
 Abrir `http://localhost:8000`. Para una validación real, probar también en un navegador móvil y en uno de escritorio. Abrir el HTML directamente mediante `file://` no reemplaza la prueba con servidor HTTP.
 
+## Accesibilidad
+
+Los sliders son manuales y no rotan automáticamente. El workflow ejecuta una comprobación automatizada axe-core sobre la página principal y la política de privacidad; esto no sustituye una revisión manual con teclado, lector de pantalla y comprobación visual de contraste.
+
 ## Pruebas estáticas
 
 Con Node.js instalado, ejecutar desde la raíz:
@@ -36,7 +40,7 @@ Las pruebas comprueban rutas locales, referencias internas, IDs duplicados y reg
 ## Dependencias externas
 
 - Lucide se carga desde unpkg. Si el proveedor externo no está disponible, los iconos pueden no inicializarse.
-- Los enlaces de contacto y redes sociales dependen de los destinos externos configurados en `index.html`.
+- El contacto publicado se limita al WhatsApp confirmado y a la dirección confirmada. El email y los perfiles sociales no se publican como datos verificados hasta que se confirme su titularidad.
 
 ## Estado de calidad
 

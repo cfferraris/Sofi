@@ -58,13 +58,6 @@
         "url": "https://www.pieldemar.com",
         "logo": "https://www.pieldemar.com/assets/img/logos/Isotipo2/Azul.png",
         "@id": "https://www.pieldemar.com/#negocio",
-        "sameAs": [
-            "https://www.instagram.com/pieldemar",
-            "https://www.youtube.com/@pieldemar",
-            "https://www.facebook.com/pieldemar",
-            "https://www.twitch.tv/pieldemar",
-            "https://x.com/pieldemar"
-        ],
         "serviceType": [
             "Estimulación temprana",
             "Neurodesarrollo infantil",
@@ -79,7 +72,6 @@
             "addressCountry": "AR"
         },
         "telephone": "+5493425004018",
-        "email": "contacto@pieldemar.com",
         "openingHours": "Mo-Fr 09:00-18:00",
         "hasMap": "https://www.google.com/maps/dir/?api=1&destination=Cullen+1619,+Esperanza,+Santa+Fe,+Argentina"
     }
@@ -90,6 +82,20 @@
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/styles.css">
+    <noscript>
+        <style>
+            #hero { display: none !important; }
+            #navbar, #mainContent {
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: none !important;
+                pointer-events: auto !important;
+            }
+            body { overflow: auto !important; }
+            .whatsapp-float { opacity: 1 !important; pointer-events: auto !important; }
+        </style>
+    </noscript>
 </head>
 <body>
 
@@ -140,46 +146,7 @@
                 <li><a href="#recursos" class="nav-link">Recursos</a></li>
                 <li><a href="#consulta" class="nav-link">Agendar</a></li>
                 <li><a href="#contacto" class="nav-link">Contacto</a></li>
-
-                <!-- Redes sociales SOLO PARA MOBILE -->
-                <li class="nav-social-mobile">
-                    <div class="social-links-mobile">
-                        <a href="https://facebook.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Facebook">
-                            <img src="assets/icons/facebook.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
-                        </a>
-                        <a href="https://instagram.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Instagram">
-                            <img src="assets/icons/Instagram.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
-                        </a>
-                        <a href="https://youtube.com/@pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Suscribite en YouTube">
-                            <img src="assets/icons/youtube.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
-                        </a>
-                        <a href="https://twitch.tv/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Twitch">
-                            <img src="assets/icons/twitch.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
-                        </a>
-                        <a href="https://x.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en X">
-                            <img src="assets/icons/x.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
-                        </a>
-                    </div>
-                </li>
             </ul>
-            <!-- Redes sociales DESKTOP -->
-            <div class="social-links" aria-label="Redes sociales">
-                <a href="https://facebook.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Facebook">
-                    <img src="assets/icons/facebook.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
-                </a>
-                <a href="https://instagram.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Instagram">
-                    <img src="assets/icons/Instagram.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
-                </a>
-                <a href="https://youtube.com/@pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Suscribite en YouTube">
-                    <img src="assets/icons/youtube.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
-                </a>
-                <a href="https://twitch.tv/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Twitch">
-                    <img src="assets/icons/twitch.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
-                </a>
-                <a href="https://x.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en X">
-                    <img src="assets/icons/x.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
-                </a>
-            </div>
         </div>
     </nav>
 
@@ -426,105 +393,11 @@
             </div>
         </section>
 
-        <!-- Sección Testimonios -->
-        <section id="testimonios" class="testimonios-section" aria-labelledby="testimonios-heading">
+        <!-- Presentación del enfoque: no se publican testimonios sin autorización verificable -->
+        <section id="acompanamiento" class="testimonios-section" aria-labelledby="acompanamiento-heading">
             <div class="container">
-                <h2 id="testimonios-heading" class="sr-only">Lo que dicen las familias</h2>
-
-                <div class="carousel-wrapper" role="region" aria-label="Testimonios de familias">
-
-                    <button class="carousel-btn prev" id="prevBtn" aria-label="Testimonio anterior">
-                        <i data-lucide="chevron-left" aria-hidden="true"></i>
-                    </button>
-
-                    <div class="carousel-track-container">
-                        <div class="carousel-track" id="carouselTrack">
-
-                            <article class="testimonio-card">
-                                <blockquote>
-                                    <p>"Llegamos con muchas dudas y angustia. El acompañamiento fue fundamental para entender qué le pasaba a nuestro hijo y cómo ayudarlo. Hoy vemos cambios reales."</p>
-                                </blockquote>
-                                <div class="testimonio-author">
-                                    <div class="testimonio-author-info">
-                                        <strong>María G.</strong>
-                                        <span>Madre de Tomás, 3 años</span>
-                                    </div>
-                                    <div class="testimonio-quote" aria-hidden="true">
-                                        <i data-lucide="quote"></i>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <article class="testimonio-card">
-                                <blockquote>
-                                    <p>"No solo trabajaron con nuestra hija, nos dieron herramientas para aplicar en casa. Sentimos que somos parte activa de su desarrollo."</p>
-                                </blockquote>
-                                <div class="testimonio-author">
-                                    <div class="testimonio-author-info">
-                                        <strong>Lucía y Martín</strong>
-                                        <span>Padres de Emma, 5 años</span>
-                                    </div>
-                                    <div class="testimonio-quote" aria-hidden="true">
-                                        <i data-lucide="quote"></i>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <article class="testimonio-card">
-                                <blockquote>
-                                    <p>"La diferencia está en el trato humano y en que realmente escuchan nuestras preocupaciones. No nos sentimos juzgados, sino acompañados."</p>
-                                </blockquote>
-                                <div class="testimonio-author">
-                                    <div class="testimonio-author-info">
-                                        <strong>Carolina R.</strong>
-                                        <span>Madre de Lucas, 4 años</span>
-                                    </div>
-                                    <div class="testimonio-quote" aria-hidden="true">
-                                        <i data-lucide="quote"></i>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <article class="testimonio-card">
-                                <blockquote>
-                                    <p>"Encontré en Piel de Mar un espacio donde me escucharon sin juzgarme. Las orientaciones fueron claras y pudimos aplicarlas enseguida en casa."</p>
-                                </blockquote>
-                                <div class="testimonio-author">
-                                    <div class="testimonio-author-info">
-                                        <strong>Valentina M.</strong>
-                                        <span>Madre de Sofía, 2 años</span>
-                                    </div>
-                                    <div class="testimonio-quote" aria-hidden="true">
-                                        <i data-lucide="quote"></i>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <article class="testimonio-card">
-                                <blockquote>
-                                    <p>"Lo que más valoro es que trabajan con toda la familia. No solo con el niño. Eso hace una diferencia enorme en los resultados."</p>
-                                </blockquote>
-                                <div class="testimonio-author">
-                                    <div class="testimonio-author-info">
-                                        <strong>Roberto y Ana</strong>
-                                        <span>Padres de Mateo, 4 años</span>
-                                    </div>
-                                    <div class="testimonio-quote" aria-hidden="true">
-                                        <i data-lucide="quote"></i>
-                                    </div>
-                                </div>
-                            </article>
-
-                        </div>
-                    </div>
-
-                    <button class="carousel-btn next" id="nextBtn" aria-label="Testimonio siguiente">
-                        <i data-lucide="chevron-right" aria-hidden="true"></i>
-                    </button>
-                </div>
-
-                <p class="sr-only" id="carouselStatus" aria-live="polite" aria-atomic="true"></p>
-                <div class="carousel-dots" id="carouselDots" aria-label="Navegación de testimonios"></div>
+                <h2 id="acompanamiento-heading">Acompañamiento centrado en cada familia</h2>
+                <p>Orientación para familias en estimulación temprana, neurodesarrollo infantil y crianza respetuosa. El primer paso es conversar sobre las necesidades de cada familia y definir juntos cómo continuar.</p>
             </div>
         </section>
 
@@ -777,19 +650,7 @@
                             </div>
                         </div>
 
-                        <!-- Email -->
-                        <div class="contact-card">
-                            <div class="contact-icon" aria-hidden="true">
-                                <i data-lucide="mail"></i>
-                            </div>
-                            <div class="contact-content">
-                                <p>También podés escribirnos por correo</p>
-                                <a href="mailto:contacto@pieldemar.com" class="contact-link">
-                                    contacto@pieldemar.com
-                                    <i data-lucide="external-link" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                        </div>
+                        
 
                         <!-- Horarios -->
                         <div class="contact-card">
@@ -816,7 +677,7 @@
                 <span aria-hidden="true">|</span>
                 <a href="https://wa.me/5493425004018" target="_blank" rel="noopener noreferrer">WhatsApp</a>
                 <span aria-hidden="true">|</span>
-                <a href="https://instagram.com/pieldemar" target="_blank" rel="noopener noreferrer">Redes sociales</a>
+                <a href="privacidad.html">Política de privacidad</a>
             </nav>
             <p class="footer-copy">
                 <small>&copy; <span id="currentYear"></span> Piel de Mar. Todos los derechos reservados.</small>

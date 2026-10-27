@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         HERO_HIDE_MS:           1500,
 
         // Carrusel
-        CAROUSEL_AUTOPLAY_MS:   5000,
         CAROUSEL_RESIZE_DEBOUNCE: 150
     };
 
@@ -468,18 +467,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function startAutoPlay() {
-            const reducedMotion = autoPlayMotionPreference.matches;
-            if (reducedMotion || document.hidden) return;
-            stopAutoPlay();
-            autoPlayId = setInterval(() => {
-                const maxIndex = cards.length - visibleCards;
-                goToSlide(currentIndex < maxIndex ? currentIndex + 1 : 0);
-            }, CONFIG.CAROUSEL_AUTOPLAY_MS);
+            // Autoplay desactivado: el carrusel sólo cambia por acción de la persona.
         }
 
         function stopAutoPlay() {
-            clearInterval(autoPlayId);
-            autoPlayId = null;
+            // Se conserva como no-op para mantener los manejadores de interacción compatibles.
         }
 
         prevBtn.addEventListener('click', () => {
@@ -559,7 +551,6 @@ if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
     const introSlides = Array.from(introTrack.querySelectorAll('.intro-slide'));
     let introCurrentIndex = 0;
     let introAutoPlayId = null;
-    const INTRO_AUTOPLAY_MS = 5000;
     const introAutoPlayMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     // Obtener ancho de slide
@@ -624,27 +615,11 @@ if (introTrack && introPrevBtn && introNextBtn && introDotsContainer) {
 
     // Autoplay (se detiene al llegar al final - no hace loop)
     function startIntroAutoPlay() {
-        const reducedMotion = introAutoPlayMotionPreference.matches;
-        if (reducedMotion || document.hidden) return;
-
-        stopIntroAutoPlay();
-        
-        // Solo iniciar si no estamos en la última slide
-        if (introCurrentIndex < introSlides.length - 1) {
-            introAutoPlayId = setInterval(() => {
-                if (introCurrentIndex < introSlides.length - 1) {
-                    goToIntroSlide(introCurrentIndex + 1);
-                } else {
-                    // Llegamos al final - detener autoplay
-                    stopIntroAutoPlay();
-                }
-            }, INTRO_AUTOPLAY_MS);
-        }
+        // Autoplay desactivado: el slider sólo cambia por acción de la persona.
     }
 
     function stopIntroAutoPlay() {
-        clearInterval(introAutoPlayId);
-        introAutoPlayId = null;
+        // Se conserva como no-op para mantener los manejadores de interacción compatibles.
     }
 
     // Event listeners

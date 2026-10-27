@@ -58,10 +58,11 @@ test('referenced local icon path matches the versioned filename case', () => {
   assert.doesNotMatch(html, /assets\/icons\/instagram\.svg/);
 });
 
-test('autoplay pauses while either carousel is hovered or keyboard-focused', () => {
-  assert.match(js, /carouselRegion\?\.addEventListener\('focusin', stopAutoPlay\)/);
-  assert.match(js, /introRegion\?\.addEventListener\('focusin', stopIntroAutoPlay\)/);
-  assert.match(js, /reducedMotion \|\| document\.hidden/g);
+test('intro slider and testimonials carousel are manual-only and do not auto-rotate', () => {
+  assert.match(js, /function startAutoPlay\(\) \{\s*\/\/ Autoplay desactivado/);
+  assert.match(js, /function startIntroAutoPlay\(\) \{\s*\/\/ Autoplay desactivado/);
+  assert.doesNotMatch(js, /setInterval\s*\(/);
+  assert.doesNotMatch(html, /introAutoplayToggle|carouselAutoplayToggle|Pausar cambio automático/i);
 });
 
 test('intro slider keyboard navigation is scoped to its section', () => {
@@ -106,10 +107,12 @@ test('appointment selector keeps period and time in the same control', () => {
   assert.match(js, /afternoon:\s*\{[\s\S]*?'16:00'[\s\S]*?'19:30'/);
 });
 
-test('privacy policy exists and describes the WhatsApp flow without claiming database storage', () => {
+test('privacy policy exists, explains the WhatsApp flow and uses the confirmed contact channel', () => {
   assert.ok(existsSync(resolve(root, 'privacidad.html')));
   const privacy = readFileSync(resolve(root, 'privacidad.html'), 'utf8');
   assert.match(privacy, /prepara un mensaje para WhatsApp/i);
+  assert.match(privacy, /wa\.me\/5493425004018/);
+  assert.doesNotMatch(privacy, /contacto@pieldemar\.com|mailto:/i);
   assert.doesNotMatch(privacy, /se registra en una base de datos privada/i);
 });
 
@@ -171,4 +174,16 @@ test('navigation and carousel controls use native semantics', () => {
   assert.equal([...js.matchAll(/setAttribute\('aria-pressed'/g)].length, 4,
     'Carousel indicators and pause/resume controls must expose their pressed state');
   assert.doesNotMatch(js, /setAttribute\('role', 'tab'\)|aria-selected/);
+});
+
+test('unverified email, social profiles and family testimonials are not published as verified facts', () => {
+  assert.doesNotMatch(html, /contacto@pieldemar\.com|mailto:/i);
+  assert.doesNotMatch(html, /aria-label="Redes sociales"|sameAs/);
+  assert.doesNotMatch(html, /María G\.|Tomás, 3 años|Lucía y Martín|Emma, 5 años|Carolina R\.|Lucas, 4 años|Valentina M\.|Sofía, 2 años|Roberto y Ana|Mateo, 4 años/);
+  assert.match(html, /Política de privacidad/);
+});
+
+test('no-JavaScript fallback is present so the hero cannot block access to the page', () => {
+  assert.match(html, /<noscript>[\s\S]*?#hero\s*\{\s*display:\s*none\s*!important/);
+  assert.match(html, /#navbar, #mainContent[\s\S]*?visibility:\s*visible\s*!important/);
 });

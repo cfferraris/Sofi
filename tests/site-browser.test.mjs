@@ -5,6 +5,7 @@ import { readFile, stat } from 'node:fs/promises';
 import { extname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import AxeBuilder from '@axe-core/playwright';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const mimeTypes = {
@@ -174,7 +175,7 @@ test('appointment flow works on desktop and mobile without sending WhatsApp mess
 });
 
 
-test('auto-rotating sliders do not render pause controls', async () => {
+test('manual sliders do not render pause controls or auto-rotate', async () => {
   const browser = await chromium.launch({ headless: true });
   try {
     for (const reducedMotion of ['reduce', 'no-preference']) {
@@ -183,6 +184,7 @@ test('auto-rotating sliders do not render pause controls', async () => {
         reducedMotion
       });
       await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(6500);
       assert.equal(
         await page.locator('#introAutoplayToggle, #carouselAutoplayToggle').count(),
         0,
@@ -195,6 +197,45 @@ test('auto-rotating sliders do not render pause controls', async () => {
       );
       await page.close();
     }
+  } finally {
+    await browser.close();
+  }
+});
+
+test('page remains accessible when JavaScript is disabled', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+    const page = await context.newPage();
+    await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+    assert.equal(await page.locator('#hero').evaluate((el) => getComputedStyle(el).display), 'none');
+    assert.equal(await page.locator('#navbar').evaluate((el) => getComputedStyle(el).visibility), 'visible');
+    assert.equal(await page.locator('#mainContent').evaluate((el) => getComputedStyle(el).visibility), 'visible');
+    await context.close();
+  } finally {
+    await browser.close();
+  }
+});
+
+test('home page and privacy policy have no automated WCAG 2.2 A/AA violations', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({ viewport: { width: 1365, height: 900 }, reducedMotion: 'reduce' });
+    await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+    await page.locator('#hero').click({ position: { x: 3, y: 3 } });
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('#hero')).display === 'none');
+    const homeResults = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    assert.deepEqual(homeResults.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help })),
+      [], 'Home page WCAG automated findings');
+
+    await page.goto(baseURL + '/privacidad.html', { waitUntil: 'domcontentloaded' });
+    const privacyResults = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    assert.deepEqual(privacyResults.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help })),
+      [], 'Privacy page WCAG automated findings');
   } finally {
     await browser.close();
   }
