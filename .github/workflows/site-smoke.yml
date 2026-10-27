@@ -27,3 +27,9 @@ jobs:
         run: npm run check
       - name: Run static site and WhatsApp flow tests
         run: npm test
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --no-save --package-lock=false playwright
+          npx playwright install --with-deps chromium
+      - name: Run desktop and mobile browser tests
+        run: npm run test:e2e
