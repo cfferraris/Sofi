@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
         lucide.createIcons();
     }
     // ========================================
-    // SOLICITUD DE TURNOS — API propia
-    // El backend registra la solicitud y notifica a Piel de Mar.
+    // SOLICITUD DE TURNOS — WhatsApp
+    // El formulario prepara el mensaje; la persona lo envía manualmente.
     // ========================================
     const appointmentForm = document.getElementById('appointmentRequestForm');
     if (appointmentForm) {
@@ -84,7 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultPanel = document.getElementById('appointmentRequestResult');
         const statusText = document.getElementById('appointmentRequestStatus');
         const errorText = document.getElementById('appointmentRequestError');
+        const whatsappLink = document.getElementById('appointmentWhatsAppLink');
+        const messagePreview = document.getElementById('appointmentMessagePreview');
+        const copyButton = document.getElementById('appointmentCopyButton');
         const submitButton = appointmentForm.querySelector('[type="submit"]');
+        const WHATSAPP_NUMBER = '5493425004018';
 
         function localDateString(date = new Date()) {
             const parts = new Intl.DateTimeFormat('en-CA', {
@@ -123,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
             timeInput.appendChild(placeholder);
             timeInput.disabled = !period;
             if (!period) return;
+
             period.times.forEach((time) => {
                 const option = document.createElement('option');
                 option.value = time;
@@ -138,11 +143,17 @@ document.addEventListener('DOMContentLoaded', () => {
             resultPanel.hidden = true;
             errorText.hidden = true;
             errorText.textContent = '';
+            copyButton.textContent = 'Copiar mensaje';
         }
         appointmentForm.addEventListener('input', resetFeedback);
         appointmentForm.addEventListener('change', resetFeedback);
 
-        appointmentForm.addEventListener('submit', async (event) => {
+        function formatDate(date) {
+            const [year, month, day] = date.split('-');
+            return `${day}/${month}/${year}`;
+        }
+
+        appointmentForm.addEventListener('submit', (event) => {
             event.preventDefault();
             resetFeedback();
             if (!appointmentForm.reportValidity()) return;
@@ -154,13 +165,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 reason: String(formData.get('reason') || '').trim(),
                 date: String(formData.get('date') || ''),
                 period: String(formData.get('period') || ''),
-                time: String(formData.get('time') || ''),
-                consent: formData.get('consent') === 'on',
-                website: String(formData.get('website') || '')
+                time: String(formData.get('time') || '')
             };
             const selectedPeriod = APPOINTMENT_SLOTS[payload.period];
-            if (!selectedPeriod || !selectedPeriod.times.includes(payload.time)) {
-                errorText.textContent = 'Elegí una franja y un horario válido.';
+            if (!payload.name || !payload.insurance || !payload.reason ||
+                !selectedPeriod || !selectedPeriod.times.includes(payload.time)) {
+                errorText.textContent = 'Revisá los datos obligatorios y elegí una franja y un horario válidos.';
                 errorText.hidden = false;
                 return;
             }
@@ -171,30 +181,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            submitButton.disabled = true;
-            submitButton.textContent = 'Enviando solicitud…';
+            const message = [
+                'Hola, quiero solicitar un turno con Piel de Mar.',
+                '',
+                `Nombre: ${payload.name}`,
+                `Obra social o cobertura: ${payload.insurance}`,
+                `Motivo de la consulta: ${payload.reason}`,
+                `Fecha deseada: ${formatDate(payload.date)}`,
+                `Franja horaria: ${selectedPeriod.label}`,
+                `Horario deseado: ${payload.time}`,
+                '',
+                'Entiendo que este mensaje es una solicitud y que el turno queda confirmado únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp.'
+            ].join('\n');
+
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+            whatsappLink.href = url;
+            messagePreview.value = message;
+            resultPanel.hidden = false;
+            statusText.textContent = 'Se preparó tu solicitud. Revisá el mensaje en WhatsApp y envialo manualmente. El turno todavía no está confirmado.';
+            resultPanel.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
+
+            // La apertura es síncrona para reducir bloqueos de ventanas emergentes.
+            // El enlace y el mensaje visible quedan como alternativa si no se abre.
+            window.open(url, '_blank', 'noopener,noreferrer');
+        });
+
+        copyButton.addEventListener('click', async () => {
+            const message = messagePreview.value;
             try {
-                const response = await fetch('/api/appointments', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json().catch(() => ({}));
-                if (!response.ok || !result.ok) {
-                    throw new Error(result.message || 'No pudimos registrar la solicitud. Intentá nuevamente o contactanos por los medios del sitio.');
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(message);
+                } else {
+                    messagePreview.focus();
+                    messagePreview.select();
+                    if (!document.execCommand('copy')) throw new Error('copy-unavailable');
                 }
-                appointmentForm.reset();
-                setMinimumAppointmentDate();
-                updateTimeOptions();
-                statusText.textContent = 'Tu solicitud de turno fue registrada. Te confirmaremos a la brevedad.';
-                resultPanel.hidden = false;
-                resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            } catch (error) {
-                errorText.textContent = error.message || 'No pudimos registrar la solicitud. Revisá tu conexión e intentá nuevamente.';
-                errorText.hidden = false;
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Enviar solicitud de turno';
+                copyButton.textContent = 'Mensaje copiado';
+            } catch {
+                messagePreview.focus();
+                messagePreview.select();
+                copyButton.textContent = 'Seleccioná y copiá el mensaje';
             }
         });
     }
