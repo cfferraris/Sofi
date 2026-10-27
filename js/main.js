@@ -80,6 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (appointmentForm) {
         const WHATSAPP_NUMBER = '5493425004018';
         const dateInput = document.getElementById('appointmentDate');
+        const periodInput = document.getElementById('appointmentPeriod');
+        const timeInput = document.getElementById('appointmentTime');
         const resultPanel = document.getElementById('appointmentRequestResult');
         const statusText = document.getElementById('appointmentRequestStatus');
         const whatsappLink = document.getElementById('appointmentOpenWhatsApp');
@@ -103,6 +105,38 @@ document.addEventListener('DOMContentLoaded', () => {
         const minimumAppointmentDate = new Date(Date.UTC(todayYear, todayMonth - 1, todayDay + 1)).toISOString().slice(0, 10);
         dateInput.min = minimumAppointmentDate;
 
+        const APPOINTMENT_SLOTS = {
+            morning: {
+                label: 'Mañana',
+                times: ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30']
+            },
+            afternoon: {
+                label: 'Tarde',
+                times: ['16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30']
+            }
+        };
+
+        function updateTimeOptions() {
+            const period = APPOINTMENT_SLOTS[periodInput.value];
+            timeInput.replaceChildren();
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = period ? 'Elegí un horario' : 'Primero elegí una franja';
+            timeInput.appendChild(placeholder);
+            timeInput.disabled = !period;
+
+            if (!period) return;
+            period.times.forEach((time) => {
+                const option = document.createElement('option');
+                option.value = time;
+                option.textContent = time;
+                timeInput.appendChild(option);
+            });
+        }
+
+        periodInput.addEventListener('change', updateTimeOptions);
+        updateTimeOptions();
+
         function clearPreparedRequest() {
             preparedMessage = '';
             resultPanel.hidden = true;
@@ -123,10 +157,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const insurance = String(formData.get('insurance') || '').trim();
             const reason = String(formData.get('reason') || '').trim();
             const date = String(formData.get('date') || '');
+            const period = String(formData.get('period') || '');
             const time = String(formData.get('time') || '');
+            const validPeriod = APPOINTMENT_SLOTS[period];
+            const validTime = Boolean(validPeriod && validPeriod.times.includes(time));
             const consent = document.getElementById('appointmentConsent').checked;
 
-            if (!name || !insurance || !reason || !date || !time || !consent) {
+            if (!name || !insurance || !reason || !date || !validTime || !consent) {
                 statusText.textContent = 'Revisá los campos obligatorios antes de continuar.';
                 resultPanel.hidden = false;
                 return;
@@ -153,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `- Obra social o cobertura: ${insurance}`,
                 `- Motivo de la consulta: ${reason}`,
                 `- Fecha deseada: ${dateLabel}`,
+                `- Franja horaria: ${validPeriod.label}`,
                 `- Horario deseado: ${time}`,
                 '',
                 'Entiendo que esta es una solicitud y que el turno queda confirmado únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp.'
