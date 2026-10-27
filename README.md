@@ -10,7 +10,8 @@ Sitio institucional estático de Piel de Mar, orientado a presentar los servicio
 - `assets/img/`: imágenes, fondos y variantes de logotipos.
 - `assets/icons/`: iconos SVG.
 - `assets/tipografias/`: fuentes locales.
-- `data/appointments.json`: datos históricos de disponibilidad; actualmente no son consumidos por el sitio.
+- `data/appointments.json`: datos históricos de disponibilidad de 2025; no son consumidos por el sitio y no deben mostrarse como horarios actuales.
+- `docs/ESPECIFICACION-TURNOS.md`: requisito funcional confirmado para solicitar turnos mediante WhatsApp, con confirmación manual de la propietaria.
 
 ## Ejecución local
 
