@@ -14,7 +14,9 @@ jobs:
           ref: audit/fix-site-baseline
           fetch-depth: 0
       - name: Apply corrections
-        run: python3 scripts/apply-p0-appointment-ux-v2.py
+        run: |
+          python3 scripts/apply-p0-appointment-ux-v2.py
+          python3 scripts/fix-p0-whatsapp-newline.py
       - name: Verify
         run: |
           npm run check
