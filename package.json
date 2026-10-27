@@ -7,7 +7,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node --test tests/*.test.mjs",
+    "test": "node --test tests/site-smoke.test.mjs",
     "check": "node --check js/main.js",
     "test:e2e": "node --test tests/site-browser.test.mjs"
   }
