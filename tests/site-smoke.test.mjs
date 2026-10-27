@@ -91,7 +91,7 @@ test('successful appointment result has one action and no WhatsApp/copy controls
 });
 
 test('appointment form submits to API and preserves the half-hour time slots', () => {
-  assert.match(js, /fetch\('\/api\/appointments'/);
+  assert.ok(js.includes("fetch('/api/appointments'"));
   assert.match(js, /morning:\s*\{[\s\S]*?'08:00'[\s\S]*?'11:30'/);
   assert.match(js, /afternoon:\s*\{[\s\S]*?'16:00'[\s\S]*?'19:30'/);
   assert.match(js, /selectedPeriod\.times\.includes\(payload\.time\)/);
