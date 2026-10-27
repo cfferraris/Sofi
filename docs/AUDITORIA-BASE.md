@@ -40,7 +40,7 @@
 5. **CSS con reglas repetidas.** Se detectaron selectores repetidos en distintas zonas del archivo. No implica automáticamente un defecto visual, pero hace más difícil predecir la cascada.
    - Aceptación: consolidar sólo después de capturar el comportamiento actual; evitar rediseños accidentales y comprobar breakpoints 320, 375, 768, 1024 y escritorio amplio.
 
-6. **Carruseles y accesibilidad.** Ambos sliders tienen autoplay y controles; la pausa por foco de teclado debe comprobarse, al igual que el comportamiento con movimiento reducido, lectores de pantalla y navegación sin mouse.
+6. **Carruseles y accesibilidad.** Ambos sliders tienen autoplay y controles. En la rama de auditoría se agregó pausa al hover y al foco dentro de cada sección, se evita iniciar autoplay cuando el documento está oculto y se limitó el manejo de flechas del slider introductorio a su propia sección. El comportamiento aún requiere prueba en navegador.
    - Aceptación: controles con nombres accesibles, estado anunciado correcto, autoplay que no interfiera con usuarios de teclado y respeto de `prefers-reduced-motion`.
 
 7. **Recursos “próximamente”.** Artículos, guías descargables y tips se presentan como futuros. Debe decidirse si permanecen como hoja de ruta visible o se publican antes del lanzamiento.
