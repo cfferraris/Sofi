@@ -79,6 +79,20 @@ jobs:
             fi
             echo "OK $result $asset"
           done
+
+          check_minified_pair() {
+            source="$1"
+            minified="$2"
+            source_bytes="$(curl -fsSL --max-time 20 "https://sofi-ywgo.onrender.com/$source" | wc -c)"
+            minified_bytes="$(curl -fsSL --max-time 20 "https://sofi-ywgo.onrender.com/$minified" | wc -c)"
+            if [ "$minified_bytes" -ge "$source_bytes" ]; then
+              echo "::error::Minified asset is not smaller: $source ($source_bytes B) vs $minified ($minified_bytes B)"
+              exit 1
+            fi
+            echo "OK $source: $source_bytes B -> $minified: $minified_bytes B"
+          }
+          check_minified_pair css/styles.css css/styles.min.css
+          check_minified_pair js/main.js js/main.min.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
