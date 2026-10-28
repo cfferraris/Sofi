@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ========================================
     const CONFIG = {
         // Transición del hero
-        HERO_AUTO_TRIGGER_MS:   1000,
+        HERO_AUTO_TRIGGER_MS:   2500,
         HERO_LOGO_MORPH_MS:      600,
         HERO_NAVBAR_SHOW_MS:    1000,
         HERO_CONTENT_SHOW_MS:   1300,
