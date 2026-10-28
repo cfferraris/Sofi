@@ -18,6 +18,23 @@ Conversion: Pillow WebP quality 82, method 6.
 | logos/LogoPrincipal/Verde.png | 41,305 B | 8,350 B | 1499×1081 | 440×317 | yes |
 | fondos/Pat_01_01.png | 130,571 B | 23,142 B | 2784×1571 | 1600×903 | yes |
 
+## Responsive WebP variants
+
+The HTML uses srcset so browsers can select an 800 px variant on narrower displays and retain the full-size WebP for larger displays.
+
+| Image | Full WebP | 800w variant | Widths |
+|---|---:|---:|---:|
+| Zona Gris.png | 53,686 B | 27,280 B | 800px / 1344px |
+| familia en consullta.png | 84,408 B | 58,960 B | 800px / 1024px |
+| Cierre.png | 50,126 B | 25,428 B | 800px / 1344px |
+| Niño sobre estimulado.png | 58,856 B | 28,430 B | 800px / 1344px |
+| ayuda.png | 59,630 B | 27,194 B | 800px / 1344px |
+| Regulacion.png | 54,214 B | 29,320 B | 800px / 1344px |
+| Duda.png | 45,888 B | 22,322 B | 800px / 1344px |
+| Ubicacion.png | 69,796 B | 52,706 B | 800px / 1024px |
+
+**Potential reduction when the 800 px candidate is selected:** 204,964 B across the eight editorial images.
+
 **Total source size:** 12,722,980 B
 **Total served size for these 10 images after conversion:** 508,096 B
 **Estimated reduction:** 12,214,884 B (96.0%).
