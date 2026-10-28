@@ -94,11 +94,11 @@ jobs:
           check_minified_pair css/styles.css css/styles.min.css
           check_minified_pair js/main.js js/main.min.js
           deployed_js="$(curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/js/main.min.js)"
-          if ! grep -q 'HERO_AUTO_TRIGGER_MS:2500' <<< "$deployed_js"; then
-            echo "::error::Staging does not serve the expected 2.5-second hero transition."
+          if ! grep -q 'HERO_AUTO_TRIGGER_MS:1000' <<< "$deployed_js"; then
+            echo "::error::Staging does not serve the expected 1-second hero transition."
             exit 1
           fi
-          echo "OK deployed hero transition is 2500 ms"
+          echo "OK deployed hero transition is 1000 ms"
 
           curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/css/styles.min.css -o /tmp/styles.min.css
           grep -q '\.hero{position:absolute' /tmp/styles.min.css || { echo "::error::Hero must be out of document flow to prevent CLS."; exit 1; }
