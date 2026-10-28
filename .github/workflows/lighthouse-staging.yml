@@ -14,13 +14,24 @@ on:
       - 'scripts/optimize_images.py'
       - 'css/**'
       - 'js/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/lighthouse-staging.yml'
+      - 'docs/technical-audit-closure.md'
+      - 'index.html'
+      - 'privacidad.html'
+      - 'assets/**'
+      - 'scripts/optimize_images.py'
+      - 'css/**'
+      - 'js/**'
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: lighthouse-staging-audit
+  group: lighthouse-staging-audit-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
