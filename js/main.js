@@ -327,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!href?.startsWith('#')) { closeMenu(); return; }
 
             e.preventDefault();
+            history.replaceState(null, '', href);
             closeMenu();
 
             if (href === '#piel-de-mar') {
