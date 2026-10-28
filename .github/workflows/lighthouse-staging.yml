@@ -93,6 +93,12 @@ jobs:
           }
           check_minified_pair css/styles.css css/styles.min.css
           check_minified_pair js/main.js js/main.min.js
+          deployed_js="$(curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/js/main.min.js)"
+          if ! grep -q 'HERO_AUTO_TRIGGER_MS:2500' <<< "$deployed_js"; then
+            echo "::error::Staging does not serve the expected 2.5-second hero transition."
+            exit 1
+          fi
+          echo "OK deployed hero transition is 2500 ms"
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
