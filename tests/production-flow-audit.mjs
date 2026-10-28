@@ -59,7 +59,7 @@ try {
       for (const [name, expected] of Object.entries(requiredHeaders)) {
         assert.equal((responseHeaders[name] || '').toLowerCase(), expected.toLowerCase(), `Missing or incorrect staging header: ${name}`);
       }
-      const permissionsPolicy = (responseHeaders['permissions-policy'] || '').replace(/\\s/g, '');
+      const permissionsPolicy = (responseHeaders['permissions-policy'] || '').replace(/\s/g, '');
       assert.equal(permissionsPolicy, 'camera=(),microphone=(),geolocation=()', 'Missing or incorrect staging Permissions-Policy');
       assert.ok(responseHeaders['strict-transport-security'], 'Strict-Transport-Security must be present');
       assert.equal((responseHeaders['x-content-type-options'] || '').toLowerCase(), 'nosniff', 'X-Content-Type-Options must be nosniff');
