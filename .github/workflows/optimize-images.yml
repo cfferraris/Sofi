@@ -5,9 +5,9 @@ on:
       - audit/fix-site-baseline
     paths:
       - '.github/workflows/optimize-images.yml'
-      - 'scripts/optimize_images.py'
       - 'assets/img/**'
       - 'index.html'
+      - 'css/styles.css'
   workflow_dispatch:
 permissions:
   contents: write
@@ -29,7 +29,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/img index.html docs/image-optimization-report.md
+          git add assets/img index.html css/styles.css docs/image-optimization-report.md
           if git diff --cached --quiet; then echo 'No changes to commit'; exit 0; fi
           git commit -m 'perf: optimize heavy site images as WebP'
           git push origin HEAD:audit/fix-site-baseline
