@@ -1,5 +1,6 @@
 name: Lighthouse staging audit
 # Re-run post-change Lighthouse measurements when this audit workflow is updated.
+# Post-LCP-fix validation: require a fresh staging run after generated assets are committed.
 
 on:
   push:
