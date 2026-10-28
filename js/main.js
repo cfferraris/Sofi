@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             const href = link.getAttribute('href');
-            if (!href?.startsWith('#')) return;
+            if (!href?.startsWith('#')) { closeMenu(); return; }
 
             e.preventDefault();
             closeMenu();
