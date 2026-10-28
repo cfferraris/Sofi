@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 from urllib.parse import quote
 from PIL import Image
 
@@ -78,9 +79,16 @@ for name in TARGETS:
                     variant_url = quote(variant_ref, safe='/:')
                     full_url = quote(new_ref, safe='/:')
                     sizes = '(max-width: 768px) 100vw, 50vw' if source.name in ('familia en consullta.png', 'Ubicacion.png') else '100vw'
-                    source_markup = f'src="{new_ref}"'
-                    responsive_markup = f'src="{new_ref}" srcset="{variant_url} {variant.width}w, {full_url} {image.width}w" sizes="{sizes}"'
-                    html = html.replace(source_markup, responsive_markup)
+                    # Replace existing responsive attributes instead of appending duplicates.
+                    # The optimizer runs after its own generated commits, so this must be idempotent.
+                    source_pattern = re.compile(r'(<img\\b[^>]*\\bsrc="' + re.escape(new_ref) + r'"[^>]*>)')
+                    def replace_responsive_attributes(match):
+                        tag = re.sub(r'\\s+srcset="[^"]*"', '', match.group(1))
+                        tag = re.sub(r'\\s+sizes="[^"]*"', '', tag)
+                        return tag[:-1] + f' srcset="{variant_url} {variant.width}w, {full_url} {image.width}w" sizes="{sizes}">'
+                    html, matches = source_pattern.subn(replace_responsive_attributes, html)
+                    if matches != 1:
+                        raise ValueError(f'Expected one image tag for {new_ref!r}; found {matches}')
                     responsive_rows.append((name, output.stat().st_size, variant_path.stat().st_size, image.width, variant.width))
                 else:
                     variant_path.unlink(missing_ok=True)
