@@ -80,7 +80,7 @@
     <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
     
     <!-- Priorizar las imágenes críticas del primer render: logo inicial y primera diapositiva -->
-    <link rel="preload" as="image" href="assets/img/logos/LogoPrincipal/Verde.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/img/logos/LogoPrincipal/Verde.png" fetchpriority="high">
     <link rel="preload" as="image" href="assets/img/Ni%C3%B1o%20sobre%20estimulado.webp" imagesrcset="assets/img/Ni%C3%B1o%20sobre%20estimulado-800.webp 800w, assets/img/Ni%C3%B1o%20sobre%20estimulado.webp 1344w" imagesizes="100vw" fetchpriority="high">
 
     <!-- CSS -->
@@ -108,7 +108,7 @@
         <div class="logo-container">
             <h1 class="sr-only">Piel de Mar — Estimulación Temprana y Acompañamiento Familiar en Esperanza, Santa Fe</h1>
             <img
-                src="assets/img/logos/LogoPrincipal/Verde.webp"
+                src="assets/img/logos/LogoPrincipal/Verde.png"
                 alt="Piel de Mar - Logo principal"
                 id="mainLogo"
                 class="main-logo"
@@ -127,7 +127,7 @@
             <div class="navbar-logo">
                 <a href="#piel-de-mar" aria-label="Volver al inicio">
                     <img
-                        src="assets/img/logos/Isotipo2/Azul.webp"
+                        src="assets/img/logos/Isotipo2/Azul.png"
                         alt="Piel de Mar"
                         class="isotipo"
                         width="50"
@@ -147,10 +147,46 @@
                 <li><a href="#piel-de-mar" class="nav-link">Piel de Mar</a></li>
                 <li><a href="#tu-hijo-y-vos" class="nav-link">Tu hij@ y vos</a></li>
                 <li><a href="#servicios" class="nav-link">Servicios</a></li>
-                <li><a href="recursos.html" class="nav-link" target="_blank" rel="noopener noreferrer">Recursos</a></li>
+                <li><a href="#recursos" class="nav-link">Recursos</a></li>
                 <li><a href="#consulta" class="nav-link">Agendar</a></li>
                 <li><a href="#contacto" class="nav-link">Contacto</a></li>
+            <li class="nav-social-mobile" role="none">
+                    <div class="social-links-mobile">
+                        <a href="https://facebook.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Facebook">
+                            <img src="assets/icons/facebook.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
+                        </a>
+                        <a href="https://instagram.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Instagram">
+                            <img src="assets/icons/Instagram.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
+                        </a>
+                        <a href="https://youtube.com/@pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Suscribite en YouTube">
+                            <img src="assets/icons/youtube.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
+                        </a>
+                        <a href="https://twitch.tv/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Twitch">
+                            <img src="assets/icons/twitch.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
+                        </a>
+                        <a href="https://x.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en X">
+                            <img src="assets/icons/x.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
+                        </a>
+                    </div>
+                </li>
             </ul>
+            <div class="social-links" aria-label="Redes sociales">
+                <a href="https://facebook.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Facebook">
+                    <img src="assets/icons/facebook.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
+                </a>
+                <a href="https://instagram.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Instagram">
+                    <img src="assets/icons/Instagram.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
+                </a>
+                <a href="https://youtube.com/@pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Suscribite en YouTube">
+                    <img src="assets/icons/youtube.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
+                </a>
+                <a href="https://twitch.tv/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en Twitch">
+                    <img src="assets/icons/twitch.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
+                </a>
+                <a href="https://x.com/pieldemar" target="_blank" rel="noopener noreferrer" aria-label="Seguinos en X">
+                    <img src="assets/icons/x.svg" alt="" width="28" height="28" loading="lazy" aria-hidden="true">
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -310,10 +346,8 @@
                     <button class="intro-slider-btn next" id="introNextBtn" aria-label="Diapositiva siguiente">
                         <i data-lucide="chevron-right" aria-hidden="true"></i>
                     </button>
-                </div>
-
-                <!-- Indicadores de progreso (dots) -->
                 <div class="intro-slider-dots" id="introSliderDots" aria-label="Navegación de diapositivas"></div>
+                </div>
 
                 <!-- Estado para lectores de pantalla -->
                 <p class="sr-only" id="introSliderStatus" aria-live="polite" aria-atomic="true"></p>
@@ -325,6 +359,7 @@
         <section id="tu-hijo-y-vos" class="tu-hijo-y-vos-section" aria-labelledby="tu-hijo-heading">
             <div class="container">
                 <h2 id="tu-hijo-heading">tu hij@ y vos</h2>
+                <p class="tu-hijo-intro">Cada familia tiene su propio ritmo. El acompañamiento busca comprender las necesidades del niño y ofrecer herramientas realistas para la vida cotidiana, sin juicios ni recetas únicas.</p>
     
                 <div class="tu-hijo-y-vos-content">
                     <ul class="check-list">
@@ -396,7 +431,112 @@
             </div>
         </section>
 
-        <section id="recursos" class="resources-section" aria-labelledby="recursos-heading"><div class="container"><p class="section-eyebrow">Biblioteca para acompañar en casa</p><h2 id="recursos-heading">Recursos gratuitos para acompañar el desarrollo</h2><p class="resources-intro">Materiales, juegos, explicaciones y guías para consultar a tu ritmo.</p><a class="btn btn-primary resources-library-link" href="recursos.html" target="_blank" rel="noopener noreferrer">Abrir biblioteca de recursos</a></div></section>
+        <!-- Sección Recursos: categorías con enlaces a la biblioteca -->
+        <section id="recursos" class="resources-section" aria-labelledby="recursos-heading">
+            <div class="container">
+                <h2 id="recursos-heading">Recursos gratuitos para acompañar el desarrollo</h2>
+                <div class="resources-cards-container">
+
+                    <!-- Tarjeta 1: Temáticas -->
+                    <article class="resources-main-card">
+                        <div class="card-options">
+                            <a href="recursos.html#desarrollo" target="_blank" rel="noopener noreferrer" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
+                                    <i data-lucide="sprout"></i>
+                                </div>
+                                <div class="option-content">
+                                    <strong>Desarrollo infantil</strong>
+                                    <span>Hitos esperables, señales de alerta y cómo acompañar cada etapa</span>
+                                </div>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
+                            </a>
+
+                            <a href="recursos.html#crianza" target="_blank" rel="noopener noreferrer" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
+                                    <i data-lucide="heart"></i>
+                                </div>
+                                <div class="option-content">
+                                    <strong>Crianza respetuosa</strong>
+                                    <span>Estrategias para criar desde el respeto mutuo y la conexión genuina</span>
+                                </div>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
+                            </a>
+
+                            <a href="recursos.html#regulacion" target="_blank" rel="noopener noreferrer" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
+                                    <i data-lucide="brain-circuit"></i>
+                                </div>
+                                <div class="option-content">
+                                    <strong>Regulación emocional</strong>
+                                    <span>Herramientas para ayudar a tu hijo a gestionar lo que siente</span>
+                                </div>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
+                            </a>
+
+                            <a href="recursos.html#juego" target="_blank" rel="noopener noreferrer" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
+                                    <i data-lucide="puzzle"></i>
+                                </div>
+                                <div class="option-content">
+                                    <strong>Juego y estimulación</strong>
+                                    <span>Actividades simples para estimular sin sobreexigir ni presionar</span>
+                                </div>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- Tarjeta 2: Tipos de recursos -->
+                    <article class="resources-main-card">
+                        <div class="card-options">
+                            <a href="recursos.html#lecturas" target="_blank" rel="noopener noreferrer" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
+                                    <i data-lucide="youtube"></i>
+                                </div>
+                                <div class="option-content">
+                                    <strong>Videos educativos</strong>
+                                    <span>Explicaciones breves y prácticas en nuestro canal de YouTube</span>
+                                </div>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
+                            </a>
+
+                            <a href="recursos.html#guias" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
+                                    <i data-lucide="book-open"></i>
+                                </div>
+                                <div class="option-content">
+                                    <strong>Artículos y bibliografía</strong>
+                                    <span>Ensayos basados en evidencia y bibliografía recomendada <em>(próximamente)</em></span>
+                                </div>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
+                            </span>
+
+                            <a href="recursos.html#guias" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
+                                    <i data-lucide="download"></i>
+                                </div>
+                                <div class="option-content">
+                                    <strong>Guías descargables</strong>
+                                    <span>Materiales en PDF listos para descargar e imprimir <em>(próximamente)</em></span>
+                                </div>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
+                            </span>
+
+                            <a href="recursos.html#guias" class="resource-option">
+                                <div class="option-icon" aria-hidden="true">
+                                    <i data-lucide="lightbulb"></i>
+                                </div>
+                                <div class="option-content">
+                                    <strong>Tips rápidos</strong>
+                                    <span>Consejos breves para aplicar en situaciones del día a día <em>(próximamente)</em></span>
+                                </div>
+                                <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
 
         <!-- Sección de solicitud de turnos: la confirmación es manual por WhatsApp -->
         <section id="consulta" class="consultation-section" aria-labelledby="consulta-heading">
@@ -551,6 +691,13 @@
                         </div>
 
                     </div>
+
+                    <aside class="contact-summary-card" aria-labelledby="contact-summary-heading">
+                        <h3 id="contact-summary-heading">Información práctica</h3>
+                        <div class="contact-summary-item"><i data-lucide="phone" aria-hidden="true"></i><div><strong>Teléfono</strong><a href="https://wa.me/5493425004018" target="_blank" rel="noopener noreferrer">+54 9 3425 004018</a></div></div>
+                        <div class="contact-summary-item"><i data-lucide="map-pin" aria-hidden="true"></i><div><strong>Dirección</strong><span>Cullen 1619, Esperanza, Santa Fe</span></div></div>
+                        <div class="contact-summary-item"><i data-lucide="clock" aria-hidden="true"></i><div><strong>Horarios</strong><span>Lunes a viernes, de 9:00 a 18:00 hs</span></div></div>
+                    </aside>
 
                 </div>
             </div>
