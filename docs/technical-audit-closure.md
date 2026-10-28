@@ -12,9 +12,9 @@
 
 | Block | Status | Evidence / next action |
 |---|---|---|
-| HTTP security headers | Blocked by hosting configuration access | HSTS and X-Content-Type-Options were previously observed. Configure Referrer-Policy, X-Frame-Options and Permissions-Policy in Render. Review CSP compatibility before adding it as a response header. Verify real response headers after configuration. |
+| HTTP security headers | Configured in Render; live verification pending | The user confirmed the four staging headers are saved: Referrer-Policy, X-Frame-Options, Permissions-Policy and staging-only X-Robots-Tag. Verify actual HTTP responses for the homepage and static assets. HSTS and X-Content-Type-Options were previously observed. Review CSP compatibility before adding it as a response header. |
 | Performance | Partial; image optimization implemented | Navbar isotipo reduced from 22,758 B PNG to 1,708 B WebP (160×160); favicon and Apple touch icon remain PNG. Latest Lighthouse audit: mobile 76, desktop 62; LCP 4.3 s / 3.9 s, CLS 0 / 0.001, TBT 150 ms / 50 ms, FCP 2.9 s / 2.4 s. The optimizer ran twice with identical HTML/CSS/report hashes. Do not claim a stable overall score improvement. LCP element render delay remains about 2.2 s and requires a design-safe follow-up. |
-| SEO | Diagnosis complete; release condition unresolved | Lighthouse SEO 69 is caused by the staging `noindex` directive. The checked `main` version does not contain that directive, but this branch does. Configure staging-only `X-Robots-Tag: noindex` in Render, verify it, then remove the HTML `noindex` before any merge. Do not merge while this condition is unresolved. |
+| SEO | HTML staging noindex removed; live verification pending | Removed the `noindex` meta tag from both `index.html` and `privacidad.html` on `audit/fix-site-baseline`. The user confirmed `X-Robots-Tag: noindex, follow` is saved in Render for staging. Verify the live response header and ensure it is not applied to production. The checked `main` branch remains untouched. |
 | Accessibility | Automated browser checks pass; manual review pending | Home page, privacy policy and the open service dialog passed the automated WCAG 2.2 A/AA axe checks; browser tests also verified keyboard opening, focus placement, Tab/Shift+Tab, Escape and focus restoration. The successful run used the same site/test code before a generated HTML formatting-only commit. The new commit receives another CI run. A human screen-reader review is still required before claiming full WCAG conformance. |
 | Integrated closure | Pending | Run static, browser, staging, Lighthouse and HTTP-header checks on the final branch SHA; verify staging serves the same commit; attach evidence; confirm rollback readiness. |
 
@@ -27,7 +27,7 @@ Apply to path `/*` in the Render dashboard:
 - `Permissions-Policy: camera=(), microphone=(), geolocation=()`
 - `X-Robots-Tag: noindex, follow` (staging only)
 
-Before adding a response-header CSP, compare the proposed policy with the actual staging console/network behavior. Avoid enforcing a second policy without checking external resources, inline styles, dialogs and generated download behavior.
+User confirmed these headers are saved on the staging service. Verify them on live HTTP responses before marking this block complete. Before adding a response-header CSP, compare the proposed policy with the actual staging console/network behavior. Avoid enforcing a second policy without checking external resources, inline styles, dialogs and generated download behavior.
 
 After changing headers, verify the actual response headers for the homepage and static assets. A meta tag alone is not evidence that a response header exists.
 
@@ -56,7 +56,7 @@ Check the response header names and values, not only the HTML source. Confirm th
 ### Production
 
 - Do not merge or deploy to production until the user explicitly authorizes the final committee.
-- Before an authorized merge, confirm the staging-only `noindex` has been moved to Render configuration and removed from the HTML.
+- Before an authorized merge, confirm the staging-only `X-Robots-Tag: noindex, follow` is confined to Render staging configuration and the `noindex` meta tag is absent from both HTML pages.
 - Keep the merge SHA, deployment result, header verification and test artifacts together as release evidence.
 - Any production rollback must follow the user's explicit authorization and the production deployment controls; do not improvise a merge or mutate `main` from this audit workflow.
 
