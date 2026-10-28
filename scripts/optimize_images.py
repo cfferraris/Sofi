@@ -81,10 +81,10 @@ for name in TARGETS:
                     sizes = '(max-width: 768px) 100vw, 50vw' if source.name in ('familia en consullta.png', 'Ubicacion.png') else '100vw'
                     # Replace existing responsive attributes instead of appending duplicates.
                     # The optimizer runs after its own generated commits, so this must be idempotent.
-                    source_pattern = re.compile(r'(<img\\b[^>]*\\bsrc="' + re.escape(new_ref) + r'"[^>]*>)')
+                    source_pattern = re.compile(r'(<img\b[^>]*\bsrc="' + re.escape(new_ref) + r'"[^>]*>)')
                     def replace_responsive_attributes(match):
-                        tag = re.sub(r'\\s+srcset="[^"]*"', '', match.group(1))
-                        tag = re.sub(r'\\s+sizes="[^"]*"', '', tag)
+                        tag = re.sub(r'\s+srcset="[^"]*"', '', match.group(1))
+                        tag = re.sub(r'\s+sizes="[^"]*"', '', tag)
                         return tag[:-1] + f' srcset="{variant_url} {variant.width}w, {full_url} {image.width}w" sizes="{sizes}">'
                     html, matches = source_pattern.subn(replace_responsive_attributes, html)
                     if matches != 1:
