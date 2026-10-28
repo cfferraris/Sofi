@@ -277,7 +277,7 @@ img {
     transition: var(--transition-smooth);
 }
 .logo-container.transitioning {
-    animation: logoToCorner 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: logoToCorner 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 @keyframes logoToCorner {
     to {
@@ -309,7 +309,7 @@ img {
     border-bottom: 1px solid var(--tiza);
     opacity: 0;
     transform: translateY(-100%);
-    transition: var(--transition-smooth);
+    transition: opacity 0.25s ease, transform 0.25s ease;
     box-shadow: none;  /* ✨ FASE 1: sin sombra inicial */
 }
 .navbar.visible {
