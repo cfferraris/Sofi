@@ -35,7 +35,7 @@ jobs:
             html="$(curl -fsSL --max-time 20 "$url" || true)"
             js="$(curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/js/main.min.js || true)"
             css="$(curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/css/styles.min.css || true)"
-            if [ -n "$html" ] && grep -q '\.webp' <<< "$html" && grep -q 'width="440"' <<< "$html" && grep -q 'height="317"' <<< "$html" && grep -q 'HERO_AUTO_TRIGGER_MS:2500' <<< "$js" && grep -q '\.hero{position:absolute' <<< "$css"; then
+            if [ -n "$html" ] && grep -q '\.webp' <<< "$html" && grep -q 'width="440"' <<< "$html" && grep -q 'height="317"' <<< "$html" && grep -q 'srcset=' <<< "$html" && grep -q 'HERO_AUTO_TRIGGER_MS:2500' <<< "$js" && grep -q '\.hero{position:absolute' <<< "$css"; then
               printf '%s' "$html" > /tmp/staging-index.html
               echo "Staging serves the current HTML, CSS and JavaScript performance fixes (attempt $attempt)."
               ready=1
@@ -58,10 +58,13 @@ jobs:
           from pathlib import Path
           from urllib.parse import quote
           html = Path('/tmp/staging-index.html').read_text()
-          refs = sorted(set(re.findall(r"""(?:src|poster)=["']([^"']+\.webp(?:\?[^"']*)?)["']""", html, re.IGNORECASE)))
+          refs = set(re.findall(r"""(?:src|poster)=["']([^"']+\\.webp(?:\\?[^"']*)?)["']""", html, re.IGNORECASE))
+          for srcset in re.findall(r"""srcset=["']([^"']+)["']""", html, re.IGNORECASE):
+              refs.update(re.findall(r'([^\\s,]+\\.webp)(?:\\s+\\d+w)?', srcset, re.IGNORECASE))
+          refs = sorted(refs)
           if not refs:
-              raise SystemExit('No WebP src/poster references found in staging HTML')
-          print(f'Found {len(refs)} unique WebP references in HTML')
+              raise SystemExit('No WebP src/poster/srcset references found in staging HTML')
+          print(f'Found {len(refs)} unique WebP references in HTML and responsive srcsets')
           for ref in refs:
               path = ref.split('?', 1)[0]
               if path.startswith(('http://', 'https://')):
