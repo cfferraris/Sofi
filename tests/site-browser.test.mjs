@@ -260,10 +260,36 @@ test('service and resource examples open in accessible in-site dialogs on deskto
       await page.locator('#hero').click({ position: { x: 3, y: 3 } });
       await page.waitForFunction(() => getComputedStyle(document.querySelector('#hero')).display === 'none');
 
-      await page.locator('[data-service-key="estimulacion"]').click();
-      await page.locator('#siteContentDialog[open]').waitFor();
+      const serviceTrigger = page.locator('[data-service-key="estimulacion"]');
+      await serviceTrigger.focus();
+      await page.keyboard.press('Enter');
+      const dialog = page.locator('#siteContentDialog[open]');
+      await dialog.waitFor();
       assert.match(await page.locator('#siteContentDialogTitle').innerText(), /Estimulación temprana/);
       assert.match(await page.locator('#siteContentDialogBody').innerText(), /Ejemplo para casa/);
+      assert.equal(await page.evaluate(() => document.activeElement?.id), 'siteContentDialogClose',
+        'Opening a dialog must move keyboard focus to its close control');
+
+      const dialogA11y = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+        .include('#siteContentDialog')
+        .analyze();
+      assert.deepEqual(dialogA11y.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, html: n.html, summary: n.failureSummary })), help: v.help })),
+        [], 'Service dialog WCAG automated findings');
+
+      await page.keyboard.press('Tab');
+      assert.equal(await page.evaluate(() => document.activeElement?.id), 'siteContentDialogConsult',
+        'Tab should move focus through the modal dialog controls');
+      await page.keyboard.press('Shift+Tab');
+      assert.equal(await page.evaluate(() => document.activeElement?.id), 'siteContentDialogClose',
+        'Shift+Tab should keep focus inside the modal dialog');
+      await page.keyboard.press('Escape');
+      await page.locator('#siteContentDialog:not([open])').waitFor({ state: 'hidden' });
+      assert.equal(await serviceTrigger.evaluate(el => document.activeElement === el), true,
+        'Closing with Escape must restore focus to the invoking control');
+
+      await serviceTrigger.click();
+      await page.locator('#siteContentDialog[open]').waitFor();
       await page.locator('#siteContentDialogClose').click();
       await page.locator('#siteContentDialog:not([open])').waitFor({ state: 'hidden' });
 
