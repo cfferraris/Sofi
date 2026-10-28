@@ -146,7 +146,7 @@ test('appointment flow works on desktop and mobile without sending WhatsApp mess
       assert.match(status, /todavía no está confirmado/i);
       assert.equal(await page.locator('#appointmentMessagePreview, #appointmentCopyButton, #appointmentWhatsAppLink').count(), 0,
         'Result screen must not expose message preview/copy/WhatsApp controls');
-      assert.equal(await page.locator('#appointmentRequestResult a[href="#recursos"]').count(), 1,
+      assert.equal(await page.locator('#appointmentRequestResult a[href="recursos.html"]').count(), 1,
         'Result screen must include the real free-resources destination');
       assert.equal(await page.getByText('Hola, quiero solicitar un turno con Piel de Mar.', { exact: true }).count(), 0,
         'Prepared WhatsApp message must not be rendered on the page');
