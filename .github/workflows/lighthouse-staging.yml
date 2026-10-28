@@ -1,4 +1,5 @@
 name: Lighthouse staging audit
+# Re-run post-change Lighthouse measurements when this audit workflow is updated.
 
 on:
   push:
@@ -91,7 +92,7 @@ jobs:
             source_bytes="$(curl -fsSL --max-time 20 "https://sofi-ywgo.onrender.com/$source" | wc -c)"
             minified_bytes="$(curl -fsSL --max-time 20 "https://sofi-ywgo.onrender.com/$minified" | wc -c)"
             if [ "$minified_bytes" -ge "$source_bytes" ]; then
-              echo "::error::Minified asset is not smaller: $source ($source_bytes B) vs $minified ($minified_bytes B)"
+              echo "::error::Minified asset is not smaller: $source ($source_bytes B) vs $minified: $minified_bytes B"
               exit 1
             fi
             echo "OK $source: $source_bytes B -> $minified: $minified_bytes B"
