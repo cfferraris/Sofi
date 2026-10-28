@@ -18,7 +18,7 @@ permissions:
 
 concurrency:
   group: lighthouse-staging-audit
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   lighthouse:
