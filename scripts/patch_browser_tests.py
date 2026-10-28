@@ -40,10 +40,8 @@ overrides = """
 .resources-brand span { overflow-wrap: anywhere; }
 .resources-library-page, .resources-library, .resources-catalog { min-width: 0; }
 """
-if 'Resource catalog contrast overrides' not in source:
+if 'Resource catalog contrast and narrow-screen overflow fixes' not in source:
     source += overrides
-elif 'Prevent the resource library header from overflowing narrow viewports' not in source:
-    source += overrides[overrides.index('/* Prevent the resource library header'): ]
 css.write_text(source)
 
 # Keep the served minified stylesheet synchronized with the source overrides.
