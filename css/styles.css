@@ -334,13 +334,13 @@ img {
 .navbar-logo {
     flex-shrink: 0;
     opacity: 0;
-    transform: scale(0);
-    transition: var(--transition-smooth);
+    transform: none;
+    transition: opacity 0.2s ease;
 }
 .navbar.visible .navbar-logo {
     opacity: 1;
-    transform: scale(1);
-    transition-delay: 0.3s;
+    transform: none;
+    transition-delay: 0s;
 }
 .isotipo {
     height: 50px;
@@ -475,7 +475,7 @@ img {
 .main-content {
     opacity: 0;
     transform: none;
-    transition: var(--transition-smooth);
+    transition: opacity 0.2s ease;
 }
 .main-content.visible {
     opacity: 1;
