@@ -46,7 +46,7 @@ jobs:
             echo "::error::Staging did not serve the expected WebP references within 5 minutes."
             exit 1
           fi
-      - name: Verify optimized image assets are served
+      - name: Verify optimized images and minified assets are served
         shell: bash
         run: |
           set -euo pipefail
@@ -71,6 +71,14 @@ jobs:
                   raise SystemExit(f'Asset check failed: {url} => {result.stdout.strip()} {result.stderr.strip()}')
               print(f'OK {result.stdout.strip()} {url}')
           PY
+          for asset in css/styles.min.css js/main.min.js; do
+            result="$(curl -sS -L -o /dev/null -w '%{http_code} %{size_download}' --max-time 20 "https://sofi-ywgo.onrender.com/$asset")"
+            if [[ "$result" != 200* ]]; then
+              echo "::error::Minified asset check failed: $asset => $result"
+              exit 1
+            fi
+            echo "OK $result $asset"
+          done
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
