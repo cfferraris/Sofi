@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Transición del hero
         HERO_AUTO_TRIGGER_MS:   2500,
         HERO_LOGO_MORPH_MS:      600,
-        HERO_NAVBAR_SHOW_MS:    1000,
-        HERO_CONTENT_SHOW_MS:   1300,
-        HERO_HIDE_MS:           1500,
+        HERO_NAVBAR_SHOW_MS:     700,
+        HERO_CONTENT_SHOW_MS:    800,
+        HERO_HIDE_MS:           1000,
 
         // Carrusel
         CAROUSEL_RESIZE_DEBOUNCE: 150
