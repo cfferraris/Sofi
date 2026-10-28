@@ -6,6 +6,8 @@ p = Path('tests/site-browser.test.mjs')
 s = p.read_text()
 marker = "\ntest('service and resource examples open in accessible in-site dialogs on desktop and mobile'"
 s = s.split(marker, 1)[0] + '\n'
+# The appointment result now links to the separate resource library page.
+s = s.replace("#appointmentRequestResult a[href=\"#recursos\"]", "#appointmentRequestResult a[href=\"recursos.html\"]")
 p.write_text(s)
 
 # Keep the static smoke suite aligned with the current product decisions:
@@ -14,7 +16,6 @@ p.write_text(s)
 q = Path('tests/site-smoke.test.mjs')
 s = q.read_text()
 old_service = "\ntest('services open in-site detail dialogs instead of jumping to appointment form'"
-old_resource = "\ntest('every resource category and format has an in-site example and a working dialog trigger'"
 start_service = s.find(old_service)
 if start_service != -1:
     s = s[:start_service].rstrip() + '\n'
@@ -22,11 +23,24 @@ q.write_text(s)
 
 # The deployed-flow audit must follow the redesigned resource destination.
 r = Path('tests/production-flow-audit.mjs')
-s = r.read_text()
-s = s.replace("page.locator('#appointmentRequestResult a[href=\"#recursos\"]')", "page.locator('#appointmentRequestResult a[href=\"recursos.html\"]')")
-s = s.replace("assert.equal(await page.locator('#appointmentRequestResult a[href=\"#recursos\"]').count(), 1, 'Free resources link must remain available');", "assert.equal(await page.locator('#appointmentRequestResult a[href=\"recursos.html\"]').count(), 1, 'Free resources link must remain available');")
-s = s.replace("await page.locator('#appointmentRequestResult a[href=\"#recursos\"]')", "await page.locator('#appointmentRequestResult a[href=\"recursos.html\"]')")
+s = r.read_text().replace("#appointmentRequestResult a[href=\"#recursos\"]", "#appointmentRequestResult a[href=\"recursos.html\"]")
 r.write_text(s)
+
+# Make the resource catalog contrast-safe. The original catalog used opacity
+# on text, which Axe correctly flags as a contrast failure in the rendered page.
+css = Path('css/styles.css')
+source = css.read_text()
+overrides = "\n/* Resource catalog contrast overrides: avoid opacity on text-bearing elements. */\n.resources-library-page .resource-tile b { color: #3b4d51; opacity: 1; }\n.resources-library-page .resource-category-heading > span { color: #526568; opacity: 1; }\n.resources-library-page .resources-disclaimer { color: #526568; opacity: 1; }\n"
+if 'Resource catalog contrast overrides' not in source:
+    source += overrides
+    css.write_text(source)
+
+# Keep the served minified stylesheet in sync without introducing a new build dependency.
+minified = Path('css/styles.min.css')
+min_source = minified.read_text()
+min_overrides = '.resources-library-page .resource-tile b{color:#3b4d51;opacity:1}.resources-library-page .resource-category-heading>span{color:#526568;opacity:1}.resources-library-page .resources-disclaimer{color:#526568;opacity:1}'
+if min_overrides not in min_source:
+    minified.write_text(min_source.rstrip() + min_overrides + '\n')
 
 # Preserve the existing npm scripts while keeping the JSON formatting stable.
 import json
