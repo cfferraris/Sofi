@@ -140,7 +140,7 @@ try {
         report.formFlow = {
           formHiddenAfterSubmission: await form.isHidden(),
           submitButtonVisibleAfterSubmission: await page.locator('.appointment-submit:visible').count() > 0,
-          freeResourcesLinkPresent: await page.locator('#appointmentRequestResult a[href="#recursos"]').count() === 1,
+          freeResourcesLinkPresent: await page.locator('#appointmentRequestResult a[href="recursos.html"]').count() === 1,
           whatsappTargetVerified: url.hostname === 'wa.me' && url.pathname === '/5493425004018',
           whatsappMessageIntercepted: true,
           realMessageSent: false,
