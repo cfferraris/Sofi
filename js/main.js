@@ -10,11 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ========================================
     const CONFIG = {
         // Transición del hero
-        HERO_AUTO_TRIGGER_MS:    500,
-        HERO_LOGO_MORPH_MS:      250,
-        HERO_NAVBAR_SHOW_MS:       0,
-        HERO_CONTENT_SHOW_MS:    150,
-        HERO_HIDE_MS:            700,
+        HERO_AUTO_TRIGGER_MS:   1000,
+        HERO_LOGO_MORPH_MS:      600,
+        HERO_NAVBAR_SHOW_MS:     700,
+        HERO_CONTENT_SHOW_MS:    800,
+        HERO_HIDE_MS:           1000,
 
         // Carrusel
         CAROUSEL_RESIZE_DEBOUNCE: 150
