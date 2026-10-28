@@ -14,6 +14,7 @@ const report = {
   mode: 'production browser simulation; window.open is intercepted; no WhatsApp message is sent',
   attempts: 0,
   assets: {},
+  securityHeaders: null,
   formFlow: null,
   result: 'FAIL',
   error: null
@@ -49,6 +50,29 @@ try {
         timeout: 25000
       });
       assert.ok(response && response.status() === 200, 'Published site must return HTTP 200');
+      const responseHeaders = response.headers();
+      const requiredHeaders = {
+        'referrer-policy': 'strict-origin-when-cross-origin',
+        'x-frame-options': 'DENY',
+        'x-robots-tag': 'noindex, follow'
+      };
+      for (const [name, expected] of Object.entries(requiredHeaders)) {
+        assert.equal((responseHeaders[name] || '').toLowerCase(), expected.toLowerCase(), `Missing or incorrect staging header: ${name}`);
+      }
+      const permissionsPolicy = (responseHeaders['permissions-policy'] || '').replace(/\\s/g, '');
+      assert.equal(permissionsPolicy, 'camera=(),microphone=(),geolocation=()', 'Missing or incorrect staging Permissions-Policy');
+      assert.ok(responseHeaders['strict-transport-security'], 'Strict-Transport-Security must be present');
+      assert.equal((responseHeaders['x-content-type-options'] || '').toLowerCase(), 'nosniff', 'X-Content-Type-Options must be nosniff');
+      report.securityHeaders = {
+        'referrer-policy': responseHeaders['referrer-policy'],
+        'x-frame-options': responseHeaders['x-frame-options'],
+        'permissions-policy': responseHeaders['permissions-policy'],
+        'x-robots-tag': responseHeaders['x-robots-tag'],
+        'strict-transport-security': responseHeaders['strict-transport-security'],
+        'x-content-type-options': responseHeaders['x-content-type-options'],
+        cspHttpHeaderPresent: Boolean(responseHeaders['content-security-policy']),
+        checkedAt: new Date().toISOString()
+      };
 
       const cssUrl = new URL('css/styles.css', targetUrl);
       cssUrl.searchParams.set('audit', String(attempt));
@@ -104,7 +128,7 @@ try {
         await page.locator('#appointmentRequestResult').waitFor({ state: 'visible', timeout: 5000 });
         assert.equal(await form.isHidden(), true, 'Submitted form and WhatsApp button must be hidden');
         assert.equal(await page.locator('.appointment-submit:visible').count(), 0, 'Submit button must not remain visible');
-        assert.equal(await page.locator('#appointmentRequestResult a[href="#recursos"]').count(), 1, 'Free resources link must remain available');
+        assert.equal(await page.locator('#appointmentRequestResult a[href="recursos.html"]').count(), 1, 'Free resources link must remain available');
 
         const opened = await page.evaluate(() => window.__pdmWhatsAppUrl);
         assert.ok(opened, 'WhatsApp URL must be opened by the form flow');
