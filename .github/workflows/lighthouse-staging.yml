@@ -9,6 +9,8 @@ on:
       - 'index.html'
       - 'privacidad.html'
       - 'assets/**'
+      - 'css/**'
+      - 'js/**'
   workflow_dispatch:
 
 permissions:
