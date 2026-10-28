@@ -7,8 +7,11 @@ on:
       - '.github/workflows/optimize-images.yml'
       - 'assets/img/**'
       - 'index.html'
-      - 'css/styles.css'
+      - 'scripts/optimize_images.py'
   workflow_dispatch:
+concurrency:
+  group: site-generated-assets
+  cancel-in-progress: false
 permissions:
   contents: write
 jobs:
