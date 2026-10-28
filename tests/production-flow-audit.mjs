@@ -4,14 +4,14 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { chromium } from 'playwright';
 
-const targetUrl = process.env.PRODUCTION_URL || 'https://sofi-ywgo.onrender.com/';
+const targetUrl = process.env.STAGING_URL || process.env.PRODUCTION_URL || 'https://sofi-ywgo.onrender.com/';
 const maxAttempts = 18;
 const retryDelayMs = 5000;
 const report = {
   generatedAt: new Date().toISOString(),
   url: targetUrl,
   auditedBranchSha: process.env.GITHUB_SHA || null,
-  mode: 'production browser simulation; window.open is intercepted; no WhatsApp message is sent',
+  mode: 'staging browser simulation; window.open is intercepted; no WhatsApp message is sent',
   attempts: 0,
   assets: {},
   securityHeaders: null,
