@@ -9,6 +9,6 @@
   "scripts": {
     "test": "node --test tests/site-smoke.test.mjs tests/resources-redesign.test.mjs",
     "check": "node --check js/main.js",
-    "test:e2e": "node --test tests/appointment-browser.test.mjs tests/resources-browser.test.mjs"
+    "test:e2e": "node --test tests/site-browser.test.mjs tests/resources-browser.test.mjs"
   }
 }
