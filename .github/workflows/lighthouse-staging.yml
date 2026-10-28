@@ -50,19 +50,20 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import re
+          import subprocess
           from pathlib import Path
+          from urllib.parse import quote
           html = Path('/tmp/staging-index.html').read_text()
-          refs = sorted(set(re.findall(r'[^"\' ]+\.webp', html)))
+          refs = sorted(set(re.findall(r'''(?:src|poster)=["']([^"']+\\.webp(?:\\?[^"']*)?)["']''', html, re.IGNORECASE)))
           if not refs:
-              raise SystemExit('No WebP references found in staging HTML')
+              raise SystemExit('No WebP src/poster references found in staging HTML')
           print(f'Found {len(refs)} unique WebP references in HTML')
           for ref in refs:
               path = ref.split('?', 1)[0]
               if path.startswith(('http://', 'https://')):
                   url = path
               else:
-                  url = 'https://sofi-ywgo.onrender.com/' + path.lstrip('/')
-              import subprocess
+                  url = 'https://sofi-ywgo.onrender.com/' + quote(path.lstrip('/'), safe='/')
               result = subprocess.run(['curl', '-sS', '-L', '-o', '/dev/null', '-w', '%{http_code} %{size_download}', '--max-time', '20', url], capture_output=True, text=True)
               if result.returncode or not result.stdout.startswith('200 '):
                   raise SystemExit(f'Asset check failed: {url} => {result.stdout.strip()} {result.stderr.strip()}')
