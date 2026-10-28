@@ -36,7 +36,6 @@ jobs:
         with:
           ref: audit/fix-site-baseline
       - name: Ensure staging-only X-Robots-Tag rule exists
-        if: github.event_name == 'push'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY || secrets.RENDER_API_TOKEN }}
         shell: bash
