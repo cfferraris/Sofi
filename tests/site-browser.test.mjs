@@ -265,7 +265,7 @@ test('service and resource examples open in accessible in-site dialogs on deskto
       assert.match(await page.locator('#siteContentDialogTitle').innerText(), /Estimulación temprana/);
       assert.match(await page.locator('#siteContentDialogBody').innerText(), /Ejemplo para casa/);
       await page.locator('#siteContentDialogClose').click();
-      await page.locator('#siteContentDialog:not([open])').waitFor();
+      await page.locator('#siteContentDialog:not([open])').waitFor({ state: 'hidden' });
 
       const resourceKeys = ['desarrollo', 'crianza', 'regulacion', 'juego', 'videos', 'articulos', 'guias', 'tips'];
       for (const key of resourceKeys) {
@@ -280,7 +280,7 @@ test('service and resource examples open in accessible in-site dialogs on deskto
           assert.match(download.suggestedFilename(), /piel-de-mar-guia-rutina-previsible\.html/);
         }
         await page.locator('#siteContentDialogClose').click();
-        await page.locator('#siteContentDialog:not([open])').waitFor();
+        await page.locator('#siteContentDialog:not([open])').waitFor({ state: 'hidden' });
       }
       await page.close();
     }
