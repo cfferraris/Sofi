@@ -11,6 +11,7 @@ on:
       - 'index.html'
       - 'privacidad.html'
       - 'assets/**'
+      - 'scripts/optimize_images.py'
       - 'css/**'
       - 'js/**'
   workflow_dispatch:
@@ -114,6 +115,26 @@ jobs:
           grep -A5 'id="mainLogo"' /tmp/staging-index.html | grep -q 'width="440"' || { echo "::error::Hero logo width attribute is incorrect."; exit 1; }
           grep -A5 'id="mainLogo"' /tmp/staging-index.html | grep -q 'height="317"' || { echo "::error::Hero logo height attribute is incorrect."; exit 1; }
           echo "OK hero flow, main-content reveal and logo aspect ratio"
+
+          if ! grep -q 'src="assets/img/logos/Isotipo2/Azul.webp"' /tmp/staging-index.html; then
+            echo "::error::Staging HTML does not reference the optimized navbar isotipo."
+            exit 1
+          fi
+          if ! grep -q 'href="assets/img/logos/Isotipo2/Azul.png" type="image/png"' /tmp/staging-index.html; then
+            echo "::error::PNG favicon/touch icon references must remain unchanged."
+            exit 1
+          fi
+          isotipo_result="$(curl -sS -L -o /dev/null -w '%{http_code} %{size_download}' --max-time 20 https://sofi-ywgo.onrender.com/assets/img/logos/Isotipo2/Azul.webp)"
+          if [[ "$isotipo_result" != 200* ]]; then
+            echo "::error::Optimized navbar isotipo failed: $isotipo_result"
+            exit 1
+          fi
+          isotipo_bytes="${isotipo_result#* }"
+          if [ "$isotipo_bytes" -ge 5000 ]; then
+            echo "::error::Optimized navbar isotipo is unexpectedly large: $isotipo_bytes bytes"
+            exit 1
+          fi
+          echo "OK optimized navbar isotipo: $isotipo_result"
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
