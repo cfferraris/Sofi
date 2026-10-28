@@ -222,7 +222,7 @@ img {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url('../assets/img/fondos/Pat_01_01.png');
+    background-image: url('../assets/img/fondos/Pat_01_01.webp');
     background-size: 400px;
     background-repeat: repeat;
     opacity: 0.05;
@@ -234,7 +234,7 @@ img {
 .hero-background {
     position: absolute;
     inset: 0;
-    background-image: url('../assets/img/fondos/Pat_01_01.png');
+    background-image: url('../assets/img/fondos/Pat_01_01.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
