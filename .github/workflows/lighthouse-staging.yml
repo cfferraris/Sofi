@@ -1,0 +1,128 @@
+name: Lighthouse staging audit
+
+on:
+  push:
+    branches:
+      - audit/fix-site-baseline
+    paths:
+      - '.github/workflows/lighthouse-staging.yml'
+      - 'index.html'
+      - 'privacidad.html'
+      - 'assets/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-staging-audit
+  cancel-in-progress: false
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Wait for Render staging to serve the latest image references
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="https://sofi-ywgo.onrender.com/"
+          ready=0
+          for attempt in $(seq 1 30); do
+            html="$(curl -fsSL --max-time 20 "$url" || true)"
+            if [ -n "$html" ] && grep -q '\.webp' <<< "$html"; then
+              printf '%s' "$html" > /tmp/staging-index.html
+              echo "Staging responds and contains WebP image references (attempt $attempt)."
+              ready=1
+              break
+            fi
+            echo "Staging not ready with expected content (attempt $attempt/30); retrying in 10 seconds."
+            sleep 10
+          done
+          if [ "$ready" -ne 1 ]; then
+            echo "::error::Staging did not serve the expected WebP references within 5 minutes."
+            exit 1
+          fi
+      - name: Verify optimized image assets are served
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          html = Path('/tmp/staging-index.html').read_text()
+          refs = sorted(set(re.findall(r'[^"\' ]+\.webp', html)))
+          if not refs:
+              raise SystemExit('No WebP references found in staging HTML')
+          print(f'Found {len(refs)} unique WebP references in HTML')
+          for ref in refs:
+              path = ref.split('?', 1)[0]
+              if path.startswith(('http://', 'https://')):
+                  url = path
+              else:
+                  url = 'https://sofi-ywgo.onrender.com/' + path.lstrip('/')
+              import subprocess
+              result = subprocess.run(['curl', '-sS', '-L', '-o', '/dev/null', '-w', '%{http_code} %{size_download}', '--max-time', '20', url], capture_output=True, text=True)
+              if result.returncode or not result.stdout.startswith('200 '):
+                  raise SystemExit(f'Asset check failed: {url} => {result.stdout.strip()} {result.stderr.strip()}')
+              print(f'OK {result.stdout.strip()} {url}')
+          PY
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run Lighthouse mobile
+        run: |
+          mkdir -p reports
+          npx --yes lighthouse@12.8.2 https://sofi-ywgo.onrender.com/ \
+            --chrome-flags="--headless --no-sandbox" \
+            --form-factor=mobile --screenEmulation.mobile=true \
+            --output=json --output=html --output-path=./reports/mobile \
+            --quiet
+      - name: Run Lighthouse desktop
+        run: |
+          npx --yes lighthouse@12.8.2 https://sofi-ywgo.onrender.com/ \
+            --chrome-flags="--headless --no-sandbox" \
+            --form-factor=desktop --screenEmulation.mobile=false \
+            --output=json --output=html --output-path=./reports/desktop \
+            --quiet
+      - name: Summarize scores and Core Web Vitals
+        if: always()
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          for (const device of ['mobile', 'desktop']) {
+            const path = `reports/${device}.report.json`;
+            if (!fs.existsSync(path)) {
+              console.log(`${device}: report not generated`);
+              continue;
+            }
+            const report = JSON.parse(fs.readFileSync(path, 'utf8'));
+            const cats = report.categories || {};
+            const audits = report.audits || {};
+            const score = id => cats[id]?.score == null ? 'N/A' : Math.round(cats[id].score * 100);
+            const metric = id => audits[id]?.displayValue || audits[id]?.numericValue || 'N/A';
+            console.log(JSON.stringify({
+              device,
+              performance: score('performance'),
+              accessibility: score('accessibility'),
+              bestPractices: score('best-practices'),
+              seo: score('seo'),
+              lcp: metric('largest-contentful-paint'),
+              cls: metric('cumulative-layout-shift'),
+              tbt: metric('total-blocking-time'),
+              speedIndex: metric('speed-index'),
+              fcp: metric('first-contentful-paint'),
+              report: path
+            }, null, 2));
+          }
+          NODE
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-staging-reports
+          path: reports/
+          if-no-files-found: warn
+          retention-days: 30
