@@ -58,9 +58,9 @@ jobs:
           from pathlib import Path
           from urllib.parse import quote
           html = Path('/tmp/staging-index.html').read_text()
-          refs = set(re.findall(r"""(?:src|poster)=["']([^"']+\\.webp(?:\\?[^"']*)?)["']""", html, re.IGNORECASE))
+          refs = set(re.findall(r"""(?:src|poster)=["']([^"']+\.webp(?:\?[^"']*)?)["']""", html, re.IGNORECASE))
           for srcset in re.findall(r"""srcset=["']([^"']+)["']""", html, re.IGNORECASE):
-              refs.update(re.findall(r'([^\\s,]+\\.webp)(?:\\s+\\d+w)?', srcset, re.IGNORECASE))
+              refs.update(re.findall(r'([^\s,]+\.webp)(?:\s+\d+w)?', srcset, re.IGNORECASE))
           refs = sorted(refs)
           if not refs:
               raise SystemExit('No WebP src/poster/srcset references found in staging HTML')
