@@ -33,9 +33,11 @@ jobs:
           ready=0
           for attempt in $(seq 1 30); do
             html="$(curl -fsSL --max-time 20 "$url" || true)"
-            if [ -n "$html" ] && grep -q '\.webp' <<< "$html" && grep -q 'width="440"' <<< "$html" && grep -q 'height="317"' <<< "$html"; then
+            js="$(curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/js/main.min.js || true)"
+            css="$(curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/css/styles.min.css || true)"
+            if [ -n "$html" ] && grep -q '\.webp' <<< "$html" && grep -q 'width="440"' <<< "$html" && grep -q 'height="317"' <<< "$html" && grep -q 'HERO_AUTO_TRIGGER_MS:1000' <<< "$js" && grep -q '\.hero{position:absolute' <<< "$css"; then
               printf '%s' "$html" > /tmp/staging-index.html
-              echo "Staging serves the optimized hero logo dimensions and WebP image references (attempt $attempt)."
+              echo "Staging serves the current HTML, CSS and JavaScript performance fixes (attempt $attempt)."
               ready=1
               break
             fi
