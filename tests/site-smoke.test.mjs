@@ -146,10 +146,14 @@ test('JSON-LD is valid structured data and remains separate from executable Java
   assert.doesNotMatch(match[1], /<\/script/i);
 });
 
-test('unverified social icon assets retain exact filename case but are not linked from the page', () => {
-  const iconPath = resolve(root, 'assets/icons/Instagram.svg');
-  assert.ok(existsSync(iconPath), 'Expected the Instagram SVG asset to retain its exact filename');
-  assert.doesNotMatch(html, /assets\/icons\/(?:Instagram|facebook|youtube|twitch|x)\.svg/);
+test('navbar social links are visible and use the exact icon asset paths', () => {
+  for (const icon of ['facebook.svg', 'Instagram.svg', 'youtube.svg', 'twitch.svg', 'x.svg']) {
+    assert.ok(existsSync(resolve(root, 'assets/icons/' + icon)), 'Missing social icon: ' + icon);
+    assert.ok(html.includes('assets/icons/' + icon), 'Navbar must reference social icon: ' + icon);
+  }
+  assert.match(html, /class="social-links" aria-label="Redes sociales"/);
+  assert.match(html, /class="social-links-mobile"/);
+  assert.doesNotMatch(html, /assets\/icons\/instagram\.svg/);
 });
 
 test('keyboard focus indicators use a high-contrast dual ring', () => {
@@ -177,7 +181,8 @@ test('navigation and carousel controls use native semantics', () => {
 
 test('unverified email, social profiles and family testimonials are not published as verified facts', () => {
   assert.doesNotMatch(html, /contacto@pieldemar\.com|mailto:/i);
-  assert.doesNotMatch(html, /aria-label="Redes sociales"|sameAs/);
+  assert.doesNotMatch(html, /sameAs/);
+  assert.match(html, /aria-label="Redes sociales"/);
   assert.doesNotMatch(html, /María G\.|Tomás, 3 años|Lucía y Martín|Emma, 5 años|Carolina R\.|Lucas, 4 años|Valentina M\.|Sofía, 2 años|Roberto y Ana|Mateo, 4 años/);
   assert.match(html, /Política de privacidad/);
 });
