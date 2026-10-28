@@ -260,7 +260,7 @@ test('service and resource examples open in accessible in-site dialogs on deskto
       await page.locator('#hero').click({ position: { x: 3, y: 3 } });
       await page.waitForFunction(() => getComputedStyle(document.querySelector('#hero')).display === 'none');
 
-      await page.locator('[data-service-key="estimulación"]').click();
+      await page.locator('[data-service-key="estimulacion"]').click();
       await page.locator('#siteContentDialog[open]').waitFor();
       assert.match(await page.locator('#siteContentDialogTitle').innerText(), /Estimulación temprana/);
       assert.match(await page.locator('#siteContentDialogBody').innerText(), /Ejemplo para casa/);
