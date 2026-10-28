@@ -42,6 +42,8 @@ overrides = """
 """
 if 'Resource catalog contrast and narrow-screen overflow fixes' not in source:
     source += overrides
+if 'grid 1fr must have a zero minimum' not in source:
+    source += "\\n/* Keep the mobile resource sidebar inside the viewport; grid 1fr must have a zero minimum. */\\n@media (max-width: 900px) { .resources-library { grid-template-columns: minmax(0, 1fr); } .resources-sidebar { min-width: 0; width: 100%; } .resources-sidebar nav { min-width: 0; max-width: 100%; } }\\n"
 css.write_text(source)
 
 # Keep the served minified stylesheet synchronized with the source overrides.
