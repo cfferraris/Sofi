@@ -10,8 +10,12 @@ test('services no longer expose per-service buttons or dialog markup', () => {
   assert.equal((home.match(/siteContentDialog/g) || []).length, 0);
 });
 
-test('resources open in a new tab and provide anchored catalog sections', () => {
-  assert.match(home, /href="recursos\.html" class="nav-link" target="_blank"/);
+test('homepage resources anchor to the section and cards target library categories', () => {
+  assert.match(home, /href="#recursos" class="nav-link"/);
+  for (const id of ['desarrollo','crianza','regulacion','juego','lecturas','guias']) {
+    assert.match(home, new RegExp('href="recursos\\.html#' + id + '"'));
+  }
+  assert.doesNotMatch(home, /href="recursos\.html" class="nav-link" target="_blank"/);
   for (const id of ['desarrollo','crianza','regulacion','juego','lecturas','guias']) {
     assert.match(resources, new RegExp(`id="${id}"`));
     assert.match(resources, new RegExp(`href="#${id}"`));
