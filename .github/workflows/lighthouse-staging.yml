@@ -54,7 +54,7 @@ jobs:
           from pathlib import Path
           from urllib.parse import quote
           html = Path('/tmp/staging-index.html').read_text()
-          refs = sorted(set(re.findall(r'''(?:src|poster)=["']([^"']+\\.webp(?:\\?[^"']*)?)["']''', html, re.IGNORECASE)))
+          refs = sorted(set(re.findall(r"""(?:src|poster)=["']([^"']+\.webp(?:\?[^"']*)?)["']""", html, re.IGNORECASE)))
           if not refs:
               raise SystemExit('No WebP src/poster references found in staging HTML')
           print(f'Found {len(refs)} unique WebP references in HTML')
