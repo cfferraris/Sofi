@@ -6,17 +6,17 @@
 - Pull request: [#1](https://github.com/cfferraris/Sofi/pull/1).
 - Staging: `https://sofi-ywgo.onrender.com/`.
 - `main` must remain untouched until the user explicitly authorizes the final committee and merge.
-- The services/resources content is intentionally not considered closed; the user will redefine that scope separately.
+- Services/resources scope is now defined and implemented: service cards are informational with no per-service buttons; Resources opens in a new tab as a responsive catalog with a left-side anchored category menu, six sections and 18 resource cards. Visual-design approval remains with the user.
 
 ## Status by technical block
 
 | Block | Status | Evidence / next action |
 |---|---|---|
-| HTTP security headers | Configured in Render; live verification pending | The user confirmed the four staging headers are saved: Referrer-Policy, X-Frame-Options, Permissions-Policy and staging-only X-Robots-Tag. Verify actual HTTP responses for the homepage and static assets. HSTS and X-Content-Type-Options were previously observed. Review CSP compatibility before adding it as a response header. |
-| Performance | Partial; image optimization implemented | Navbar isotipo reduced from 22,758 B PNG to 1,708 B WebP (160×160); favicon and Apple touch icon remain PNG. Latest Lighthouse audit: mobile 76, desktop 62; LCP 4.3 s / 3.9 s, CLS 0 / 0.001, TBT 150 ms / 50 ms, FCP 2.9 s / 2.4 s. The optimizer ran twice with identical HTML/CSS/report hashes. Do not claim a stable overall score improvement. LCP element render delay remains about 2.2 s and requires a design-safe follow-up. |
+| HTTP security headers | Automated live verification added; final staging run pending | The live flow audit now asserts Referrer-Policy, X-Frame-Options, Permissions-Policy, staging-only X-Robots-Tag, HSTS and X-Content-Type-Options on the staging homepage and records whether an HTTP CSP header exists. The CSP meta policy remains in HTML; do not claim an HTTP CSP header exists unless the report confirms it. |
+| Performance | Image optimization implemented; final Lighthouse report pending | Navbar isotipo reduced from 22,758 B PNG to 1,708 B WebP (160×160); favicon and Apple touch icon remain PNG. Earlier Lighthouse baseline: mobile 76, desktop 62; LCP 4.3 s / 3.9 s, CLS 0 / 0.001, TBT 150 ms / 50 ms, FCP 2.9 s / 2.4 s. The existing Lighthouse workflow runs mobile and desktop audits and uploads JSON/HTML reports. Use its latest run for final numbers; staging `noindex` can affect the SEO score. |
 | SEO | HTML staging noindex removed; live verification pending | Removed the `noindex` meta tag from both `index.html` and `privacidad.html` on `audit/fix-site-baseline`. The user confirmed `X-Robots-Tag: noindex, follow` is saved in Render for staging. Verify the live response header and ensure it is not applied to production. The checked `main` branch remains untouched. |
-| Accessibility | Automated browser checks pass; manual review pending | Home page, privacy policy and the open service dialog passed the automated WCAG 2.2 A/AA axe checks; browser tests also verified keyboard opening, focus placement, Tab/Shift+Tab, Escape and focus restoration. The successful run used the same site/test code before a generated HTML formatting-only commit. The new commit receives another CI run. A human screen-reader review is still required before claiming full WCAG conformance. |
-| Integrated closure | Pending | Run static, browser, staging, Lighthouse and HTTP-header checks on the final branch SHA; verify staging serves the same commit; attach evidence; confirm rollback readiness. |
+| Accessibility | Static and browser suites passed at SHA `8397f584fb37683c1142cf4c6056ec3702ddb64f`; final SHA rerun pending | 26 static tests and five browser tests passed, including desktop/mobile resource catalog navigation, horizontal-overflow checks, Axe WCAG 2.2 A/AA scans for home/privacy/resources, and appointment flow with WhatsApp intercepted. Per-service dialogs were removed by product decision, so their obsolete tests were removed. Automated checks do not replace a human screen-reader review or certify WCAG conformance. |
+| Integrated closure | Pending final deployed evidence | Static and browser tests pass on the last tested code snapshot. Finish the live staging audit and latest Lighthouse run against the final branch SHA, confirm the deployed assets match, then record results and rollback readiness. |
 
 ## Render staging header checklist
 
@@ -62,11 +62,11 @@ Check the response header names and values, not only the HTML source. Confirm th
 
 ## Final acceptance gate
 
-- [ ] Required security headers verified on live HTTP responses.
+- [ ] Required security headers verified on live HTTP responses by the staging audit.
 - [ ] Staging-only noindex verified in Render; noindex absent from production HTML.
-- [ ] Latest Lighthouse report reviewed; remaining LCP delay accepted or corrected with a repeatable comparison.
-- [ ] Static tests and desktop/mobile Playwright tests pass on the final branch SHA.
-- [ ] Dialog axe scan and keyboard/focus checks pass.
+- [ ] Latest mobile and desktop Lighthouse reports reviewed; remaining LCP delay accepted or corrected with a repeatable comparison.
+- [x] Static tests and desktop/mobile Playwright tests passed at SHA `8397f584fb37683c1142cf4c6056ec3702ddb64f`; rerun after final generated-asset updates.
+- [x] Resource catalog Axe scan and keyboard/navigation checks pass at the last tested SHA; no homepage service dialogs remain.
 - [ ] Staging assets match the intended branch commit.
 - [ ] Booking flow verified without sending a real WhatsApp message.
 - [ ] Rollback path documented and understood.
