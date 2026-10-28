@@ -2,7 +2,7 @@ name: Finalize browser coverage
 on:
   push:
     branches: [audit/fix-site-baseline]
-    paths: [.github/workflows/finalize-browser-tests.yml, scripts/patch_browser_tests.py, tests/resources-browser.test.mjs, package.json]
+    paths: [.github/workflows/finalize-browser-tests.yml, scripts/patch_browser_tests.py, tests/resources-browser.test.mjs, tests/site-smoke.test.mjs, tests/production-flow-audit.mjs, package.json]
 permissions:
   contents: write
 jobs:
@@ -22,8 +22,12 @@ jobs:
       - run: npm run check && npm test && npm run test:e2e
       - name: Commit
         run: |
+          if git diff --quiet; then
+            echo 'No patch changes required.'
+            exit 0
+          fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add tests/site-browser.test.mjs tests/resources-browser.test.mjs package.json
-          git commit -m 'test: cover redesigned resources library'
+          git add tests/site-browser.test.mjs tests/resources-browser.test.mjs tests/site-smoke.test.mjs tests/production-flow-audit.mjs scripts/patch_browser_tests.py package.json
+          git commit -m 'test: align redesigned site audit coverage'
           git push origin HEAD:audit/fix-site-baseline
