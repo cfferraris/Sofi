@@ -1,0 +1,27 @@
+name: Finalize resources presentation
+on:
+  push:
+    branches: [audit/fix-site-baseline]
+    paths: [.github/workflows/finalize-resources-redesign.yml, scripts/finalize_resources.py]
+permissions:
+  contents: write
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/fix-site-baseline
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/finalize_resources.py
+      - run: npx --yes esbuild@0.25.11 css/styles.css --minify --outfile=css/styles.min.css && npx --yes esbuild@0.25.11 js/main.js --minify --outfile=js/main.min.js
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html recursos.html css/styles.css css/styles.min.css js/main.min.js
+          git commit -m 'fix: finalize resources thumbnails and remove unused dialog'
+          git push origin HEAD:audit/fix-site-baseline
