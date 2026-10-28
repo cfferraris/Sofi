@@ -35,6 +35,29 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: audit/fix-site-baseline
+      - name: Ensure staging-only X-Robots-Tag rule exists
+        if: github.event_name == 'push'
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY || secrets.RENDER_API_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${RENDER_API_KEY:-}" ]; then
+            echo "::warning::No RENDER_API_KEY or RENDER_API_TOKEN secret is available; the staging noindex header must be configured in Render Dashboard."
+            exit 0
+          fi
+          api="https://api.render.com/v1/services/srv-d6488ksr85hc73bmgi90/headers"
+          headers="$(curl -fsS --max-time 20 -H "Authorization: Bearer $RENDER_API_KEY" -H "Accept: application/json" "$api?limit=100")"
+          if jq -e 'any(.[]; ((.header.name | ascii_downcase) == "x-robots-tag") and .header.path == "/*" and .header.value == "noindex, follow")' <<< "$headers" >/dev/null; then
+            echo "Staging-only X-Robots-Tag rule already exists."
+          else
+            curl -fsS --max-time 20 --request POST "$api" \
+              -H "Authorization: Bearer $RENDER_API_KEY" \
+              -H "Accept: application/json" \
+              -H "Content-Type: application/json" \
+              --data '{"path":"/*","name":"X-Robots-Tag","value":"noindex, follow"}'
+            echo "Added X-Robots-Tag: noindex, follow to the staging service only."
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: 22
