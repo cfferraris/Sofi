@@ -1,0 +1,53 @@
+name: Live staging acceptance audit
+on:
+  push:
+    branches: [audit/fix-site-baseline]
+    paths:
+      - .github/workflows/live-staging-audit.yml
+      - tests/production-flow-audit.mjs
+      - docs/technical-audit-closure.md
+      - index.html
+      - privacidad.html
+      - css/**
+      - js/**
+      - recursos.html
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/live-staging-audit.yml
+      - tests/production-flow-audit.mjs
+      - docs/technical-audit-closure.md
+      - index.html
+      - privacidad.html
+      - css/**
+      - js/**
+      - recursos.html
+permissions:
+  contents: read
+concurrency:
+  group: live-staging-acceptance-${{ github.event_name }}
+  cancel-in-progress: true
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/fix-site-baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-save --package-lock=false playwright
+      - run: npx playwright install --with-deps chromium
+      - name: Verify staging headers, deployed assets and appointment flow
+        env:
+          STAGING_URL: https://sofi-ywgo.onrender.com/
+        run: node tests/production-flow-audit.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: piel-de-mar-live-staging-audit
+          path: artifacts/production-flow-audit.json
+          if-no-files-found: warn
+          retention-days: 30
