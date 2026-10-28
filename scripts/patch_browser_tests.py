@@ -31,14 +31,17 @@ r.write_text(s)
 css = Path('css/styles.css')
 source = css.read_text()
 overrides = "\n/* Resource catalog contrast overrides: avoid opacity on text-bearing elements. */\n.resources-library-page .resource-tile b { color: #3b4d51; opacity: 1; }\n.resources-library-page .resource-category-heading > span { color: #526568; opacity: 1; }\n.resources-library-page .resources-disclaimer { color: #526568; opacity: 1; }\n"
+responsive = "\\n/* Prevent the resource library header from overflowing narrow viewports. */\\n.resources-library-header { flex-wrap: wrap; gap: .75rem; }\\n.resources-brand { min-width: 0; }\\n.resources-brand span { overflow-wrap: anywhere; }\\n.resources-library-page, .resources-library, .resources-catalog { min-width: 0; }\\n"
 if 'Resource catalog contrast overrides' not in source:
     source += overrides
-    css.write_text(source)
+if 'Prevent the resource library header from overflowing narrow viewports' not in source:
+    source += responsive
+css.write_text(source)
 
 # Keep the served minified stylesheet in sync without introducing a new build dependency.
 minified = Path('css/styles.min.css')
 min_source = minified.read_text()
-min_overrides = '.resources-library-page .resource-tile b{color:#3b4d51;opacity:1}.resources-library-page .resource-category-heading>span{color:#526568;opacity:1}.resources-library-page .resources-disclaimer{color:#526568;opacity:1}'
+min_overrides = '.resources-library-page .resource-tile b{color:#3b4d51;opacity:1}.resources-library-page .resource-category-heading>span{color:#526568;opacity:1}.resources-library-page .resources-disclaimer{color:#526568;opacity:1}.resources-library-header{flex-wrap:wrap;gap:.75rem}.resources-brand{min-width:0}.resources-brand span{overflow-wrap:anywhere}.resources-library-page,.resources-library,.resources-catalog{min-width:0}'
 if min_overrides not in min_source:
     minified.write_text(min_source.rstrip() + min_overrides + '\n')
 
