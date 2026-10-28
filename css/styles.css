@@ -2881,3 +2881,10 @@ body:has(.navbar.visible) .whatsapp-float {
 .resources-brand { min-width: 0; }
 .resources-brand span { overflow-wrap: anywhere; }
 .resources-library-page, .resources-library, .resources-catalog { min-width: 0; }
+
+/* Keep the mobile resource sidebar inside the viewport; grid 1fr must have a zero minimum. */
+@media (max-width: 900px) {
+  .resources-library { grid-template-columns: minmax(0, 1fr); }
+  .resources-sidebar { min-width: 0; width: 100%; }
+  .resources-sidebar nav { min-width: 0; max-width: 100%; }
+}
