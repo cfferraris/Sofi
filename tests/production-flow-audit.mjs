@@ -50,6 +50,7 @@ try {
         timeout: 25000
       });
       assert.ok(response && response.status() === 200, 'Published site must return HTTP 200');
+      assetsMatch = true; // Fail immediately on header/flow errors; only retry asset-version mismatches.
       const responseHeaders = response.headers();
       const requiredHeaders = {
         'referrer-policy': 'strict-origin-when-cross-origin',
