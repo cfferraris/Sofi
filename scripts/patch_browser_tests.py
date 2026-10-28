@@ -51,7 +51,7 @@ min_overrides = '.resources-library-page .resource-tile b{color:#3b4d51;opacity:
 if '.resources-library-header{flex-wrap:wrap;gap:.75rem}' not in min_source:
     min_source = min_source.rstrip() + min_overrides
 min_grid_fix = '@media(max-width:900px){.resources-library{grid-template-columns:minmax(0,1fr)}.resources-sidebar{min-width:0;width:100%}.resources-sidebar nav{min-width:0;max-width:100%}}'
-if 'grid 1fr must have a zero minimum' not in min_source:
+if '.resources-sidebar nav{min-width:0;max-width:100%}' not in min_source:
     min_source = min_source.rstrip() + min_grid_fix
 minified.write_text(min_source.rstrip() + '\n')
 
