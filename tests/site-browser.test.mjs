@@ -252,10 +252,11 @@ test('service and resource examples open in accessible in-site dialogs on deskto
       { name: 'desktop', width: 1365, height: 900 },
       { name: 'mobile', width: 390, height: 844 }
     ]) {
-      const page = await browser.newPage({
+      const context = await browser.newContext({
         viewport: { width: viewport.width, height: viewport.height },
         reducedMotion: 'reduce'
       });
+      const page = await context.newPage();
       page.on('pageerror', error => failures.push(viewport.name + ': ' + error.message));
       await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
       await page.locator('#hero').click({ position: { x: 3, y: 3 } });
