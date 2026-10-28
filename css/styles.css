@@ -17,7 +17,7 @@
     src: url('../assets/tipografias/Belgan-Aesthetic.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
-    font-display: fallback;
+    font-display: swap;
 }
 
 @font-face {
@@ -25,70 +25,70 @@
     src: url('../assets/tipografias/Fahkwang-Light.ttf') format('truetype');
     font-weight: 300;
     font-style: normal;
-    font-display: fallback;
+    font-display: swap;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-LightItalic.ttf') format('truetype');
     font-weight: 300;
     font-style: italic;
-    font-display: fallback;
+    font-display: swap;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
-    font-display: fallback;
+    font-display: swap;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-Italic.ttf') format('truetype');
     font-weight: 400;
     font-style: italic;
-    font-display: fallback;
+    font-display: swap;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
-    font-display: fallback;
+    font-display: swap;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-MediumItalic.ttf') format('truetype');
     font-weight: 500;
     font-style: italic;
-    font-display: fallback;
+    font-display: swap;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-SemiBold.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
-    font-display: fallback;
+    font-display: swap;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-SemiBoldItalic.ttf') format('truetype');
     font-weight: 600;
     font-style: italic;
-    font-display: fallback;
+    font-display: swap;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
-    font-display: fallback;
+    font-display: swap;
 }
 @font-face {
     font-family: 'Fahkwang';
     src: url('../assets/tipografias/Fahkwang-BoldItalic.ttf') format('truetype');
     font-weight: 700;
     font-style: italic;
-    font-display: fallback;
+    font-display: swap;
 }
 
 /* ========================================
