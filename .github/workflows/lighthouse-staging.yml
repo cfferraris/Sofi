@@ -70,7 +70,7 @@ jobs:
               if path.startswith(('http://', 'https://')):
                   url = path
               else:
-                  url = 'https://sofi-ywgo.onrender.com/' + quote(path.lstrip('/'), safe='/')
+                  url = 'https://sofi-ywgo.onrender.com/' + quote(path.lstrip('/'), safe='/%')
               result = subprocess.run(['curl', '-sS', '-L', '-o', '/dev/null', '-w', '%{http_code} %{size_download}', '--max-time', '20', url], capture_output=True, text=True)
               if result.returncode or not result.stdout.startswith('200 '):
                   raise SystemExit(f'Asset check failed: {url} => {result.stdout.strip()} {result.stderr.strip()}')
