@@ -72,18 +72,18 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
       - name: Run Lighthouse mobile
         run: |
           mkdir -p reports
-          npx --yes lighthouse@12.8.2 https://sofi-ywgo.onrender.com/ \
+          npx --yes lighthouse@13.5.0 https://sofi-ywgo.onrender.com/ \
             --chrome-flags="--headless --no-sandbox" \
             --form-factor=mobile --screenEmulation.mobile=true \
             --output=json --output=html --output-path=./reports/mobile \
             --quiet
       - name: Run Lighthouse desktop
         run: |
-          npx --yes lighthouse@12.8.2 https://sofi-ywgo.onrender.com/ \
+          npx --yes lighthouse@13.5.0 https://sofi-ywgo.onrender.com/ \
             --chrome-flags="--headless --no-sandbox" \
             --form-factor=desktop --screenEmulation.mobile=false \
             --output=json --output=html --output-path=./reports/desktop \
