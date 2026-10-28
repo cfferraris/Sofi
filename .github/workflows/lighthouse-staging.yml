@@ -99,6 +99,14 @@ jobs:
             exit 1
           fi
           echo "OK deployed hero transition is 2500 ms"
+
+          curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/css/styles.min.css -o /tmp/styles.min.css
+          grep -q '\.hero{position:absolute' /tmp/styles.min.css || { echo "::error::Hero must be out of document flow to prevent CLS."; exit 1; }
+          grep -q '\.main-content{opacity:0;transform:none' /tmp/styles.min.css || { echo "::error::Main content reveal must not translate the full page."; exit 1; }
+          curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/ -o /tmp/staging-index.html
+          grep -A5 'id="mainLogo"' /tmp/staging-index.html | grep -q 'width="440"' || { echo "::error::Hero logo width attribute is incorrect."; exit 1; }
+          grep -A5 'id="mainLogo"' /tmp/staging-index.html | grep -q 'height="317"' || { echo "::error::Hero logo height attribute is incorrect."; exit 1; }
+          echo "OK hero flow, main-content reveal and logo aspect ratio"
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
