@@ -1,4 +1,5 @@
 from pathlib import Path
+from urllib.parse import quote
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,6 +19,7 @@ TARGETS = [
 ]
 IMAGE_DIR = ROOT / 'assets' / 'img'
 rows = []
+responsive_rows = []
 html = INDEX.read_text(encoding='utf-8')
 css = STYLES.read_text(encoding='utf-8')
 
@@ -51,6 +53,25 @@ for name in TARGETS:
             css_old_ref = '../' + old_ref
             css_new_ref = '../' + new_ref
             css = css.replace(css_old_ref, css_new_ref)
+
+            # Add an 800 px responsive candidate for the eight editorial images.
+            # The full-size WebP remains available for larger viewports and as fallback.
+            if name not in ('logos/LogoPrincipal/Verde.png', 'fondos/Pat_01_01.png'):
+                variant = image.copy()
+                variant.thumbnail((800, 800), Image.Resampling.LANCZOS)
+                variant_path = source.with_name(source.stem + '-800.webp')
+                variant.save(variant_path, 'WEBP', quality=82, method=6, optimize=True)
+                if variant_path.stat().st_size < output.stat().st_size and variant.width < image.width:
+                    variant_ref = variant_path.relative_to(ROOT).as_posix()
+                    variant_url = quote(variant_ref, safe='/:')
+                    full_url = quote(new_ref, safe='/:')
+                    sizes = '(max-width: 768px) 100vw, 50vw' if source.name in ('familia en consullta.png', 'Ubicacion.png') else '100vw'
+                    source_markup = f'src="{new_ref}"'
+                    responsive_markup = f'src="{new_ref}" srcset="{variant_url} {variant.width}w, {full_url} {image.width}w" sizes="{sizes}"'
+                    html = html.replace(source_markup, responsive_markup)
+                    responsive_rows.append((name, output.stat().st_size, variant_path.stat().st_size, image.width, variant.width))
+                else:
+                    variant_path.unlink(missing_ok=True)
         rows.append((name, original_bytes, optimized_bytes if use_webp else None, original_size, image.size, use_webp))
 
 INDEX.write_text(html, encoding='utf-8')
@@ -71,6 +92,20 @@ lines = [
 for name, before, after, old_dims, new_dims, used in rows:
     webp = f'{after:,} B' if after is not None else 'not retained (not smaller)'
     lines.append(f'| {name} | {before:,} B | {webp} | {old_dims[0]}×{old_dims[1]} | {new_dims[0]}×{new_dims[1]} | {"yes" if used else "no"} |')
+if responsive_rows:
+    lines.extend([
+        '',
+        '## Responsive WebP variants',
+        '',
+        'The HTML uses srcset so browsers can select an 800 px variant on narrower displays and retain the full-size WebP for larger displays.',
+        '',
+        '| Image | Full WebP | 800w variant | Widths |',
+        '|---|---:|---:|---:|',
+    ])
+    for name, full_bytes, variant_bytes, full_width, variant_width in responsive_rows:
+        lines.append(f'| {name} | {full_bytes:,} B | {variant_bytes:,} B | {variant_width}px / {full_width}px |')
+    responsive_saved = sum(full - variant for _, full, variant, _, _ in responsive_rows)
+    lines.extend(['', f'**Potential reduction when the 800 px candidate is selected:** {responsive_saved:,} B across the eight editorial images.'])
 saved = total_before - total_after
 percent = (saved / total_before * 100) if total_before else 0
 lines.extend(['', f'**Total source size:** {total_before:,} B', f'**Total served size for these {len(rows)} images after conversion:** {total_after:,} B', f'**Estimated reduction:** {saved:,} B ({percent:.1f}%).', '', 'This report measures file bytes, not Lighthouse or Core Web Vitals. Those require a browser-based performance run against the deployed build.'])
