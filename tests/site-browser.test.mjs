@@ -108,7 +108,7 @@ test('appointment flow works on desktop and mobile without sending WhatsApp mess
         const menu = page.locator('#menuToggle');
         await menu.click();
         assert.equal(await menu.getAttribute('aria-expanded'), 'true');
-        await page.locator('#navMenu a[href="#recursos"]').click();
+        await page.locator('#navMenu a[href="recursos.html"]').click();
         assert.equal(await menu.getAttribute('aria-expanded'), 'false');
       }
 
@@ -241,79 +241,4 @@ test('home page and privacy policy have no automated WCAG 2.2 A/AA violations', 
   } finally {
     await browser.close();
   }
-});
-
-
-test('service and resource examples open in accessible in-site dialogs on desktop and mobile', async () => {
-  const browser = await chromium.launch({ headless: true });
-  const failures = [];
-  try {
-    for (const viewport of [
-      { name: 'desktop', width: 1365, height: 900 },
-      { name: 'mobile', width: 390, height: 844 }
-    ]) {
-      const context = await browser.newContext({
-        viewport: { width: viewport.width, height: viewport.height },
-        reducedMotion: 'reduce'
-      });
-      const page = await context.newPage();
-      page.on('pageerror', error => failures.push(viewport.name + ': ' + error.message));
-      await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
-      await page.locator('#hero').click({ position: { x: 3, y: 3 } });
-      await page.waitForFunction(() => getComputedStyle(document.querySelector('#hero')).display === 'none');
-
-      const serviceTrigger = page.locator('[data-service-key="estimulacion"]');
-      await serviceTrigger.focus();
-      await page.keyboard.press('Enter');
-      const dialog = page.locator('#siteContentDialog[open]');
-      await dialog.waitFor();
-      assert.match(await page.locator('#siteContentDialogTitle').innerText(), /Estimulación temprana/);
-      assert.match(await page.locator('#siteContentDialogBody').innerText(), /Ejemplo para casa/);
-      assert.equal(await page.evaluate(() => document.activeElement?.id), 'siteContentDialogClose',
-        'Opening a dialog must move keyboard focus to its close control');
-
-      const dialogA11y = await new AxeBuilder({ page })
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-        .include('#siteContentDialog')
-        .analyze();
-      assert.deepEqual(dialogA11y.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, html: n.html, summary: n.failureSummary })), help: v.help })),
-        [], 'Service dialog WCAG automated findings');
-
-      await page.keyboard.press('Tab');
-      assert.equal(await page.evaluate(() => document.activeElement?.id), 'siteContentDialogConsult',
-        'Tab should move focus through the modal dialog controls');
-      await page.keyboard.press('Shift+Tab');
-      assert.equal(await page.evaluate(() => document.activeElement?.id), 'siteContentDialogClose',
-        'Shift+Tab should keep focus inside the modal dialog');
-      await page.keyboard.press('Escape');
-      await page.locator('#siteContentDialog:not([open])').waitFor({ state: 'hidden' });
-      assert.equal(await serviceTrigger.evaluate(el => document.activeElement === el), true,
-        'Closing with Escape must restore focus to the invoking control');
-
-      await serviceTrigger.click();
-      await page.locator('#siteContentDialog[open]').waitFor();
-      await page.locator('#siteContentDialogClose').click();
-      await page.locator('#siteContentDialog:not([open])').waitFor({ state: 'hidden' });
-
-      const resourceKeys = ['desarrollo', 'crianza', 'regulacion', 'juego', 'videos', 'articulos', 'guias', 'tips'];
-      for (const key of resourceKeys) {
-        await page.locator('[data-resource-key="' + key + '"]').click();
-        await page.locator('#siteContentDialog[open]').waitFor();
-        assert.ok((await page.locator('#siteContentDialogTitle').innerText()).trim().length > 0, key + ': title required');
-        assert.ok((await page.locator('#siteContentDialogBody').innerText()).trim().length > 50, key + ': sample material required');
-        if (key === 'guias') {
-          const downloadPromise = page.waitForEvent('download');
-          await page.locator('#siteContentDialogDownload').click();
-          const download = await downloadPromise;
-          assert.match(download.suggestedFilename(), /piel-de-mar-guia-rutina-previsible\.html/);
-        }
-        await page.locator('#siteContentDialogClose').click();
-        await page.locator('#siteContentDialog:not([open])').waitFor({ state: 'hidden' });
-      }
-      await page.close();
-    }
-  } finally {
-    await browser.close();
-  }
-  assert.deepEqual(failures, [], 'No uncaught JavaScript errors should occur in service/resource dialogs');
 });
