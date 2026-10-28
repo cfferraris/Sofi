@@ -277,7 +277,7 @@ img {
     transition: var(--transition-smooth);
 }
 .logo-container.transitioning {
-    animation: logoToCorner 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: logoToCorner 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 @keyframes logoToCorner {
     to {
