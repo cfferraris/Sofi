@@ -366,7 +366,7 @@
                         </div>
                         <h3>Estimulación temprana</h3>
                         <p>Actividades personalizadas para potenciar el desarrollo integral de tu hijo según su edad y necesidades.</p>
-                        <a href="#consulta" class="btn link">Conocer más</a>
+                        <button type="button" class="btn link" data-service-key="estimulación">Conocer más</button>
                     </article>
 
                     <article class="service-card">
@@ -375,7 +375,7 @@
                         </div>
                         <h3>Acompañamiento emocional</h3>
                         <p>Herramientas para que tu hijo aprenda a identificar y gestionar sus emociones de forma saludable.</p>
-                        <a href="#consulta" class="btn link">Conocer más</a>
+                        <button type="button" class="btn link" data-service-key="emocional">Conocer más</button>
                     </article>
 
                     <article class="service-card">
@@ -384,7 +384,7 @@
                         </div>
                         <h3>Neurodesarrollo infantil</h3>
                         <p>Detección temprana de señales de alerta e intervención oportuna para optimizar su desarrollo.</p>
-                        <a href="#consulta" class="btn link">Conocer más</a>
+                        <button type="button" class="btn link" data-service-key="neurodesarrollo">Conocer más</button>
                     </article>
 
                     <article class="service-card">
@@ -393,7 +393,7 @@
                         </div>
                         <h3>Acompañamiento familiar</h3>
                         <p>Orientación para madres y padres que buscan una crianza consciente, respetuosa y conectada.</p>
-                        <a href="#consulta" class="btn link">Conocer más</a>
+                        <button type="button" class="btn link" data-service-key="familiar">Conocer más</button>
                     </article>
                 </div>
             </div>
@@ -407,112 +407,93 @@
             </div>
         </section>
 
-        <!-- Sección Recursos -->
+        <!-- Sección Recursos: materiales de ejemplo disponibles dentro del sitio -->
         <section id="recursos" class="resources-section" aria-labelledby="recursos-heading">
             <div class="container">
+                <p class="section-eyebrow">Biblioteca para acompañar en casa</p>
                 <h2 id="recursos-heading">Recursos gratuitos para acompañar el desarrollo</h2>
+                <p class="resources-intro">Ideas claras, propuestas cotidianas y materiales de orientación para consultar a tu ritmo. Elegí un tema para ver el contenido de ejemplo.</p>
                 <div class="resources-cards-container">
-
-                    <!-- Tarjeta 1: Temáticas -->
                     <article class="resources-main-card">
+                        <div class="resources-card-heading">
+                            <span class="resources-card-kicker">Explorá por tema</span>
+                            <h3>¿Qué necesitás acompañar hoy?</h3>
+                        </div>
                         <div class="card-options">
-                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&amp;sort=dd&amp;shelf_id=1" target="_blank" rel="noopener noreferrer" class="resource-option">
-                                <div class="option-icon" aria-hidden="true">
-                                    <i data-lucide="sprout"></i>
-                                </div>
-                                <div class="option-content">
-                                    <strong>Desarrollo infantil</strong>
-                                    <span>Hitos esperables, señales de alerta y cómo acompañar cada etapa</span>
-                                </div>
+                            <button type="button" class="resource-option" data-resource-key="desarrollo">
+                                <span class="option-icon" aria-hidden="true"><i data-lucide="sprout"></i></span>
+                                <span class="option-content"><strong>Desarrollo infantil</strong><span>Hitos, observación cotidiana y señales para consultar.</span></span>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
-                            </a>
-
-                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&amp;sort=dd&amp;shelf_id=2" target="_blank" rel="noopener noreferrer" class="resource-option">
-                                <div class="option-icon" aria-hidden="true">
-                                    <i data-lucide="heart"></i>
-                                </div>
-                                <div class="option-content">
-                                    <strong>Crianza respetuosa</strong>
-                                    <span>Estrategias para criar desde el respeto mutuo y la conexión genuina</span>
-                                </div>
+                            </button>
+                            <button type="button" class="resource-option" data-resource-key="crianza">
+                                <span class="option-icon" aria-hidden="true"><i data-lucide="heart"></i></span>
+                                <span class="option-content"><strong>Crianza respetuosa</strong><span>Límites claros, conexión y acompañamiento sin humillar.</span></span>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
-                            </a>
-
-                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&amp;sort=dd&amp;shelf_id=3" target="_blank" rel="noopener noreferrer" class="resource-option">
-                                <div class="option-icon" aria-hidden="true">
-                                    <i data-lucide="brain-circuit"></i>
-                                </div>
-                                <div class="option-content">
-                                    <strong>Regulación emocional</strong>
-                                    <span>Herramientas para ayudar a tu hijo a gestionar lo que siente</span>
-                                </div>
+                            </button>
+                            <button type="button" class="resource-option" data-resource-key="regulacion">
+                                <span class="option-icon" aria-hidden="true"><i data-lucide="brain-circuit"></i></span>
+                                <span class="option-content"><strong>Regulación emocional</strong><span>Qué hacer antes, durante y después de un momento intenso.</span></span>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
-                            </a>
-
-                            <a href="https://www.youtube.com/@pieldemar/playlists?view=50&amp;sort=dd&amp;shelf_id=4" target="_blank" rel="noopener noreferrer" class="resource-option">
-                                <div class="option-icon" aria-hidden="true">
-                                    <i data-lucide="puzzle"></i>
-                                </div>
-                                <div class="option-content">
-                                    <strong>Juego y estimulación</strong>
-                                    <span>Actividades simples para estimular sin sobreexigir ni presionar</span>
-                                </div>
+                            </button>
+                            <button type="button" class="resource-option" data-resource-key="juego">
+                                <span class="option-icon" aria-hidden="true"><i data-lucide="puzzle"></i></span>
+                                <span class="option-content"><strong>Juego y estimulación</strong><span>Propuestas sencillas con objetos cotidianos.</span></span>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
-                            </a>
+                            </button>
                         </div>
                     </article>
-
-                    <!-- Tarjeta 2: Tipos de recursos -->
                     <article class="resources-main-card">
+                        <div class="resources-card-heading">
+                            <span class="resources-card-kicker">Elegí un formato</span>
+                            <h3>Ideas para llevar a la práctica</h3>
+                        </div>
                         <div class="card-options">
-                            <a href="https://www.youtube.com/@pieldemar" target="_blank" rel="noopener noreferrer" class="resource-option">
-                                <div class="option-icon" aria-hidden="true">
-                                    <i data-lucide="youtube"></i>
-                                </div>
-                                <div class="option-content">
-                                    <strong>Videos educativos</strong>
-                                    <span>Explicaciones breves y prácticas en nuestro canal de YouTube</span>
-                                </div>
+                            <button type="button" class="resource-option" data-resource-key="videos">
+                                <span class="option-icon" aria-hidden="true"><i data-lucide="clapperboard"></i></span>
+                                <span class="option-content"><strong>Videos educativos</strong><span>Guion de muestra con una explicación breve y práctica.</span></span>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
-                            </a>
-
-                            <span class="resource-option resource-option--disabled" aria-disabled="true" title="Próximamente">
-                                <div class="option-icon" aria-hidden="true">
-                                    <i data-lucide="book-open"></i>
-                                </div>
-                                <div class="option-content">
-                                    <strong>Artículos y bibliografía</strong>
-                                    <span>Ensayos basados en evidencia y bibliografía recomendada <em>(próximamente)</em></span>
-                                </div>
+                            </button>
+                            <button type="button" class="resource-option" data-resource-key="articulos">
+                                <span class="option-icon" aria-hidden="true"><i data-lucide="book-open"></i></span>
+                                <span class="option-content"><strong>Artículos y bibliografía</strong><span>Lectura introductoria y preguntas para reflexionar.</span></span>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
-                            </span>
-
-                            <span class="resource-option resource-option--disabled" aria-disabled="true" title="Próximamente">
-                                <div class="option-icon" aria-hidden="true">
-                                    <i data-lucide="download"></i>
-                                </div>
-                                <div class="option-content">
-                                    <strong>Guías descargables</strong>
-                                    <span>Materiales en PDF listos para descargar e imprimir <em>(próximamente)</em></span>
-                                </div>
+                            </button>
+                            <button type="button" class="resource-option" data-resource-key="guias">
+                                <span class="option-icon" aria-hidden="true"><i data-lucide="file-down"></i></span>
+                                <span class="option-content"><strong>Guías descargables</strong><span>Una guía de ejemplo para guardar o imprimir.</span></span>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
-                            </span>
-
-                            <span class="resource-option resource-option--disabled" aria-disabled="true" title="Próximamente">
-                                <div class="option-icon" aria-hidden="true">
-                                    <i data-lucide="lightbulb"></i>
-                                </div>
-                                <div class="option-content">
-                                    <strong>Tips rápidos</strong>
-                                    <span>Consejos breves para aplicar en situaciones del día a día <em>(próximamente)</em></span>
-                                </div>
+                            </button>
+                            <button type="button" class="resource-option" data-resource-key="tips">
+                                <span class="option-icon" aria-hidden="true"><i data-lucide="lightbulb"></i></span>
+                                <span class="option-content"><strong>Tips rápidos</strong><span>Pequeñas acciones que podés probar en la rutina.</span></span>
                                 <i data-lucide="arrow-right" class="option-arrow" aria-hidden="true"></i>
-                            </span>
+                            </button>
                         </div>
                     </article>
                 </div>
+                <p class="resources-note">El contenido es orientativo y educativo. No reemplaza una evaluación individual ni una consulta con profesionales de salud o desarrollo.</p>
             </div>
         </section>
+
+        <!-- Diálogo reutilizable para servicios y recursos -->
+        <dialog id="siteContentDialog" class="site-content-dialog" aria-labelledby="siteContentDialogTitle" aria-describedby="siteContentDialogBody">
+            <div class="site-dialog-shell">
+                <header class="site-dialog-header">
+                    <div>
+                        <p class="site-dialog-eyebrow" id="siteContentDialogEyebrow">Piel de Mar · Orientación</p>
+                        <h2 id="siteContentDialogTitle">Más información</h2>
+                    </div>
+                    <button type="button" class="site-dialog-close" id="siteContentDialogClose" aria-label="Cerrar ventana">
+                        <i data-lucide="x" aria-hidden="true"></i>
+                    </button>
+                </header>
+                <div class="site-dialog-body" id="siteContentDialogBody"></div>
+                <footer class="site-dialog-footer" id="siteContentDialogFooter">
+                    <p>Si necesitás orientación para tu situación particular, podés solicitar una consulta.</p>
+                    <button type="button" class="btn btn-primary" id="siteContentDialogConsult">Consultar por este tema</button>
+                </footer>
+            </div>
+        </dialog>
 
         <!-- Sección de solicitud de turnos: la confirmación es manual por WhatsApp -->
         <section id="consulta" class="consultation-section" aria-labelledby="consulta-heading">

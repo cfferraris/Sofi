@@ -241,3 +241,51 @@ test('home page and privacy policy have no automated WCAG 2.2 A/AA violations', 
     await browser.close();
   }
 });
+
+
+test('service and resource examples open in accessible in-site dialogs on desktop and mobile', async () => {
+  const browser = await chromium.launch({ headless: true });
+  const failures = [];
+  try {
+    for (const viewport of [
+      { name: 'desktop', width: 1365, height: 900 },
+      { name: 'mobile', width: 390, height: 844 }
+    ]) {
+      const page = await browser.newPage({
+        viewport: { width: viewport.width, height: viewport.height },
+        reducedMotion: 'reduce'
+      });
+      page.on('pageerror', error => failures.push(viewport.name + ': ' + error.message));
+      await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+      await page.locator('#hero').click({ position: { x: 3, y: 3 } });
+      await page.waitForFunction(() => getComputedStyle(document.querySelector('#hero')).display === 'none');
+
+      await page.locator('[data-service-key="estimulación"]').click();
+      await page.locator('#siteContentDialog[open]').waitFor();
+      assert.match(await page.locator('#siteContentDialogTitle').innerText(), /Estimulación temprana/);
+      assert.match(await page.locator('#siteContentDialogBody').innerText(), /Ejemplo para casa/);
+      await page.locator('#siteContentDialogClose').click();
+      await page.locator('#siteContentDialog:not([open])').waitFor();
+
+      const resourceKeys = ['desarrollo', 'crianza', 'regulacion', 'juego', 'videos', 'articulos', 'guias', 'tips'];
+      for (const key of resourceKeys) {
+        await page.locator('[data-resource-key="' + key + '"]').click();
+        await page.locator('#siteContentDialog[open]').waitFor();
+        assert.ok((await page.locator('#siteContentDialogTitle').innerText()).trim().length > 0, key + ': title required');
+        assert.ok((await page.locator('#siteContentDialogBody').innerText()).trim().length > 50, key + ': sample material required');
+        if (key === 'guias') {
+          const downloadPromise = page.waitForEvent('download');
+          await page.locator('#siteContentDialogDownload').click();
+          const download = await downloadPromise;
+          assert.match(download.suggestedFilename(), /piel-de-mar-guia-rutina-previsible\.html/);
+        }
+        await page.locator('#siteContentDialogClose').click();
+        await page.locator('#siteContentDialog:not([open])').waitFor();
+      }
+      await page.close();
+    }
+  } finally {
+    await browser.close();
+  }
+  assert.deepEqual(failures, [], 'No uncaught JavaScript errors should occur in service/resource dialogs');
+});

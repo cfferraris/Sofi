@@ -186,3 +186,22 @@ test('no-JavaScript fallback is present so the hero cannot block access to the p
   assert.match(html, /<noscript>[\s\S]*?#hero\s*\{\s*display:\s*none\s*!important/);
   assert.match(html, /#navbar, #mainContent[\s\S]*?visibility:\s*visible\s*!important/);
 });
+
+
+test('services open in-site detail dialogs instead of jumping to appointment form', () => {
+  assert.equal([...html.matchAll(/data-service-key=/g)].length, 4);
+  assert.match(html, /id="siteContentDialog"/);
+  assert.match(js, /serviceContent\s*=/);
+  assert.match(js, /trigger\.addEventListener\('click'/);
+  assert.doesNotMatch(html.slice(html.indexOf('id="servicios"'), html.indexOf('id="acompanamiento"')), /href="#consulta" class="btn link"/);
+});
+
+test('every resource category and format has an in-site example and a working dialog trigger', () => {
+  for (const key of ['desarrollo', 'crianza', 'regulacion', 'juego', 'videos', 'articulos', 'guias', 'tips']) {
+    assert.match(html, new RegExp('data-resource-key="' + key + '"'));
+    assert.match(js, new RegExp(key + ':\\s*\\{'));
+  }
+  assert.match(js, /function downloadGuide\(\)/);
+  assert.match(js, /siteContentDialogDownload/);
+  assert.match(css, /\.site-content-dialog::backdrop/);
+});
