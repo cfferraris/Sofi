@@ -1,0 +1,29 @@
+name: Finalize browser coverage
+on:
+  push:
+    branches: [audit/fix-site-baseline]
+    paths: [.github/workflows/finalize-browser-tests.yml, scripts/patch_browser_tests.py, tests/resources-browser.test.mjs, package.json]
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/fix-site-baseline
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/patch_browser_tests.py
+      - run: npm install --no-save --package-lock=false playwright @axe-core/playwright
+      - run: npx playwright install --with-deps chromium
+      - run: npm run check && npm test && npm run test:e2e
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tests/site-browser.test.mjs tests/resources-browser.test.mjs package.json
+          git commit -m 'test: cover redesigned resources library'
+          git push origin HEAD:audit/fix-site-baseline
