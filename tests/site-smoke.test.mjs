@@ -212,7 +212,7 @@ test('XML sitemap includes the public homepage, resource library and privacy pol
   const sitemapPath = resolve(root, 'sitemap.xml');
   assert.ok(existsSync(sitemapPath), 'Missing sitemap.xml');
   const sitemap = readFileSync(sitemapPath, 'utf8');
-  assert.match(sitemap, /<urlset\\b[^>]*xmlns=["']https?:\\/\\/www\\.sitemaps\\.org\\/schemas\\/sitemap\\/0\\.9["']/);
+  assert.ok(sitemap.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'), 'Sitemap must use the standard sitemap namespace');
   for (const url of [
     'https://www.pieldemar.com/',
     'https://www.pieldemar.com/recursos.html',
@@ -220,7 +220,7 @@ test('XML sitemap includes the public homepage, resource library and privacy pol
   ]) {
     assert.ok(sitemap.includes('<loc>' + url + '</loc>'), 'Sitemap is missing public page: ' + url);
   }
-  assert.doesNotMatch(sitemap, /sofi-ywgo\\.onrender\\.com|noindex/i, 'Staging URLs or noindex directives must not enter the public sitemap');
+  assert.ok(!/sofi-ywgo\.onrender\.com|noindex/i.test(sitemap), 'Staging URLs or noindex directives must not enter the public sitemap');
 });
 
 
