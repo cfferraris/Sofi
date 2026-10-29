@@ -2,7 +2,7 @@ name: Finalize browser coverage
 on:
   push:
     branches: [audit/fix-site-baseline]
-    paths: [.github/workflows/finalize-browser-tests.yml, scripts/patch_browser_tests.py, tests/resources-browser.test.mjs, tests/site-smoke.test.mjs, tests/site-browser.test.mjs, tests/production-flow-audit.mjs, css/styles.css, css/styles.min.css, package.json, scripts/optimize_logo_webp.py, assets/img/logos/LogoPrincipal/Verde.png, assets/img/logos/LogoPrincipal/Verde.webp, assets/img/logos/Isotipo2/Azul.png, assets/img/logos/Isotipo2/Azul.webp, index.html]
+    paths: [.github/workflows/finalize-browser-tests.yml, scripts/patch_browser_tests.py, tests/resources-browser.test.mjs, tests/site-smoke.test.mjs, tests/site-browser.test.mjs, tests/production-flow-audit.mjs, css/styles.css, css/styles.min.css, package.json, index.html]
 concurrency:
   group: site-generated-assets
   cancel-in-progress: false
@@ -21,11 +21,6 @@ jobs:
         with:
           python-version: '3.12'
       - run: python scripts/patch_browser_tests.py
-      # Re-encode from the original transparent PNGs; the script checks size and alpha.
-      - name: Optimize transparent logo WebP assets
-        run: |
-          python -m pip install --disable-pip-version-check Pillow
-          python scripts/optimize_logo_webp.py
       - run: npm install --no-save --package-lock=false playwright @axe-core/playwright
       - run: npx playwright install --with-deps chromium
       - run: npm run check && npm test && npm run test:e2e
@@ -37,6 +32,6 @@ jobs:
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add tests/site-browser.test.mjs tests/resources-browser.test.mjs tests/site-smoke.test.mjs tests/production-flow-audit.mjs scripts/patch_browser_tests.py scripts/optimize_logo_webp.py assets/img/logos/LogoPrincipal/Verde.webp assets/img/logos/Isotipo2/Azul.webp css/styles.css css/styles.min.css package.json
+          git add tests/site-browser.test.mjs tests/resources-browser.test.mjs tests/site-smoke.test.mjs tests/production-flow-audit.mjs scripts/patch_browser_tests.py css/styles.css css/styles.min.css package.json
           git commit -m 'test: finalize redesigned site accessibility coverage'
           git push origin HEAD:audit/fix-site-baseline
