@@ -27,10 +27,15 @@ def optimize(source_rel: str, target_rel: str) -> None:
         rgba.save(
             target,
             format="WEBP",
-            quality=90,
+            quality=88,
             method=6,
-            exact=True,
-            alpha_quality=100,
+            alpha_quality=95,
+        )
+
+    if target.stat().st_size >= source.stat().st_size:
+        raise ValueError(
+            f"WebP did not reduce file size for {target_rel}: "
+            f"{source.stat().st_size} -> {target.stat().st_size} bytes"
         )
 
     with Image.open(target) as optimized:
