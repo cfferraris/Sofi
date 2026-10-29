@@ -3,6 +3,10 @@ on:
   push:
     branches: [audit/fix-site-baseline]
     paths: [.github/workflows/finalize-browser-tests.yml, scripts/patch_browser_tests.py, tests/resources-browser.test.mjs, tests/site-smoke.test.mjs, tests/site-browser.test.mjs, tests/production-flow-audit.mjs, css/styles.css, css/styles.min.css, package.json]
+concurrency:
+  group: site-generated-assets
+  cancel-in-progress: false
+
 permissions:
   contents: write
 jobs:
