@@ -21,6 +21,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python scripts/patch_browser_tests.py
+      # Re-encode from the original transparent PNGs; the script checks size and alpha.
       - name: Optimize transparent logo WebP assets
         run: |
           python -m pip install --disable-pip-version-check Pillow
