@@ -1,51 +1,45 @@
-# Piel de Mar — auditoría técnica y de diseño
+# Piel de Mar — cierre de auditoría técnica P0/P1
 
 ## Entorno y límites
 
 - Rama de trabajo: `audit/fix-site-baseline`.
 - Staging: https://sofi-ywgo.onrender.com/
 - Pull request: https://github.com/cfferraris/Sofi/pull/1
-- Producción y `main` permanecen fuera del alcance. No fusionar ni desplegar sin autorización explícita del PM.
+- `main` y producción permanecen fuera del alcance. No fusionar ni desplegar sin autorización explícita.
 
-## Estado verificado
-
-Última revisión funcional y HTTP de staging: commit `b560eb64b3d2c4de28db5c184f0e5797e66f7a09` (29 de octubre de 2026). Las mediciones Lighthouse recientes cubren el mismo código de aplicación; los commits intermedios posteriores al SHA `7e8bed5d94fb7c57b2e3f21bfe6f31537bb7d2cc` ajustaron automatización de CI, documentación y pruebas, no el comportamiento visual.
+## Estado verificado — 29 de octubre de 2026
 
 | Área | Resultado | Evidencia |
 |---|---|---|
-| Navegación y biblioteca | Aprobado en pruebas automatizadas | La biblioteca abre en una pestaña nueva, contiene 6 categorías ancladas y 18 recursos. Cada recurso tiene una ilustración SVG distinta. |
-| Turnos y WhatsApp | Aprobado en staging | Flujo verificado con el navegador interceptando `window.open`; no se envió ningún mensaje real. El sitio no muestra el texto del mensaje ni botones de depuración en la confirmación. |
-| Accesibilidad automatizada | Aprobado en las comprobaciones ejecutadas | Pruebas Playwright de escritorio/móvil y análisis Axe pasaron; no se encontraron errores de consola, errores de página, solicitudes fallidas ni imágenes fallidas en el informe publicado. Esto no certifica por sí solo conformidad WCAG. |
-| Cabeceras y recursos desplegados | Aprobado en staging | La auditoría HTTP de staging pasó, incluidos los controles de seguridad y la verificación de los recursos desplegados. `X-Robots-Tag: noindex, follow` es una regla exclusiva de staging. |
-| Lighthouse | Ejecutado; rendimiento por mejorar | En ejecuciones registradas hasta el 29/10/2026 02:40 UTC, Performance osciló entre 47 y 81 en móvil y entre 60 y 67 en escritorio; Accessibility fue 100 y SEO 69. Medición de referencia (run [40807622268](https://github.com/cfferraris/Sofi/actions/runs/40807622268)): móvil Performance 81, LCP 4,2 s, CLS 0, TBT 30 ms y FCP 2,4 s; escritorio Performance 67, LCP 4,5 s, CLS 0,001, TBT 20 ms y FCP 1,1 s. En el conjunto observado, LCP varió entre 4,2 y 5,5 s y TBT móvil entre 30 y 1.160 ms. La variación es alta y no permite afirmar una mejora estable. El SEO de staging está afectado por el noindex intencional. |
+| Turnos y WhatsApp | Aprobado en staging | Selector de franja y horario en el mismo cuadro; validación de campos; mensaje preparado para WhatsApp; al continuar, formulario y botón se ocultan y queda el estado de solicitud con el enlace a recursos. La prueba intercepta la apertura y no envía mensajes reales. |
+| Privacidad técnica del formulario | Aprobado | El sitio no envía los campos a una API, no usa backend ni persiste los datos en almacenamiento local o base de datos. El usuario decide si envía el mensaje por WhatsApp. |
+| Biblioteca de recursos | Implementado y probado | Abre en pestaña aparte; menú lateral con seis anclas y seis categorías: Desarrollo infantil, Crianza respetuosa, Regulación emocional, Juego y estimulación, Lecturas y explicaciones, Guías y materiales. Hay 18 tarjetas de recursos con contenido y destinos propios. Cada categoría tiene una ilustración SVG; no hay una miniatura distinta por cada recurso. |
+| Accesibilidad automatizada | Aprobado en las comprobaciones ejecutadas | Pruebas estáticas y Playwright en escritorio/móvil aprobadas; Lighthouse Accessibility 100 y Best Practices 100 en la última medición. No equivale a certificación completa WCAG 2.2 AA. |
+| Cabeceras y recursos publicados | Aprobado en staging | La auditoría HTTP más reciente dio `PASS`. Confirmó `X-Robots-Tag: noindex, follow`, CSP HTTP, HSTS, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `X-Frame-Options: DENY` y `Permissions-Policy`. El noindex se aplica exclusivamente a staging. |
+| Logos aprobados | Restaurados y protegidos | Los archivos `assets/img/logos/Isotipo2/Azul.webp` y `assets/img/logos/LogoPrincipal/Verde.webp` se restauraron a sus versiones anteriores. El workflow de pruebas ya no vuelve a generarlos automáticamente. |
+| Hero y rendimiento | Optimización aplicada; resultado variable | Se simplificó la transición de entrada para evitar revelar el contenido con temporizadores y desplazar toda la página. La última ejecución Lighthouse (29/10/2026, 11:20 UTC) midió móvil: Performance 68, LCP 4,6 s, CLS 0, TBT 390 ms, FCP 2,8 s; escritorio: Performance 66, LCP 2,4 s, CLS 0, TBT 330 ms, FCP 1,0 s. Otras ejecuciones recientes dieron resultados distintos; una sola corrida no demuestra una mejora estable. SEO 69 en staging está afectado por el noindex intencional. |
 
-## Revisión de diseño pendiente del PM
+## Validaciones humanas que siguen pendientes
 
-- El LCP más reciente fue de 5,5 s en móvil y 4,2 s en escritorio, con variaciones grandes entre ejecuciones; sigue siendo el principal punto de rendimiento. Auditorías anteriores relacionaron parte del retraso con la transición de hero/contenido y la primera diapositiva. No se modificó esa experiencia visual sin decisión del PM.
-- Las miniaturas únicas de los 18 recursos ya están implementadas con una hoja SVG compartida; las tarjetas mantienen el título, el contenido y los enlaces propios.
-- La aprobación visual final de la biblioteca y del comportamiento del hero corresponde al PM.
+- La política de privacidad `privacidad.html` necesita revisión final de la persona responsable/legal, especialmente identidad del responsable del tratamiento y datos de contacto para ejercer derechos. No inventar esa identidad ni publicar datos de prueba como confirmados.
+- Correo electrónico y perfiles sociales siguen siendo provisionales; confirmar titularidad y datos antes de una publicación final.
+- Si se requiere aprobación visual final, revisar en staging la biblioteca y la transición del hero en dispositivos reales.
 
 ## Reglas técnicas
 
-- No usar `!important` en HTML ni CSS; una prueba estática verifica que no reaparezca.
-- No modificar imágenes/logos que el PM ya validó salvo evidencia de un fallo reproducible.
-- No cambiar `main` ni producción durante esta auditoría.
+- No usar `!important` en HTML ni CSS.
+- No modificar imágenes o logos previamente validados salvo fallo reproducible y autorización.
+- No tocar `main` ni producción durante esta auditoría.
 - Ante una falla, corregir la causa y repetir la prueba; no alterar una expectativa para ocultar el defecto.
 
 ## Cierre
 
-- [x] Pruebas estáticas y de navegador para escritorio/móvil aprobadas en staging.
-- [x] Flujo de turnos comprobado sin enviar mensajes reales.
-- [x] Cabeceras y recursos de staging comprobados.
-- [x] Lighthouse ejecutado y métricas documentadas.
-- [ ] PM revisa/aprueba el comportamiento visual del hero si se propone cambiarlo para mejorar LCP.
-- [ ] PM da autorización explícita para la revisión final y cualquier fusión a `main`.
+- [x] Pruebas estáticas: 31 pasaron, 0 fallaron.
+- [x] Prueba de navegador del flujo de turnos: 5 pasaron, 0 fallaron; sin mensajes reales enviados.
+- [x] Auditoría HTTP de staging: `PASS`.
+- [x] Lighthouse ejecutado en móvil y escritorio; métricas registradas con su variabilidad.
+- [x] Logos restaurados y automatización corregida para no reescribirlos.
+- [ ] Revisión legal/comercial de los datos pendientes.
+- [ ] Autorización explícita para sacar el PR del borrador o fusionar a `main`.
 
-La política de privacidad, los datos comerciales y la identidad de los enlaces sociales requieren validación humana por la persona responsable antes de una publicación final.
-
-
-## Estado de preparación P1 — revisión de código 2026-10-29
-
-La inspección estática confirma que la rama contiene los controles P1 principales: fallback `noscript`, CSP sin scripts inline ejecutables, JSON-LD válido separado, Lucide con versión fijada, navegación HTML nativa, controles de carrusel manuales con estado accesible, política de privacidad y formulario sin persistencia ni llamadas a API. Los testimonios identificables no se presentan como reseñas verificadas. El sitemap público incluye `/`, `/recursos.html` y `/privacidad.html`.
-
-**La fase P1 no se declara aprobada todavía:** queda pendiente la batería acordada de pruebas de cierre en staging. También quedan como bloqueos de aprobación humana la confirmación de los datos comerciales, horario, número de WhatsApp y propiedad de perfiles sociales. La medición Lighthouse se hará al cierre de la fase, no después de cada cambio. No se tocó `main` ni producción.
+El PR permanece abierto y en borrador. No se fusiona sin autorización explícita.
