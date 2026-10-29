@@ -206,3 +206,19 @@ test('all homepage links to the resource library open a separate tab safely', ()
     assert.match(link, /rel=["'][^"']*noopener[^"']*["']/i, `New-tab resource link must prevent opener access: ${link}`);
   }
 });
+
+
+test('XML sitemap includes the public homepage, resource library and privacy policy', () => {
+  const sitemapPath = resolve(root, 'sitemap.xml');
+  assert.ok(existsSync(sitemapPath), 'Missing sitemap.xml');
+  const sitemap = readFileSync(sitemapPath, 'utf8');
+  assert.match(sitemap, /<urlset\\b[^>]*xmlns=["']https?:\\/\\/www\\.sitemaps\\.org\\/schemas\\/sitemap\\/0\\.9["']/);
+  for (const url of [
+    'https://www.pieldemar.com/',
+    'https://www.pieldemar.com/recursos.html',
+    'https://www.pieldemar.com/privacidad.html'
+  ]) {
+    assert.ok(sitemap.includes('<loc>' + url + '</loc>'), 'Sitemap is missing public page: ' + url);
+  }
+  assert.doesNotMatch(sitemap, /sofi-ywgo\\.onrender\\.com|noindex/i, 'Staging URLs or noindex directives must not enter the public sitemap');
+});
