@@ -9,7 +9,7 @@
 
 ## Estado verificado
 
-Última revisión integral automatizada: commit `afed8307cd7dec9626c276893e025e33f8d8a5f6` (29 de octubre de 2026).
+Última revisión funcional, HTTP y Lighthouse de la aplicación: commit `7e8bed5d94fb7c57b2e3f21bfe6f31537bb7d2cc` (29 de octubre de 2026). Los commits posteriores `d06c474cbbcb9973ec9dabfd1f58eb8974847281` y `0edaa29a78a585b2d78f976cb8d1625b131013c1` ajustaron automatización de CI y formato de pruebas, no el comportamiento de la aplicación.
 
 | Área | Resultado | Evidencia |
 |---|---|---|
@@ -17,17 +17,17 @@
 | Turnos y WhatsApp | Aprobado en staging | Flujo verificado con el navegador interceptando `window.open`; no se envió ningún mensaje real. El sitio no muestra el texto del mensaje ni botones de depuración en la confirmación. |
 | Accesibilidad automatizada | Aprobado en las comprobaciones ejecutadas | Pruebas Playwright de escritorio/móvil y análisis Axe pasaron; no se encontraron errores de consola, errores de página, solicitudes fallidas ni imágenes fallidas en el informe publicado. Esto no certifica por sí solo conformidad WCAG. |
 | Cabeceras y recursos desplegados | Aprobado en staging | La auditoría HTTP de staging pasó, incluidos los controles de seguridad y la verificación de los recursos desplegados. `X-Robots-Tag: noindex, follow` es una regla exclusiva de staging. |
-| Lighthouse | Ejecutado; rendimiento por mejorar | Última medición: móvil Performance 77, Accessibility 100, SEO 69; escritorio Performance 60, Accessibility 100, SEO 69. LCP 4,4 s en ambos; CLS 0 móvil / 0,001 escritorio; TBT 80 ms móvil / 0 ms escritorio; FCP 2,8 s móvil / 2,7 s escritorio. Son mediciones puntuales, sujetas a variación. El SEO de staging está afectado por el noindex intencional. |
+| Lighthouse | Ejecutado; rendimiento por mejorar | Última medición: móvil Performance 74, Accessibility 100, SEO 69; escritorio Performance 61, Accessibility 100, SEO 69. LCP 4,5 s móvil / 4,2 s escritorio; CLS 0 móvil / 0,001 escritorio; TBT 170 ms móvil / 90 ms escritorio; FCP 2,7 s móvil / 2,3 s escritorio. Son mediciones puntuales, sujetas a variación. El SEO de staging está afectado por el noindex intencional. |
 
 ## Revisión de diseño pendiente del PM
 
-- El LCP de 4,4 s sigue siendo el principal punto de rendimiento. Auditorías anteriores relacionaron parte del retraso con la transición de hero/contenido y la primera diapositiva. No se modificó esa experiencia visual sin decisión del PM.
+- El LCP de 4,5 s en móvil y 4,2 s en escritorio sigue siendo el principal punto de rendimiento. Auditorías anteriores relacionaron parte del retraso con la transición de hero/contenido y la primera diapositiva. No se modificó esa experiencia visual sin decisión del PM.
 - Las miniaturas únicas de los 18 recursos ya están implementadas con una hoja SVG compartida; las tarjetas mantienen el título, el contenido y los enlaces propios.
 - La aprobación visual final de la biblioteca y del comportamiento del hero corresponde al PM.
 
 ## Reglas técnicas
 
-- No usar `!important` en HTML ni CSS.
+- No usar `!important` en HTML ni CSS; una prueba estática verifica que no reaparezca.
 - No modificar imágenes/logos que el PM ya validó salvo evidencia de un fallo reproducible.
 - No cambiar `main` ni producción durante esta auditoría.
 - Ante una falla, corregir la causa y repetir la prueba; no alterar una expectativa para ocultar el defecto.

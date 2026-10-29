@@ -5,7 +5,8 @@ import json
 p = Path('tests/site-browser.test.mjs')
 source = p.read_text()
 marker = "\ntest('service and resource examples open in accessible in-site dialogs on desktop and mobile'"
-source = source.split(marker, 1)[0] + '\n'
+if marker in source:
+    source = source.split(marker, 1)[0].rstrip() + '\n'
 source = source.replace('#appointmentRequestResult a[href="#recursos"]', '#appointmentRequestResult a[href="recursos.html"]')
 source = source.replace('#navMenu a[href="#recursos"]', '#navMenu a[href="recursos.html"]')
 p.write_text(source)
