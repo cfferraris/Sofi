@@ -6,8 +6,8 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = (
-    ("assets/img/logos/LogoPrincipal/Verde.png", "assets/img/logos/LogoPrincipal/Verde.webp", 600),
-    ("assets/img/logos/Isotipo2/Azul.png", "assets/img/logos/Isotipo2/Azul.webp", 128),
+    ("assets/img/logos/LogoPrincipal/Verde.png", "assets/img/logos/LogoPrincipal/Verde.webp", 480),
+    ("assets/img/logos/Isotipo2/Azul.png", "assets/img/logos/Isotipo2/Azul.webp", 64),
 )
 
 
@@ -28,9 +28,9 @@ def optimize(source_rel: str, target_rel: str, max_dimension: int) -> None:
         rgba.save(
             target,
             format="WEBP",
-            quality=78,
+            quality=65,
             method=6,
-            alpha_quality=90,
+            alpha_quality=85,
         )
 
     if target.stat().st_size >= source.stat().st_size:
