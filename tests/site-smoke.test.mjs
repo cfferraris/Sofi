@@ -59,8 +59,8 @@ test('referenced local icon path matches the versioned filename case', () => {
 });
 
 test('intro slider and testimonials carousel are manual-only and do not auto-rotate', () => {
-  assert.match(js, /function startAutoPlay\(\) \{\s*\/\/ Autoplay desactivado/);
-  assert.match(js, /function startIntroAutoPlay\(\) \{\s*\/\/ Autoplay desactivado/);
+  assert.match(js, /carouselRegion\.setAttribute\('data-autoplay', 'off'\)/);
+  assert.match(js, /introRegion\.setAttribute\('data-autoplay', 'off'\)/);
   assert.doesNotMatch(js, /setInterval\s*\(/);
   assert.doesNotMatch(html, /introAutoplayToggle|carouselAutoplayToggle|Pausar cambio automático/i);
 });
