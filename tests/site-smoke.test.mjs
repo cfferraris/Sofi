@@ -198,7 +198,7 @@ test('no-JavaScript fallback is present so the hero cannot block access to the p
 });
 
 test('all homepage links to the resource library open a separate tab safely', () => {
-  const resourceLinks = [...html.matchAll(/<a\\b[^>]*href=["']recursos\\.html(?:#[^"']*)?["'][^>]*>/g)]
+  const resourceLinks = [...html.matchAll(/<a\b[^>]*href=["']recursos\.html(?:#[^"']*)?["'][^>]*>/g)]
     .map((match) => match[0]);
   assert.ok(resourceLinks.length >= 9, 'Expected navigation, category and confirmation links to the resource library');
   for (const link of resourceLinks) {
