@@ -6,12 +6,12 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = (
-    ("assets/img/logos/LogoPrincipal/Verde.png", "assets/img/logos/LogoPrincipal/Verde.webp"),
-    ("assets/img/logos/Isotipo2/Azul.png", "assets/img/logos/Isotipo2/Azul.webp"),
+    ("assets/img/logos/LogoPrincipal/Verde.png", "assets/img/logos/LogoPrincipal/Verde.webp", 800),
+    ("assets/img/logos/Isotipo2/Azul.png", "assets/img/logos/Isotipo2/Azul.webp", 256),
 )
 
 
-def optimize(source_rel: str, target_rel: str) -> None:
+def optimize(source_rel: str, target_rel: str, max_dimension: int) -> None:
     source = ROOT / source_rel
     target = ROOT / target_rel
     if not source.is_file():
@@ -22,6 +22,7 @@ def optimize(source_rel: str, target_rel: str) -> None:
         alpha_min, _ = rgba.getchannel("A").getextrema()
         if alpha_min == 255:
             raise ValueError(f"Source does not contain transparent pixels: {source_rel}")
+        rgba.thumbnail((max_dimension, max_dimension), Image.Resampling.LANCZOS)
         dimensions = rgba.size
         target.parent.mkdir(parents=True, exist_ok=True)
         rgba.save(
@@ -56,5 +57,5 @@ def optimize(source_rel: str, target_rel: str) -> None:
 
 
 if __name__ == "__main__":
-    for source_path, target_path in ASSETS:
-        optimize(source_path, target_path)
+    for source_path, target_path, max_dimension in ASSETS:
+        optimize(source_path, target_path, max_dimension)
