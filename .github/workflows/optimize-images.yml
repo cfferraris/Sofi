@@ -40,4 +40,17 @@ jobs:
           git add assets/img index.html css/styles.css docs/image-optimization-report.md
           if git diff --cached --quiet; then echo 'No changes to commit'; exit 0; fi
           git commit -m 'perf: optimize heavy site images as WebP'
-          git push origin HEAD:audit/fix-site-baseline
+          for attempt in 1 2 3; do
+            git fetch origin audit/fix-site-baseline
+            if ! git rebase origin/audit/fix-site-baseline; then
+              git rebase --abort
+              echo 'Generated assets conflict with newer branch changes; stopping without overwriting them.'
+              exit 1
+            fi
+            if git push origin HEAD:audit/fix-site-baseline; then
+              exit 0
+            fi
+            echo "Push raced with another branch update (attempt $attempt/3); retrying after fetch and rebase."
+          done
+          echo 'Could not push generated assets after three synchronized attempts.'
+          exit 1
