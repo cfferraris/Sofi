@@ -14,6 +14,7 @@ const mime = {
   '.js': 'text/javascript; charset=utf-8',
   '.png': 'image/png',
   '.webp': 'image/webp',
+  '.svg': 'image/svg+xml',
   '.txt': 'text/plain; charset=utf-8',
 };
 
@@ -74,7 +75,24 @@ test('resource library is navigable, responsive and accessible', async () => {
       assert.equal(await page.locator('.resources-sidebar nav a').count(), 6);
       assert.equal(await page.locator('.resource-category').count(), 6);
       assert.equal(await page.locator('.resource-tile').count(), 18);
-      assert.equal(await page.locator('.resource-thumb img').count(), 18);
+      assert.equal(await page.locator('.resource-thumb svg').count(), 18);
+      assert.equal(await page.locator('.resource-thumb svg use').count(), 18);
+
+      const spriteResponse = await page.request.get(`${baseURL}/assets/recursos/miniaturas.svg`);
+      assert.equal(spriteResponse.status(), 200, 'the resource thumbnail sprite must load');
+      assert.match(spriteResponse.headers()['content-type'] || '', /image\\/svg\\+xml/);
+      const spriteMarkup = await spriteResponse.text();
+      const symbolIds = [...spriteMarkup.matchAll(/<symbol id="([^"]+)"/g)].map((match) => match[1]);
+      assert.equal(symbolIds.length, 18, 'the sprite must define one illustration per resource');
+      const referencedSymbols = await page.locator('.resource-thumb svg use').evaluateAll((elements) =>
+        elements.map((element) => new URL(element.getAttribute('href'), location.href).hash.slice(1)),
+      );
+      assert.equal(new Set(referencedSymbols).size, 18, 'every resource must use a distinct illustration');
+      assert.deepEqual(
+        referencedSymbols.filter((id) => !symbolIds.includes(id)),
+        [],
+        'every resource thumbnail must reference a symbol in the sprite',
+      );
 
       for (const id of [
         'desarrollo',
