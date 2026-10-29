@@ -187,7 +187,12 @@ test('unverified email, social profiles and family testimonials are not publishe
   assert.match(html, /Política de privacidad/);
 });
 
+test('HTML and CSS avoid !important overrides', () => {
+  assert.doesNotMatch(html, /!important/i);
+  assert.doesNotMatch(css, /!important/i);
+});
+
 test('no-JavaScript fallback is present so the hero cannot block access to the page', () => {
-  assert.match(html, /<noscript>[\s\S]*?#hero\s*\{\s*display:\s*none\s*!important/);
-  assert.match(html, /#navbar, #mainContent[\s\S]*?visibility:\s*visible\s*!important/);
+  assert.match(html, /<noscript>[\s\S]*?#hero\s*\{\s*display:\s*none\s*;/);
+  assert.match(html, /#navbar, #mainContent[\s\S]*?visibility:\s*visible\s*;/);
 });

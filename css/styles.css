@@ -2366,28 +2366,28 @@ body:has(.navbar.visible) .whatsapp-float {
    IMPRESIÓN
    ======================================== */
 @media print {
-    .navbar,
-    .hero,
-    .carousel-btn,
-    .carousel-dots,
-    .menu-toggle,
-    .social-links,
-    .social-links-mobile,
-    .appointments-section,
-    .footer-nav {
-        display: none !important;
+    body #navbar,
+    body #hero,
+    body .carousel-btn,
+    body .carousel-dots,
+    body .menu-toggle,
+    body .social-links,
+    body .social-links-mobile,
+    body .appointments-section,
+    body .footer-nav {
+        display: none;
     }
     body {
         background: white;
         color: black;
         font-size: 12pt;
     }
-    .main-content {
+    body #mainContent {
         opacity: 1;
         transform: none;
     }
-    section {
-        min-height: auto !important;
+    body section:not(#hero) {
+        min-height: auto;
         padding: 1rem 0;
         page-break-inside: avoid;
     }
@@ -2406,13 +2406,15 @@ body:has(.navbar.visible) .whatsapp-float {
    PREFERENCIAS DE MOVIMIENTO REDUCIDO
    ======================================== */
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
+    :root body :is(*, *::before, *::after),
+    .logo-container.transitioning,
+    .main-logo.morphing {
+        animation-duration: 0.01ms;
+        animation-iteration-count: 1;
+        transition-duration: 0.01ms;
+    }
+    html {
+        scroll-behavior: auto;
     }
     .hero-background {
         animation: none;
@@ -2867,7 +2869,7 @@ body:has(.navbar.visible) .whatsapp-float {
 @media (prefers-reduced-motion: reduce) {
     .resource-option,
     .service-card .btn {
-        transition: none !important;
+        transition: none;
     }
 }
 .resources-library-page{background:#f7f7f3;color:#26363a}.resources-library-header{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:1rem clamp(1rem,3vw,3rem);background:rgba(247,247,243,.96);border-bottom:1px solid rgba(38,54,58,.12)}.resources-brand{display:flex;align-items:center;gap:.75rem;color:inherit;text-decoration:none;font-weight:700}.resources-brand img{border-radius:50%}.resources-back{color:inherit;text-decoration:none;border:1px solid currentColor;padding:.55rem .9rem;border-radius:999px}.resources-library{display:grid;grid-template-columns:260px 1fr;max-width:1440px;margin:auto}.resources-sidebar{position:sticky;top:78px;align-self:start;padding:3rem 1.5rem;min-height:calc(100vh - 78px);border-right:1px solid rgba(38,54,58,.12)}.resources-sidebar h1{margin:.2rem 0 1.5rem}.resources-sidebar nav{display:grid;gap:.35rem}.resources-sidebar nav a{color:inherit;text-decoration:none;padding:.7rem .8rem;border-radius:.65rem}.resources-sidebar nav a:hover,.resources-sidebar nav a:focus-visible{background:rgba(5,73,84,.08)}.resources-catalog{padding:clamp(2rem,4vw,4rem)}.resources-catalog-intro{max-width:760px;padding-bottom:2rem}.resources-catalog-intro h2{font-size:clamp(2rem,4vw,3.3rem);margin:.25rem 0 .75rem}.resources-catalog-intro p{line-height:1.65}.resource-category{scroll-margin-top:100px;padding:2.5rem 0;border-top:1px solid rgba(38,54,58,.12)}.resource-category-heading{display:flex;gap:1rem;margin-bottom:1.25rem}.resource-category-heading>span{opacity:.55}.resource-category-heading h2{margin:0}.resource-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.resource-tile{min-height:210px;display:flex;flex-direction:column;padding:1.3rem;background:#fff;border:1px solid rgba(38,54,58,.1);border-radius:1rem;box-shadow:0 8px 28px rgba(38,54,58,.06)}.resource-tile b{font-size:.7rem;letter-spacing:.08em;opacity:.7}.resource-tile h3{margin:1rem 0 .5rem}.resource-tile p{line-height:1.55;flex:1}.resource-tile a{margin-top:1rem;color:#054954;font-weight:700}.resource-detail{margin-top:1rem;padding:1.2rem 1.3rem;background:rgba(5,73,84,.045);border-left:3px solid #054954;scroll-margin-top:100px}.resource-detail h3{margin-top:0}.resource-detail p{line-height:1.65}.resources-disclaimer{padding:2rem 0 4rem;opacity:.7}@media(max-width:900px){.resources-library{grid-template-columns:1fr}.resources-sidebar{position:sticky;top:78px;min-height:auto;padding:1rem;border-right:0;border-bottom:1px solid rgba(38,54,58,.12);background:rgba(247,247,243,.96)}.resources-sidebar nav{display:flex;overflow:auto}.resources-sidebar nav a{white-space:nowrap}.resource-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.resources-catalog{padding:1.5rem 1rem}.resource-grid{grid-template-columns:1fr}}
@@ -2891,7 +2893,7 @@ body:has(.navbar.visible) .whatsapp-float {
 
 
 /* Correcciones visuales solicitadas: logos, carrusel, secciones y contacto */
-.main-logo,.isotipo{background:transparent!important;mix-blend-mode:normal}
+.main-logo,.isotipo{background:transparent;mix-blend-mode:normal}
 .intro-slider-wrapper{max-width:1240px;margin-inline:auto;padding-inline:clamp(10px,1.5vw,22px);box-sizing:border-box}
 .intro-slider-container{border-radius:clamp(14px,2vw,24px);overflow:hidden}
 .intro-slider-btn{width:42px;height:42px;background:rgba(247,247,243,.82);color:var(--profundo);border:1px solid rgba(5,73,84,.18);box-shadow:0 3px 12px rgba(5,73,84,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
