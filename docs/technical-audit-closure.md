@@ -9,7 +9,7 @@
 
 ## Estado verificado
 
-Última revisión funcional, HTTP y Lighthouse de la aplicación: commit `7e8bed5d94fb7c57b2e3f21bfe6f31537bb7d2cc` (29 de octubre de 2026). Los commits posteriores `d06c474cbbcb9973ec9dabfd1f58eb8974847281` y `0edaa29a78a585b2d78f976cb8d1625b131013c1` ajustaron automatización de CI y formato de pruebas, no el comportamiento de la aplicación.
+Última revisión funcional y HTTP de staging: commit `b560eb64b3d2c4de28db5c184f0e5797e66f7a09` (29 de octubre de 2026). Las mediciones Lighthouse recientes cubren el mismo código de aplicación; los commits intermedios posteriores al SHA `7e8bed5d94fb7c57b2e3f21bfe6f31537bb7d2cc` ajustaron automatización de CI, documentación y pruebas, no el comportamiento visual.
 
 | Área | Resultado | Evidencia |
 |---|---|---|
@@ -17,11 +17,11 @@
 | Turnos y WhatsApp | Aprobado en staging | Flujo verificado con el navegador interceptando `window.open`; no se envió ningún mensaje real. El sitio no muestra el texto del mensaje ni botones de depuración en la confirmación. |
 | Accesibilidad automatizada | Aprobado en las comprobaciones ejecutadas | Pruebas Playwright de escritorio/móvil y análisis Axe pasaron; no se encontraron errores de consola, errores de página, solicitudes fallidas ni imágenes fallidas en el informe publicado. Esto no certifica por sí solo conformidad WCAG. |
 | Cabeceras y recursos desplegados | Aprobado en staging | La auditoría HTTP de staging pasó, incluidos los controles de seguridad y la verificación de los recursos desplegados. `X-Robots-Tag: noindex, follow` es una regla exclusiva de staging. |
-| Lighthouse | Ejecutado; rendimiento por mejorar | Última medición: móvil Performance 74, Accessibility 100, SEO 69; escritorio Performance 61, Accessibility 100, SEO 69. LCP 4,5 s móvil / 4,2 s escritorio; CLS 0 móvil / 0,001 escritorio; TBT 170 ms móvil / 90 ms escritorio; FCP 2,7 s móvil / 2,3 s escritorio. Son mediciones puntuales, sujetas a variación. El SEO de staging está afectado por el noindex intencional. |
+| Lighthouse | Ejecutado; rendimiento por mejorar | En tres ejecuciones recientes, Performance osciló entre 47 y 77 en móvil y entre 60 y 61 en escritorio; Accessibility fue 100 y SEO 69. Última medición (run [40807464476](https://github.com/cfferraris/Sofi/actions/runs/40807464476)): móvil Performance 47, LCP 5,5 s, CLS 0, TBT 1.160 ms y FCP 2,8 s; escritorio Performance 60, LCP 4,2 s, CLS 0,001, TBT 0 ms y FCP 2,7 s. La variación es alta y no permite afirmar una mejora estable. El SEO de staging está afectado por el noindex intencional. |
 
 ## Revisión de diseño pendiente del PM
 
-- El LCP de 4,5 s en móvil y 4,2 s en escritorio sigue siendo el principal punto de rendimiento. Auditorías anteriores relacionaron parte del retraso con la transición de hero/contenido y la primera diapositiva. No se modificó esa experiencia visual sin decisión del PM.
+- El LCP más reciente fue de 5,5 s en móvil y 4,2 s en escritorio, con variaciones grandes entre ejecuciones; sigue siendo el principal punto de rendimiento. Auditorías anteriores relacionaron parte del retraso con la transición de hero/contenido y la primera diapositiva. No se modificó esa experiencia visual sin decisión del PM.
 - Las miniaturas únicas de los 18 recursos ya están implementadas con una hoja SVG compartida; las tarjetas mantienen el título, el contenido y los enlaces propios.
 - La aprobación visual final de la biblioteca y del comportamiento del hero corresponde al PM.
 
