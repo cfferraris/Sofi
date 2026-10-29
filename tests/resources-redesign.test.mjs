@@ -25,10 +25,21 @@ test('navigation opens the resource library and cards link to their categories',
   }
 
   assert.equal((resources.match(/class="resource-tile"/g) || []).length, 18);
-  assert.equal((resources.match(/class="resource-thumb"/g) || []).length, 18);
+  assert.equal((resources.match(/class="resource-category-illustration"/g) || []).length, 6);
+  assert.equal((resources.match(/class="resource-thumb"/g) || []).length, 0);
 });
 
 test('resources contain a downloadable reading material', () => {
   assert.match(resources, /assets\/recursos\/registro-semanal\.txt/);
   assert.match(resources, /download/);
+});
+
+test('category illustrations are shared at section level, not repeated on resource cards', () => {
+  const sprite = fs.readFileSync('assets/recursos/miniaturas.svg', 'utf8');
+  const symbols = [...sprite.matchAll(/<symbol id="([^"]+)"/g)].map((match) => match[1]);
+  const uses = [...resources.matchAll(/class="resource-category-illustration"[\s\S]*?<use href="assets\/recursos\/miniaturas\.svg#([^"]+)"/g)].map((match) => match[1]);
+  assert.equal(symbols.length, 6);
+  assert.equal(uses.length, 6);
+  assert.equal(new Set(uses).size, 6);
+  assert.deepEqual(uses.filter((id) => !symbols.includes(id)), []);
 });
