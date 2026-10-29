@@ -80,7 +80,7 @@ test('resource library is navigable, responsive and accessible', async () => {
 
       const spriteResponse = await page.request.get(`${baseURL}/assets/recursos/miniaturas.svg`);
       assert.equal(spriteResponse.status(), 200, 'the resource thumbnail sprite must load');
-      assert.match(spriteResponse.headers()['content-type'] || '', /image\\/svg\\+xml/);
+      assert.match(spriteResponse.headers()['content-type'] || '', /image\/svg\+xml/);
       const spriteMarkup = await spriteResponse.text();
       const symbolIds = [...spriteMarkup.matchAll(/<symbol id="([^"]+)"/g)].map((match) => match[1]);
       assert.equal(symbolIds.length, 18, 'the sprite must define one illustration per resource');
