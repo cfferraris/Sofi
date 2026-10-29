@@ -49,7 +49,7 @@ jobs:
             html="$(curl -fsSL --max-time 20 "$url" || true)"
             js="$(curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/js/main.min.js || true)"
             css="$(curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/css/styles.min.css || true)"
-            if [ -n "$html" ] && grep -q '\.webp' <<< "$html" && grep -q 'width="440"' <<< "$html" && grep -q 'height="317"' <<< "$html" && grep -q 'srcset=' <<< "$html" && grep -Eq 'HERO_AUTO_TRIGGER_MS:(1000|1e3)' <<< "$js" && grep -q 'HERO_NAVBAR_SHOW_MS:700' <<< "$js" && grep -q 'HERO_CONTENT_SHOW_MS:800' <<< "$js" && grep -q 'HERO_HIDE_MS:1e3' <<< "$js" && grep -q '\.hero{position:absolute' <<< "$css"; then
+            if [ -n "$html" ] && [ -n "$js" ] && grep -q '\.webp' <<< "$html" && grep -q 'width="440"' <<< "$html" && grep -q 'height="317"' <<< "$html" && grep -q 'srcset=' <<< "$html" && grep -q '\.hero{position:absolute' <<< "$css"; then
               printf '%s' "$html" > /tmp/staging-index.html
               echo "Staging serves the current HTML, CSS and JavaScript performance fixes (attempt $attempt)."
               ready=1
@@ -113,11 +113,11 @@ jobs:
           check_minified_pair css/styles.css css/styles.min.css
           check_minified_pair js/main.js js/main.min.js
           deployed_js="$(curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/js/main.min.js)"
-          if ! grep -Eq 'HERO_AUTO_TRIGGER_MS:(1000|1e3)' <<< "$deployed_js" || ! grep -q 'HERO_NAVBAR_SHOW_MS:700' <<< "$deployed_js" || ! grep -q 'HERO_CONTENT_SHOW_MS:800' <<< "$deployed_js" || ! grep -q 'HERO_HIDE_MS:1e3' <<< "$deployed_js"; then
-            echo "::error::Staging does not serve the expected hero transition timings."
+          if grep -Eq 'HERO_AUTO_TRIGGER_MS|HERO_NAVBAR_SHOW_MS|HERO_CONTENT_SHOW_MS|HERO_HIDE_MS' <<< "$deployed_js"; then
+            echo "::error::Staging still serves obsolete timer-based hero transition configuration."
             exit 1
           fi
-          echo "OK deployed hero transition timings are 1000 / 700 / 800 / 1000 ms"
+          echo "OK obsolete timer-based hero transition configuration is absent"
 
           curl -fsSL --max-time 20 https://sofi-ywgo.onrender.com/css/styles.min.css -o /tmp/styles.min.css
           grep -q '\.hero{position:absolute' /tmp/styles.min.css || { echo "::error::Hero must be out of document flow to prevent CLS."; exit 1; }
