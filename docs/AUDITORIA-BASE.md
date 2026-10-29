@@ -184,3 +184,19 @@ La propuesta intermedia de API, PostgreSQL, SMTP y despliegue Blueprint de Rende
 La rama de auditoría incorpora selector de franja (mañana/tarde) y, según la selección, horarios de inicio cada 30 minutos: 08:00–11:30 o 16:00–19:30. Se trata de preferencias, no de disponibilidad real. El formulario abre WhatsApp con el mensaje codificado y deja visible un enlace y un control de copia alternativos. La persona debe enviar el mensaje y esperar respuesta para confirmar el turno.
 
 GitHub Actions: la ejecución de la rama posterior a esta corrección debe validar las pruebas estáticas del sitio y del flujo de WhatsApp. Aun con pruebas aprobadas, falta probar el comportamiento real en navegador de escritorio y móvil. `main` permanece sin modificar; el PR continúa abierto y sin fusionar.
+
+
+## Estado de cierre P1 — revisión de código 2026-10-29
+
+Los hallazgos técnicos P1 revisados en esta rama tienen implementación en el código; el cierre de fase queda sujeto a la batería de pruebas pendiente y a validaciones humanas que no pueden inferirse desde el repositorio:
+
+- **Fallback sin JavaScript:** existe bloque `noscript` que retira el hero y deja visible navegación y contenido. La prueba final debe comprobar también fallo real de carga/ejecución de JavaScript, no sólo el caso `noscript`.
+- **Promesas de atención:** no se encontró la frase «Te atendemos hoy» ni una promesa explícita de respuesta «en el día» en el HTML actual. No se agregan plazos de respuesta sin confirmación de la titular.
+- **Carruseles:** autoplay desactivado; navegación manual mediante botones y puntos con `aria-pressed`. Se debe confirmar en navegador teclado, toque, lector de pantalla y movimiento reducido.
+- **Semántica accesible:** navegación con elementos nativos `nav/ul/li/a`; los indicadores de carrusel son botones, no tabs ARIA incompletos.
+- **Datos personales:** existe política de privacidad enlazada desde el flujo de turnos; el formulario no persiste datos ni llama a APIs y aclara que la cita requiere confirmación manual.
+- **Dependencia de iconos:** Lucide está fijado a la versión `0.468.0`, no a `latest`; la página no debe depender de que la CDN de iconos cargue para acceder al contenido principal.
+- **Contenido sensible:** los testimonios identificables de familias/menores y los enlaces sociales no verificados no se presentan como datos verificados en el HTML actual.
+- **SEO y estructura:** JSON-LD se mantiene como JSON válido separado de JavaScript ejecutable; `robots.txt` y `sitemap.xml` existen y el sitemap público incluye la biblioteca de recursos.
+
+**Pendientes de la titular (no bloquean otras tareas técnicas):** confirmar número de WhatsApp, horario real de atención, dirección/datos comerciales y perfiles oficiales antes de cualquier publicación en producción. No modificar `main` ni producción para resolver estas confirmaciones.

@@ -222,3 +222,14 @@ test('XML sitemap includes the public homepage, resource library and privacy pol
   }
   assert.doesNotMatch(sitemap, /sofi-ywgo\\.onrender\\.com|noindex/i, 'Staging URLs or noindex directives must not enter the public sitemap');
 });
+
+
+test('P1: public content remains accessible without app-style ARIA and unpinned third-party scripts', () => {
+  assert.doesNotMatch(html, /role=["'](?:menubar|menuitem|none|tablist|tab)["']/);
+  assert.match(html, /<nav\b[^>]*aria-label=["']Navegación principal["']/);
+  assert.match(html, /lucide@0\.468\.0\/dist\/umd\/lucide\.min\.js/);
+  assert.doesNotMatch(html, /lucide@latest/i);
+  assert.match(html, /<noscript>[\s\S]*?#hero\s*\{\s*display:\s*none\s*;/);
+  assert.match(html, /<script\s+type=["']application\/ld\+json["']>/);
+  assert.doesNotMatch(html, /<script>(?!\s*type=["']application\/ld\+json["'])/i);
+});

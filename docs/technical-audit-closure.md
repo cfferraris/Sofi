@@ -42,3 +42,10 @@
 - [ ] PM da autorización explícita para la revisión final y cualquier fusión a `main`.
 
 La política de privacidad, los datos comerciales y la identidad de los enlaces sociales requieren validación humana por la persona responsable antes de una publicación final.
+
+
+## Estado de preparación P1 — revisión de código 2026-10-29
+
+La inspección estática confirma que la rama contiene los controles P1 principales: fallback `noscript`, CSP sin scripts inline ejecutables, JSON-LD válido separado, Lucide con versión fijada, navegación HTML nativa, controles de carrusel manuales con estado accesible, política de privacidad y formulario sin persistencia ni llamadas a API. Los testimonios identificables no se presentan como reseñas verificadas. El sitemap público incluye `/`, `/recursos.html` y `/privacidad.html`.
+
+**La fase P1 no se declara aprobada todavía:** queda pendiente la batería acordada de pruebas de cierre en staging. También quedan como bloqueos de aprobación humana la confirmación de los datos comerciales, horario, número de WhatsApp y propiedad de perfiles sociales. La medición Lighthouse se hará al cierre de la fase, no después de cada cambio. No se tocó `main` ni producción.
