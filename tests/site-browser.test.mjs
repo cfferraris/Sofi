@@ -108,9 +108,17 @@ test('appointment flow works on desktop and mobile without sending WhatsApp mess
         const menu = page.locator('#menuToggle');
         await menu.click();
         assert.equal(await menu.getAttribute('aria-expanded'), 'true');
-        await page.locator('#navMenu a[href="#recursos"]').click();
+        const resourceLink = page.locator('#navMenu a[href="recursos.html"]');
+        assert.equal(await resourceLink.getAttribute('target'), '_blank');
+        assert.match(await resourceLink.getAttribute('rel') || '', /noopener/);
+        const [resourcePage] = await Promise.all([
+          context.waitForEvent('page'),
+          resourceLink.click(),
+        ]);
+        await resourcePage.waitForLoadState('domcontentloaded');
+        assert.equal(new URL(resourcePage.url()).pathname, '/recursos.html');
         assert.equal(await menu.getAttribute('aria-expanded'), 'false');
-        assert.equal(new URL(page.url()).hash, '#recursos');
+        await resourcePage.close();
       }
 
       const form = page.locator('#appointmentRequestForm');
