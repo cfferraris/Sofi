@@ -71,7 +71,20 @@
             "addressCountry": "AR"
         },
         "telephone": "+5493425004018",
-        "openingHours": "Mo-Fr 09:00-18:00",
+        "openingHoursSpecification": [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "08:00",
+                "closes": "12:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "16:00",
+                "closes": "20:00"
+            }
+        ],
         "hasMap": "https://www.google.com/maps/dir/?api=1&destination=Cullen+1619,+Esperanza,+Santa+Fe,+Argentina"
     }
     </script>
@@ -583,7 +596,7 @@
                                     <div>
                                         <label for="appointmentDate">Fecha deseada</label>
                                         <input id="appointmentDate" name="date" type="date" aria-describedby="appointmentDateHelp" required>
-                                        <small id="appointmentDateHelp">Elegí una fecha a partir de mañana; el horario queda sujeto a confirmación.</small>
+                                        <small id="appointmentDateHelp">Atendemos de lunes a viernes. Elegí una fecha a partir de mañana; el horario queda sujeto a confirmación.</small>
                                     </div>
                                     <div>
                                         <label for="appointmentTime">Franja y horario</label>
@@ -689,7 +702,7 @@
                                 <i data-lucide="clock"></i>
                             </div>
                             <div class="contact-content">
-                                <p>Lunes a viernes<br>9:00 a 18:00 hs</p>
+                                <p>Lunes a viernes<br>8:00 a 12:00 y 16:00 a 20:00 hs</p>
                             </div>
                         </div>
 
@@ -699,7 +712,7 @@
                         <h3 id="contact-summary-heading">Información práctica</h3>
                         <div class="contact-summary-item"><i data-lucide="phone" aria-hidden="true"></i><div><strong>Teléfono</strong><a href="https://wa.me/5493425004018" target="_blank" rel="noopener noreferrer">+54 9 3425 004018</a></div></div>
                         <div class="contact-summary-item"><i data-lucide="map-pin" aria-hidden="true"></i><div><strong>Dirección</strong><span>Cullen 1619, Esperanza, Santa Fe</span></div></div>
-                        <div class="contact-summary-item"><i data-lucide="clock" aria-hidden="true"></i><div><strong>Horarios</strong><span>Lunes a viernes, de 9:00 a 18:00 hs</span></div></div>
+                        <div class="contact-summary-item"><i data-lucide="clock" aria-hidden="true"></i><div><strong>Horarios</strong><span>Lunes a viernes, de 8:00 a 12:00 y de 16:00 a 20:00 hs</span></div></div>
                     </aside>
 
                 </div>

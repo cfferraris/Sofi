@@ -18,6 +18,21 @@ const mime = {
 let server;
 let base;
 
+// Fecha mínima del formulario o, si cae en fin de semana, el lunes siguiente.
+function nextWeekday(isoDate) {
+  const [year, month, day] = isoDate.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  while (date.getUTCDay() === 0 || date.getUTCDay() === 6) date.setUTCDate(date.getUTCDate() + 1);
+  return date.toISOString().slice(0, 10);
+}
+
+function nextWeekend(isoDate) {
+  const [year, month, day] = isoDate.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  while (date.getUTCDay() !== 6) date.setUTCDate(date.getUTCDate() + 1);
+  return date.toISOString().slice(0, 10);
+}
+
 before(async () => {
   server = createServer(async (request, response) => {
     try {
@@ -83,7 +98,7 @@ test('appointment request still works without rendering the WhatsApp message', a
       await page.locator('#appointmentReason').fill('Consulta automatizada');
 
       const minimumDate = await page.locator('#appointmentDate').getAttribute('min');
-      await page.locator('#appointmentDate').fill(minimumDate);
+      await page.locator('#appointmentDate').fill(nextWeekday(minimumDate));
       await page.locator('#appointmentConsent').check();
       await page.locator('#appointmentTime').selectOption('afternoon');
       await page.locator('#appointmentTime').selectOption('16:00');
@@ -117,6 +132,32 @@ test('appointment request still works without rendering the WhatsApp message', a
 
       await context.close();
     }
+  } finally {
+    await browser.close();
+  }
+});
+
+test('appointment dates are limited to weekdays', async () => {
+  const browser = await chromium.launch({ headless: true });
+
+  try {
+    const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await page.goto(base, { waitUntil: 'domcontentloaded' });
+
+    const dateInput = page.locator('#appointmentDate');
+    const minimumDate = await dateInput.getAttribute('min');
+
+    await dateInput.fill(nextWeekend(minimumDate));
+    assert.match(await dateInput.evaluate((el) => el.validationMessage), /lunes a viernes/i);
+
+    await dateInput.fill(nextWeekday(minimumDate));
+    assert.equal(await dateInput.evaluate((el) => el.validationMessage), '');
+
+    await dateInput.fill('2020-01-06');
+    assert.match(await dateInput.evaluate((el) => el.validationMessage), /a partir de mañana/i);
+
+    await context.close();
   } finally {
     await browser.close();
   }

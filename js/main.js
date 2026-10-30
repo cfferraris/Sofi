@@ -94,6 +94,26 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        function isWeekday(dateString) {
+            const [y, m, d] = dateString.split('-').map(Number);
+            const weekday = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+            return weekday >= 1 && weekday <= 5;
+        }
+
+        function validateDate() {
+            const value = dateInput.value;
+            let message = '';
+            if (value && value < dateInput.min) {
+                message = 'Elegí una fecha a partir de mañana.';
+            } else if (value && !isWeekday(value)) {
+                message = 'Atendemos de lunes a viernes. Elegí un día hábil.';
+            }
+            dateInput.setCustomValidity(message);
+            return message === '';
+        }
+        dateInput.addEventListener('input', validateDate);
+        dateInput.addEventListener('change', validateDate);
+
         renderPeriodOptions();
         timeInput.addEventListener('change', () => {
             if (timeInput.value === 'morning' || timeInput.value === 'afternoon') {
@@ -132,10 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 errorText.hidden = false;
                 return;
             }
-            if (payload.date < dateInput.min) {
-                dateInput.setCustomValidity('Elegí una fecha a partir de mañana.');
+            if (!validateDate()) {
                 dateInput.reportValidity();
-                dateInput.setCustomValidity('');
                 return;
             }
 
