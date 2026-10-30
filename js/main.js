@@ -197,34 +197,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const navMenu = document.getElementById('navMenu');
     const navLinks = document.querySelectorAll('.nav-link');
 
+    let heroFinished = false;
     function finishHero() {
-        if (!hero) return;
+        if (!hero || heroFinished) return;
+        heroFinished = true;
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         navbar?.classList.add('visible');
         mainContent?.classList.add('visible');
         heroBackground?.style.setProperty('animation', 'none');
         hero.style.cursor = 'default';
 
-        if (reducedMotion) {
+        const hideHero = () => {
             hero.style.display = 'none';
             adjustSplitSections();
+        };
+
+        if (reducedMotion) {
+            hideHero();
             return;
         }
 
-        hero.style.transition = 'opacity .7s ease';
-        requestAnimationFrame(() => {
-            hero.style.opacity = '0';
-        });
-        window.setTimeout(() => {
-            hero.style.display = 'none';
-            adjustSplitSections();
-        }, 700);
+        // Presentación de marca: el telón sube (solo transform/opacity) y se retira el hero.
+        hero.classList.add('hero-leaving');
+        window.setTimeout(hideHero, 850);
     }
 
     if (hero) {
         // El contenido nunca queda bloqueado detrás de una animación larga.
         heroBackground?.style.setProperty('animation', 'none');
-        window.setTimeout(finishHero, 700);
+        window.setTimeout(finishHero, 1050);
         hero.addEventListener('click', finishHero, { once: true });
     } else {
         navbar?.classList.add('visible');
