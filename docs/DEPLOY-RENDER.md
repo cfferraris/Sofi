@@ -44,6 +44,22 @@
 - **Antes de lanzar el dominio final:** quitar `noindex` de `index.html` y `privacidad.html`, verificar el canonical y el sitemap contra las URLs reales, y comprobar que el dominio final sirve HTTPS. Esa tarea requiere un cambio explícito de lanzamiento.
 - `robots.txt` permite el rastreo para que los motores puedan leer la directiva `noindex`; no sustituirla por `Disallow: /` en esta estrategia.
 
+## Cabeceras HTTP (configuradas en el panel de Render, no en el repositorio)
+
+Render las aplica desde *Settings → Headers* del servicio estático `Sofi`. Si se recrea el servicio, hay que volver a cargarlas; sin ellas el sitio sigue funcionando pero pierde estas protecciones:
+
+| Cabecera | Valor esperado |
+|---|---|
+| `X-Robots-Tag` | `noindex, follow` solo en staging. **Quitarla al lanzar el dominio final.** |
+| `Content-Security-Policy` | Debe ser igual o más permisiva que la `<meta>` del HTML: `script-src 'self'; style-src 'self'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube.com`. Ya no hace falta `unpkg.com` ni `unsafe-inline`. |
+| `Strict-Transport-Security` | `max-age=31536000` (agregar `includeSubDomains` solo si todo el dominio es HTTPS) |
+| `X-Content-Type-Options` | `nosniff` |
+| `X-Frame-Options` | `DENY` |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` |
+| `Permissions-Policy` | Mínimo necesario (p. ej. `camera=(), microphone=(), geolocation=()`) |
+
+La auditoría `tests/production-audit.mjs` comprueba su presencia en cada push.
+
 ## Lighthouse y Core Web Vitals
 
 La auditoría automatizada de publicación no equivale a una medición de Core Web Vitals. Antes de cerrar P2-A, ejecutar Lighthouse en la URL de staging en móvil y escritorio, guardar el informe JSON/HTML y registrar Performance, LCP, CLS, TBT como proxy de INP y oportunidades principales. INP real requiere datos de interacción de campo; no se debe presentar TBT como si fuera INP.

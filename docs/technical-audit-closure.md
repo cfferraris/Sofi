@@ -50,8 +50,21 @@ El PR permanece abierto y en borrador. No se fusiona sin autorización explícit
 - Nueva transición de presentación de marca (logo con desenfoque suave, línea de marca y telón que sube). Solo usa `transform` y `opacity`, se omite con `prefers-reduced-motion` y se puede saltear con un clic. Medir Lighthouse antes de dar por cerrada su incidencia en LCP.
 - Pruebas: 31 estáticas y 7 de navegador aprobadas en local.
 
-### Pendientes detectados (sin tocar)
+### Resuelto después de la auditoría completa
 
-- **Logos WebP sin transparencia (P1):** `assets/img/logos/LogoPrincipal/Verde.webp` y `assets/img/logos/Isotipo2/Azul.webp` se guardaron como RGB sin canal alfa y se ven con un recuadro gris azulado. Los PNG originales sí tienen transparencia. Requiere autorización para reemplazarlos.
-- Formulario de turnos sin respaldo si WhatsApp no abre (enlace y copia del mensaje).
-- Fuentes TTF (704 KB) a WOFF2; menú móvil cerrado alcanzable con Tab; `h1` oculto tras la intro; metadatos de `recursos.html` y `privacidad.html`; cabeceras fuera del repositorio; workflows de un solo uso con permiso de escritura.
+- **Logos con recuadro (causa raíz):** `scripts/optimize_images.py` convertía los PNG de paleta a RGB (perdía la transparencia) y los reducía antes de convertir. Se corrigió, los logos se guardan sin pérdida con alfa y coinciden pixel a pixel con los PNG aprobados. El umbral de CI del isotipo pasó de 5 KB a 10 KB (el archivo con transparencia pesa 8 KB).
+- **Fuentes:** las 13 tipografías de marca se sirven en WOFF2 sin recortar glyphs (1,1 MB → 0,4 MB); los TTF quedan como respaldo.
+- **Formulario de turnos:** si WhatsApp no se abre hay «Abrir WhatsApp», «Copiar mensaje» y «Editar mis datos»; el mensaje no se renderiza ni se guarda.
+- **Accesibilidad:** el menú móvil cerrado ya no recibe foco; el `h1` vive en `main`.
+- **Iconos y CSP:** sin scripts de terceros; la CSP queda en `script-src 'self'` y `style-src 'self'`, sin `unsafe-inline`.
+- **Metadatos:** canonical y Open Graph en `recursos.html` y `privacidad.html`.
+- **CI:** se retiraron 5 workflows de un solo uso con permiso de escritura. `finalize-browser-tests` reescribía `package.json` y quitaba la prueba de turnos de `test:e2e`.
+- **Testimonios:** se retiró la sección vacía «Opiniones de las familias» y su JavaScript. Reincorporarla solo con testimonios reales y autorizados.
+
+### Pendientes
+
+- CSS duplicado y reglas sin uso (incluidas las de testimonios): limpiar solo con comparación visual.
+- PNG originales sin referencia y logos de otras paletas: eliminar solo con autorización.
+- Revisión legal de `privacidad.html`, correo y redes sociales (titularidad).
+- Cabeceras HTTP: viven en el panel de Render; ver `docs/DEPLOY-RENDER.md`.
+- Medir Lighthouse con la nueva transición y las fuentes WOFF2.
