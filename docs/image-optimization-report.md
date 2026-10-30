@@ -16,7 +16,7 @@ Conversion: Pillow WebP quality 82, method 6. Logos: lossless with alpha preserv
 | Duda.png | 1,417,136 B | 45,888 B | 1344×768 | 1344×768 | yes |
 | Ubicacion.png | 1,143,354 B | 69,796 B | 1024×1024 | 1024×1024 | yes |
 | logos/LogoPrincipal/Verde.png | 41,305 B | 25,656 B | 1499×1081 | 440×317 | yes |
-| logos/Isotipo2/Azul.png | 22,758 B | 8,226 B | 1081×1081 | 160×160 | yes |
+| logos/Isotipo2/Azul.png | 22,758 B | 8,352 B | 1081×1081 | 160×160 | yes |
 | fondos/Pat_01_01.png | 130,571 B | 22,608 B | 2784×1571 | 1600×903 | yes |
 
 ## Responsive WebP variants
@@ -37,7 +37,7 @@ The HTML uses srcset so browsers can select an 800 px variant on narrower displa
 **Potential reduction when the 800 px candidate is selected:** 204,964 B across the eight editorial images.
 
 **Total source size:** 12,745,738 B
-**Total served size for these 11 images after conversion:** 533,094 B
-**Estimated reduction:** 12,212,644 B (95.8%).
+**Total served size for these 11 images after conversion:** 533,220 B
+**Estimated reduction:** 12,212,518 B (95.8%).
 
 This report measures file bytes, not Lighthouse or Core Web Vitals. Those require a browser-based performance run against the deployed build.
