@@ -1,0 +1,10 @@
+#hero { display: none; }
+#navbar, #mainContent {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+}
+body { overflow: auto; }
+.whatsapp-float { opacity: 1; pointer-events: auto; }

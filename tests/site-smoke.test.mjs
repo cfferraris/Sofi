@@ -42,9 +42,9 @@ test('HTML ids are unique and internal links have targets', () => {
   assert.deepEqual([...new Set(missingTargets)], [], `Missing anchor targets: ${[...new Set(missingTargets)].join(', ')}`);
 });
 
-test('intro slider controls target the intro slider, not the testimonials carousel', () => {
+test('intro slider controls target the intro slider only', () => {
   assert.match(js, /introNextBtn\.disabled\s*=\s*introCurrentIndex\s*>=\s*introSlides\.length\s*-\s*1/);
-  assert.doesNotMatch(js, /nextBtn\.disabled\s*=\s*introCurrentIndex/);
+  assert.doesNotMatch(js, /[^o]nextBtn\.disabled\s*=\s*introCurrentIndex/);
 });
 
 test('footer year is initialized by the external script allowed by CSP', () => {
@@ -58,8 +58,7 @@ test('referenced local icon path matches the versioned filename case', () => {
   assert.doesNotMatch(html, /assets\/icons\/instagram\.svg/);
 });
 
-test('intro slider and testimonials carousel are manual-only and do not auto-rotate', () => {
-  assert.match(js, /carouselRegion\.setAttribute\('data-autoplay', 'off'\)/);
+test('intro slider is manual-only and does not auto-rotate', () => {
   assert.match(js, /introRegion\.setAttribute\('data-autoplay', 'off'\)/);
   assert.doesNotMatch(js, /setInterval\s*\(/);
   assert.doesNotMatch(html, /introAutoplayToggle|carouselAutoplayToggle|Pausar cambio automático/i);
@@ -133,10 +132,11 @@ test('CSP explicitly permits only the script sources used by the page', () => {
   assert.ok(match, 'Missing Content-Security-Policy meta');
   const policy = match[1].replace(/\s+/g, ' ').trim();
   assert.match(policy, /(?:^|; )default-src 'self'(?:;|$)/);
-  assert.match(policy, /(?:^|; )script-src 'self' https:\/\/unpkg\.com(?:;|$)/);
-  assert.doesNotMatch(policy, /script-src[^;]*'unsafe-inline'|script-src[^;]*'unsafe-eval'/);
-  assert.match(html, /<script src=["']https:\/\/unpkg\.com\/lucide@0\.468\.0\/dist\/umd\/lucide\.min\.js["'] defer><\/script>/);
-  assert.doesNotMatch(html, /lucide@latest/i);
+  assert.match(policy, /(?:^|; )script-src 'self'(?:;|$)/);
+  assert.match(policy, /(?:^|; )style-src 'self'(?:;|$)/);
+  assert.doesNotMatch(policy, /unsafe-inline|unsafe-eval|unpkg\.com/);
+  assert.doesNotMatch(html, /<script[^>]+src=["']https?:/i, 'no third-party scripts');
+  assert.doesNotMatch(html, /<style[\s>]|\sstyle=/i, 'no inline styles under the strict CSP');
 });
 
 test('JSON-LD is valid structured data and remains separate from executable JavaScript', () => {
@@ -172,10 +172,10 @@ test('inactive slider and carousel dots have solid high-contrast boundaries', ()
     'Both sets of inactive interactive indicators must have a solid dark boundary');
 });
 
-test('navigation and carousel controls use native semantics', () => {
+test('navigation and slider controls use native semantics', () => {
   assert.doesNotMatch(html, /role=["'](?:menubar|menuitem|none|tablist|tab)["']/);
-  assert.equal([...js.matchAll(/setAttribute\('aria-pressed'/g)].length, 4,
-    'Carousel indicators and pause/resume controls must expose their pressed state');
+  assert.equal([...js.matchAll(/setAttribute\('aria-pressed'/g)].length, 2,
+    'Intro slider indicators must expose their pressed state');
   assert.doesNotMatch(js, /setAttribute\('role', 'tab'\)|aria-selected/);
 });
 
@@ -193,8 +193,10 @@ test('HTML and CSS avoid !important overrides', () => {
 });
 
 test('no-JavaScript fallback is present so the hero cannot block access to the page', () => {
-  assert.match(html, /<noscript>[\s\S]*?#hero\s*\{\s*display:\s*none\s*;/);
-  assert.match(html, /#navbar, #mainContent[\s\S]*?visibility:\s*visible\s*;/);
+  assert.match(html, /<noscript>\s*<link rel="stylesheet" href="css\/noscript\.css">\s*<\/noscript>/);
+  const noscriptCss = readFileSync(resolve(root, 'css/noscript.css'), 'utf8');
+  assert.match(noscriptCss, /#hero\s*\{\s*display:\s*none\s*;/);
+  assert.match(noscriptCss, /#navbar, #mainContent[\s\S]*?visibility:\s*visible\s*;/);
 });
 
 test('all homepage links to the resource library open a separate tab safely', () => {
@@ -224,12 +226,12 @@ test('XML sitemap includes the public homepage, resource library and privacy pol
 });
 
 
-test('P1: public content remains accessible without app-style ARIA and unpinned third-party scripts', () => {
+test('P1: public content remains accessible without app-style ARIA and without third-party scripts', () => {
   assert.doesNotMatch(html, /role=["'](?:menubar|menuitem|none|tablist|tab)["']/);
   assert.match(html, /<nav\b[^>]*aria-label=["']Navegación principal["']/);
-  assert.match(html, /lucide@0\.468\.0\/dist\/umd\/lucide\.min\.js/);
-  assert.doesNotMatch(html, /lucide@latest/i);
-  assert.match(html, /<noscript>[\s\S]*?#hero\s*\{\s*display:\s*none\s*;/);
+  assert.doesNotMatch(html, /unpkg\.com|lucide@/i);
+  assert.match(js, /const LUCIDE_ICONS = \{/);
+  assert.match(html, /<noscript>\s*<link rel="stylesheet" href="css\/noscript\.css">/);
   assert.match(html, /<script\s+type=["']application\/ld\+json["']>/);
   assert.doesNotMatch(html, /<script>(?!\s*type=["']application\/ld\+json["'])/i);
 });

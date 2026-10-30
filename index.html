@@ -10,11 +10,11 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
-        script-src 'self' https://unpkg.com;
-        style-src 'self' 'unsafe-inline';
+        script-src 'self';
+        style-src 'self';
         img-src 'self' data: https:;
         font-src 'self';
-        connect-src 'self' https://unpkg.com;
+        connect-src 'self';
         frame-src https://www.youtube.com;
         upgrade-insecure-requests;
     ">
@@ -89,9 +89,6 @@
     }
     </script>
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
-    
     <!-- Priorizar las imágenes críticas del primer render: logo inicial y primera diapositiva -->
     <link rel="preload" as="image" href="assets/img/logos/LogoPrincipal/Verde.webp" fetchpriority="high">
     <link rel="preload" as="image" href="assets/img/Ni%C3%B1o%20sobre%20estimulado.webp" imagesrcset="assets/img/Ni%C3%B1o%20sobre%20estimulado-800.webp 800w, assets/img/Ni%C3%B1o%20sobre%20estimulado.webp 1344w" imagesizes="100vw" fetchpriority="high">
@@ -99,18 +96,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="css/styles.min.css">
     <noscript>
-        <style>
-            #hero { display: none; }
-            #navbar, #mainContent {
-                display: block;
-                opacity: 1;
-                visibility: visible;
-                transform: none;
-                pointer-events: auto;
-            }
-            body { overflow: auto; }
-            .whatsapp-float { opacity: 1; pointer-events: auto; }
-        </style>
+        <link rel="stylesheet" href="css/noscript.css">
     </noscript>
 </head>
 <body>
@@ -432,17 +418,6 @@
                         <h3>Acompañamiento familiar</h3>
                         <p>Orientación para madres y padres que buscan una crianza consciente, respetuosa y conectada.</p>
                     </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- Presentación del enfoque: no se publican testimonios sin autorización verificable -->
-        <section id="acompanamiento" class="testimonios-section" aria-labelledby="acompanamiento-heading">
-            <div class="container">
-                <h2 id="acompanamiento-heading">Opiniones de las familias</h2>
-                <div class="opiniones-pendientes">
-                    <i data-lucide="message-circle-heart" aria-hidden="true"></i>
-                    <p>Este espacio queda preparado para incorporar experiencias reales de las familias, únicamente con su autorización. No se publican testimonios inventados ni datos personales sin consentimiento.</p>
                 </div>
             </div>
         </section>

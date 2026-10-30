@@ -173,6 +173,7 @@ try {
         || report.resourceFailures.length
         || (report.icons.lucideScriptResponse && report.icons.lucideScriptResponse.status !== 200)
         || report.icons.inlineLucidePlaceholders > 0
+        || report.icons.renderedLucideSvgCount === 0
         || report.publishedFeatures.appointmentFormPresent === false
         || report.securityHeaderFindings.length > 0
         ? 'REVIEW'

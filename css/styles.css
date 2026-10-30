@@ -3018,3 +3018,10 @@ body:has(.navbar.visible) .whatsapp-float {
 .appointment-fallback-action[hidden] {
     display: none;
 }
+
+/* Política de privacidad: ancho de lectura (antes era un estilo en línea) */
+.privacy-page {
+    max-width: 850px;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}

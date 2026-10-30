@@ -6,11 +6,56 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ========================================
-    // INICIALIZAR LUCIDE ICONS
+    // ÍCONOS (Lucide v0.468.0, licencia ISC) — alojados en el sitio, sin dependencias externas
     // ========================================
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
+    const LUCIDE_ICONS = {
+        'arrow-right': '<path d="M5 12h14" /><path d="m12 5 7 7-7 7" />',
+        'book-open': '<path d="M12 7v14" /><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />',
+        'brain': '<path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" /><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" /><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" /><path d="M17.599 6.5a3 3 0 0 0 .399-1.375" /><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" /><path d="M3.477 10.896a4 4 0 0 1 .585-.396" /><path d="M19.938 10.5a4 4 0 0 1 .585.396" /><path d="M6 18a4 4 0 0 1-1.967-.516" /><path d="M19.967 17.484A4 4 0 0 1 18 18" />',
+        'brain-circuit': '<path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" /><path d="M9 13a4.5 4.5 0 0 0 3-4" /><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" /><path d="M3.477 10.896a4 4 0 0 1 .585-.396" /><path d="M6 18a4 4 0 0 1-1.967-.516" /><path d="M12 13h4" /><path d="M12 18h6a2 2 0 0 1 2 2v1" /><path d="M12 8h8" /><path d="M16 8V5a2 2 0 0 1 2-2" /><circle cx="16" cy="13" r=".5" /><circle cx="18" cy="3" r=".5" /><circle cx="20" cy="21" r=".5" /><circle cx="20" cy="8" r=".5" />',
+        'calendar-check': '<path d="M8 2v4" /><path d="M16 2v4" /><rect width="18" height="18" x="3" y="4" rx="2" /><path d="M3 10h18" /><path d="m9 16 2 2 4-4" />',
+        'chevron-left': '<path d="m15 18-6-6 6-6" />',
+        'chevron-right': '<path d="m9 18 6-6-6-6" />',
+        'clock': '<circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />',
+        'download': '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" />',
+        'external-link': '<path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />',
+        'heart': '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />',
+        'heart-handshake': '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /><path d="M12 5 9.04 7.96a2.17 2.17 0 0 0 0 3.08c.82.82 2.13.85 3 .07l2.07-1.9a2.82 2.82 0 0 1 3.79 0l2.96 2.66" /><path d="m18 15-2-2" /><path d="m15 18-2-2" />',
+        'info': '<circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" />',
+        'lightbulb': '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" />',
+        'map-pin': '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /><circle cx="12" cy="10" r="3" />',
+        'message-circle': '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />',
+        'message-circle-heart': '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /><path d="M15.8 9.2a2.5 2.5 0 0 0-3.5 0l-.3.4-.35-.3a2.42 2.42 0 1 0-3.2 3.6l3.6 3.5 3.6-3.5c1.2-1.2 1.1-2.7.2-3.7" />',
+        'phone': '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />',
+        'puzzle': '<path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z" />',
+        'sparkles': '<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" /><path d="M20 3v4" /><path d="M22 5h-4" /><path d="M4 17v2" /><path d="M5 18H3" />',
+        'sprout': '<path d="M7 20h10" /><path d="M10 20c5.5-2.5.8-6.4 3-10" /><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z" /><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z" />',
+        'users': '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />',
+        'youtube': '<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" /><path d="m10 15 5-3-5-3z" />'
+    };
+
+    function renderIcons() {
+        const svgNS = 'http://www.w3.org/2000/svg';
+        document.querySelectorAll('[data-lucide]').forEach((placeholder) => {
+            const name = placeholder.getAttribute('data-lucide');
+            const inner = LUCIDE_ICONS[name];
+            if (!inner) return;
+            const svg = document.createElementNS(svgNS, 'svg');
+            const attrs = {
+                width: '24', height: '24', viewBox: '0 0 24 24', fill: 'none',
+                stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round'
+            };
+            Object.entries(attrs).forEach(([key, value]) => svg.setAttribute(key, value));
+            Array.from(placeholder.attributes).forEach((attr) => {
+                if (attr.name !== 'data-lucide' && attr.name !== 'class') svg.setAttribute(attr.name, attr.value);
+            });
+            svg.setAttribute('class', ['lucide', `lucide-${name}`, placeholder.getAttribute('class')].filter(Boolean).join(' '));
+            // Contenido controlado por este archivo (no proviene de la entrada del usuario).
+            svg.innerHTML = inner;
+            placeholder.replaceWith(svg);
+        });
     }
+    renderIcons();
 
     // ========================================
     // SOLICITUD DE TURNOS — WhatsApp
@@ -332,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function adjustSplitSections() {
-        const sections = document.querySelectorAll('.service-section, .testimonios-section');
+        const sections = document.querySelectorAll('.service-section');
         if (window.innerWidth <= 768) {
             sections.forEach((section) => section.style.removeProperty('min-height'));
             return;
@@ -340,91 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const navH = navbar?.offsetHeight ?? 0;
         const halfHeight = (window.innerHeight - navH) / 2;
         sections.forEach((section) => section.style.setProperty('min-height', `${halfHeight}px`));
-    }
-
-    // ========================================
-    // CARRUSEL DE TESTIMONIOS — MANUAL
-    // ========================================
-    const track = document.getElementById('carouselTrack');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const dotsContainer = document.getElementById('carouselDots');
-    const carouselStatus = document.getElementById('carouselStatus');
-
-    if (track && prevBtn && nextBtn && dotsContainer) {
-        const cards = Array.from(track.querySelectorAll('.testimonio-card'));
-        const carouselRegion = track.closest('.testimonios-section');
-        let currentIndex = 0;
-        let visibleCards = getVisibleCards();
-
-        function getVisibleCards() {
-            if (window.innerWidth <= 768) return 1;
-            if (window.innerWidth <= 1024) return 2;
-            return 3;
-        }
-        function getCardWidth() {
-            const gap = parseFloat(getComputedStyle(track).gap) || 0;
-            return (cards[0]?.offsetWidth ?? 0) + gap;
-        }
-        function buildDots() {
-            dotsContainer.innerHTML = '';
-            const total = Math.max(0, cards.length - visibleCards + 1);
-            for (let i = 0; i < total; i += 1) {
-                const dot = document.createElement('button');
-                dot.classList.add('carousel-dot');
-                dot.setAttribute('aria-label', `Ir al testimonio ${i + 1}`);
-                dot.setAttribute('aria-pressed', String(i === 0));
-                if (i === 0) dot.classList.add('active');
-                dot.addEventListener('click', () => goToSlide(i));
-                dotsContainer.appendChild(dot);
-            }
-        }
-        function updateDots() {
-            dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, i) => {
-                const active = i === currentIndex;
-                dot.classList.toggle('active', active);
-                dot.setAttribute('aria-pressed', String(active));
-            });
-        }
-        function updateButtons() {
-            prevBtn.disabled = currentIndex === 0;
-            nextBtn.disabled = currentIndex >= cards.length - visibleCards;
-        }
-        function goToSlide(index) {
-            const maxIndex = Math.max(0, cards.length - visibleCards);
-            currentIndex = Math.max(0, Math.min(index, maxIndex));
-            track.style.willChange = 'transform';
-            track.style.transform = `translateX(-${currentIndex * getCardWidth()}px)`;
-            track.addEventListener('transitionend', () => track.style.removeProperty('will-change'), { once: true });
-            updateDots();
-            updateButtons();
-            if (carouselStatus) carouselStatus.textContent = `Testimonio ${currentIndex + 1} de ${cards.length - visibleCards + 1}`;
-        }
-
-        prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
-        nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
-
-        let touchStartX = 0;
-        track.addEventListener('touchstart', (event) => { touchStartX = event.touches[0].clientX; }, { passive: true });
-        track.addEventListener('touchend', (event) => {
-            const diff = touchStartX - event.changedTouches[0].clientX;
-            if (Math.abs(diff) > 50) goToSlide(diff > 0 ? currentIndex + 1 : currentIndex - 1);
-        }, { passive: true });
-
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                visibleCards = getVisibleCards();
-                buildDots();
-                goToSlide(0);
-                adjustSplitSections();
-            }, CONFIG.CAROUSEL_RESIZE_DEBOUNCE);
-        });
-
-        buildDots();
-        updateButtons();
-        if (carouselRegion) carouselRegion.setAttribute('data-autoplay', 'off');
     }
 
     // ========================================

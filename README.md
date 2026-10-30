@@ -6,7 +6,8 @@ Sitio institucional estático de Piel de Mar, orientado a presentar los servicio
 
 - `index.html`: contenido, metadatos SEO, datos estructurados y navegación.
 - `css/styles.css`: estilos, identidad visual, tipografías locales y comportamiento responsive.
-- `js/main.js`: transición inicial, navegación móvil, carrusel de testimonios y slider introductorio.
+- `js/main.js`: iconos, solicitud de turnos por WhatsApp, transición inicial, navegación móvil y slider introductorio.
+- `css/noscript.css`: estilos de respaldo cuando JavaScript está desactivado.
 - `assets/img/`: imágenes, fondos y variantes de logotipos.
 - `assets/icons/`: iconos SVG.
 - `assets/tipografias/`: fuentes locales.
@@ -40,7 +41,8 @@ Las pruebas comprueban rutas locales, referencias internas, IDs duplicados y reg
 
 ## Dependencias externas
 
-- Lucide se carga desde unpkg. Si el proveedor externo no está disponible, los iconos pueden no inicializarse.
+- No hay scripts de terceros. Los iconos (Lucide v0.468.0, licencia ISC) están incluidos en `js/main.js` como `LUCIDE_ICONS`; para agregar uno, copiar su contenido SVG desde `lucide-static@0.468.0` y usar `<i data-lucide="nombre">`.
+- La CSP (`<meta>`) es estricta: `script-src 'self'` y `style-src 'self'`; no se permiten estilos ni scripts en línea. El respaldo sin JavaScript vive en `css/noscript.css`.
 - El contacto publicado se limita al WhatsApp confirmado y a la dirección confirmada. El email y los perfiles sociales no se publican como datos verificados hasta que se confirme su titularidad.
 
 ## Estado de calidad
@@ -51,5 +53,5 @@ Consultar [la auditoría inicial y el plan de remediación](docs/AUDITORIA-BASE.
 ## SEO y publicación
 
 - `robots.txt` y `sitemap.xml` describen las URLs previstas del dominio final.
-- Mientras se trabaja únicamente en la URL de staging, la página principal y la política de privacidad llevan `noindex, follow`.
+- Mientras se trabaja únicamente en la URL de staging, el `noindex, follow` se aplica con la cabecera HTTP `X-Robots-Tag` configurada en Render (no hay etiqueta `<meta name="robots">` en el HTML). Ver «Cabeceras HTTP» en [DEPLOY-RENDER.md](docs/DEPLOY-RENDER.md).
 - Antes de habilitar el dominio final, revisar las instrucciones de lanzamiento y verificación en [DEPLOY-RENDER.md](docs/DEPLOY-RENDER.md). No quitar `noindex` hasta que el dominio final esté listo.
