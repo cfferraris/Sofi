@@ -116,7 +116,10 @@ try {
         await page.locator('#appointmentReason').fill('Consulta automatizada de producción');
         const minDate = await page.locator('#appointmentDate').getAttribute('min');
         assert.ok(minDate, 'Appointment date must have a minimum');
-        await page.locator('#appointmentDate').fill(minDate);
+        const [my, mm, md] = minDate.split('-').map(Number);
+        const weekdayDate = new Date(Date.UTC(my, mm - 1, md));
+        while (weekdayDate.getUTCDay() === 0 || weekdayDate.getUTCDay() === 6) weekdayDate.setUTCDate(weekdayDate.getUTCDate() + 1);
+        await page.locator('#appointmentDate').fill(weekdayDate.toISOString().slice(0, 10));
         await page.locator('#appointmentConsent').check();
         const time = page.locator('#appointmentTime');
         await time.selectOption('morning');

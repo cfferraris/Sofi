@@ -130,7 +130,10 @@ test('appointment flow works on desktop and mobile without sending WhatsApp mess
       await page.locator('#appointmentReason').fill('Consulta de prueba automatizada');
       const date = await page.locator('#appointmentDate').getAttribute('min');
       assert.ok(date, 'Date input must have a minimum date');
-      await page.locator('#appointmentDate').fill(date);
+      const [dy, dm, dd] = date.split('-').map(Number);
+      const weekdayDate = new Date(Date.UTC(dy, dm - 1, dd));
+      while (weekdayDate.getUTCDay() === 0 || weekdayDate.getUTCDay() === 6) weekdayDate.setUTCDate(weekdayDate.getUTCDate() + 1);
+      await page.locator('#appointmentDate').fill(weekdayDate.toISOString().slice(0, 10));
       await page.locator('#appointmentConsent').check();
 
       const time = page.locator('#appointmentTime');
@@ -247,6 +250,38 @@ test('home page and privacy policy have no automated WCAG 2.2 A/AA violations', 
       .analyze();
     assert.deepEqual(privacyResults.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, html: n.html, summary: n.failureSummary })), help: v.help })),
       [], 'Privacy page WCAG automated findings');
+  } finally {
+    await browser.close();
+  }
+});
+
+test('closed mobile menu is not keyboard reachable and the page keeps a visible h1 after the intro', async () => {
+  const browser = await chromium.launch({ headless: true });
+
+  try {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('#hero')).display === 'none');
+
+    assert.equal(await page.locator('main h1').count(), 1, 'el h1 debe vivir dentro de main');
+    assert.equal(await page.locator('#hero h1').count(), 0);
+
+    const closedVisibility = await page.locator('#navMenu').evaluate((el) => getComputedStyle(el).visibility);
+    assert.equal(closedVisibility, 'hidden');
+    for (let i = 0; i < 4; i += 1) {
+      await page.keyboard.press('Tab');
+      const insideMenu = await page.evaluate(() => Boolean(document.activeElement?.closest('#navMenu')));
+      assert.equal(insideMenu, false, 'el foco no debe entrar al menú cerrado');
+    }
+
+    await page.locator('#menuToggle').click();
+    assert.equal(await page.locator('#menuToggle').getAttribute('aria-label'), 'Cerrar menú de navegación');
+    assert.equal(await page.locator('#navMenu').evaluate((el) => getComputedStyle(el).visibility), 'visible');
+
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#menuToggle').getAttribute('aria-label'), 'Abrir menú de navegación');
+    await context.close();
   } finally {
     await browser.close();
   }
