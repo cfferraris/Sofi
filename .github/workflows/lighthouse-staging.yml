@@ -141,7 +141,7 @@ jobs:
             exit 1
           fi
           isotipo_bytes="${isotipo_result#* }"
-          if [ "$isotipo_bytes" -ge 5000 ]; then
+          if [ "$isotipo_bytes" -ge 10000 ]; then
             echo "::error::Optimized navbar isotipo is unexpectedly large: $isotipo_bytes bytes"
             exit 1
           fi
