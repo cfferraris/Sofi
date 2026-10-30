@@ -43,3 +43,15 @@
 - [ ] Autorización explícita para sacar el PR del borrador o fusionar a `main`.
 
 El PR permanece abierto y en borrador. No se fusiona sin autorización explícita.
+
+## Actualización — 30 de octubre de 2026 (auditoría completa y ajustes)
+
+- Horario de atención confirmado por la propietaria: lunes a viernes, horario cortado (8:00–12:00 y 16:00–20:00). El formulario valida día hábil y fecha desde mañana; el texto de contacto y el JSON-LD usan el mismo horario.
+- Nueva transición de presentación de marca (logo con desenfoque suave, línea de marca y telón que sube). Solo usa `transform` y `opacity`, se omite con `prefers-reduced-motion` y se puede saltear con un clic. Medir Lighthouse antes de dar por cerrada su incidencia en LCP.
+- Pruebas: 31 estáticas y 7 de navegador aprobadas en local.
+
+### Pendientes detectados (sin tocar)
+
+- **Logos WebP sin transparencia (P1):** `assets/img/logos/LogoPrincipal/Verde.webp` y `assets/img/logos/Isotipo2/Azul.webp` se guardaron como RGB sin canal alfa y se ven con un recuadro gris azulado. Los PNG originales sí tienen transparencia. Requiere autorización para reemplazarlos.
+- Formulario de turnos sin respaldo si WhatsApp no abre (enlace y copia del mensaje).
+- Fuentes TTF (704 KB) a WOFF2; menú móvil cerrado alcanzable con Tab; `h1` oculto tras la intro; metadatos de `recursos.html` y `privacidad.html`; cabeceras fuera del repositorio; workflows de un solo uso con permiso de escritura.
