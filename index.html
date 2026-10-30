@@ -119,7 +119,6 @@
     <section id="hero" class="hero" aria-label="Pantalla de inicio Piel de Mar">
         <div class="hero-background"></div>
         <div class="logo-container">
-            <h1 class="sr-only">Piel de Mar — Estimulación Temprana y Acompañamiento Familiar en Esperanza, Santa Fe</h1>
             <img
                 src="assets/img/logos/LogoPrincipal/Verde.webp"
                 alt="Piel de Mar - Logo principal"
@@ -205,6 +204,7 @@
 
     <!-- CONTENIDO PRINCIPAL -->
     <main id="mainContent" class="main-content">
+        <h1 class="sr-only">Piel de Mar — Estimulación Temprana y Acompañamiento Familiar en Esperanza, Santa Fe</h1>
 
         <!-- Sección Piel de Mar - SLIDER OPTIMIZADO -->
         <section id="piel-de-mar" class="intro-section" aria-labelledby="intro-heading">
@@ -623,6 +623,12 @@
                             <div id="appointmentRequestResult" class="appointment-result" aria-labelledby="appointmentRequestStatus" hidden>
                                 <p id="appointmentRequestStatus" class="appointment-status" role="status" aria-live="polite"></p>
                                 <p class="appointment-followup">El turno debe ser confirmado por Piel de Mar después de recibir y revisar tu mensaje.</p>
+                                <div class="appointment-fallback">
+                                    <p class="appointment-fallback-help">¿No se abrió WhatsApp? Usá una de estas opciones. Los datos no se guardan en este sitio.</p>
+                                    <a id="appointmentOpenWhatsApp" class="btn link appointment-fallback-action" href="#" target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
+                                    <button type="button" id="appointmentCopyMessage" class="btn link appointment-fallback-action">Copiar mensaje</button>
+                                    <button type="button" id="appointmentEditData" class="btn link appointment-fallback-action">Editar mis datos</button>
+                                </div>
                                 <a class="btn primary appointment-resource-action" href="recursos.html" target="_blank" rel="noopener noreferrer">Ver recursos gratuitos</a>
                             </div>
                             <p id="appointmentRequestError" class="appointment-error" role="alert" hidden></p>

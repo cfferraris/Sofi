@@ -162,3 +162,53 @@ test('appointment dates are limited to weekdays', async () => {
     await browser.close();
   }
 });
+
+test('appointment fallback offers WhatsApp link, copy and edit without rendering the message', async () => {
+  const browser = await chromium.launch({ headless: true });
+
+  try {
+    const context = await browser.newContext({
+      viewport: { width: 1280, height: 900 },
+      reducedMotion: 'reduce',
+      permissions: ['clipboard-read', 'clipboard-write'],
+    });
+    const page = await context.newPage();
+    // Simula un navegador que bloquea la apertura de WhatsApp.
+    await page.addInitScript(() => { window.open = () => null; });
+    await page.goto(base, { waitUntil: 'domcontentloaded' });
+
+    await page.locator('#appointmentName').fill('Prueba Respaldo');
+    await page.locator('#appointmentInsurance').fill('Particular');
+    await page.locator('#appointmentReason').fill('Consulta de respaldo');
+    const minimumDate = await page.locator('#appointmentDate').getAttribute('min');
+    await page.locator('#appointmentDate').fill(nextWeekday(minimumDate));
+    await page.locator('#appointmentConsent').check();
+    await page.locator('#appointmentTime').selectOption('morning');
+    await page.locator('#appointmentTime').selectOption('09:00');
+    await page.locator('.appointment-submit').click();
+
+    const result = page.locator('#appointmentRequestResult');
+    await result.waitFor({ state: 'visible' });
+    assert.match(await page.locator('#appointmentRequestStatus').innerText(), /bloqueado WhatsApp/i);
+
+    const href = await page.locator('#appointmentOpenWhatsApp').getAttribute('href');
+    assert.match(href, /^https:\/\/wa\.me\/5493425004018\?text=/);
+    assert.match(decodeURIComponent(href), /Nombre: Prueba Respaldo/);
+
+    await page.locator('#appointmentCopyMessage').click();
+    await page.getByText('Mensaje copiado', { exact: false }).first().waitFor();
+    const copied = await page.evaluate(() => navigator.clipboard.readText());
+    assert.match(copied, /Hola, quiero solicitar un turno con Piel de Mar\./);
+    assert.match(copied, /Horario deseado: 09:00/);
+    assert.equal(await result.getByText('Prueba Respaldo').count(), 0, 'el mensaje no debe renderizarse');
+
+    await page.locator('#appointmentEditData').click();
+    assert.equal(await page.locator('#appointmentRequestForm').isVisible(), true);
+    assert.equal(await page.locator('#appointmentName').inputValue(), 'Prueba Respaldo');
+    assert.equal(await page.evaluate(() => document.activeElement.id), 'appointmentName');
+
+    await context.close();
+  } finally {
+    await browser.close();
+  }
+});

@@ -23,6 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultPanel = document.getElementById('appointmentRequestResult');
         const statusText = document.getElementById('appointmentRequestStatus');
         const errorText = document.getElementById('appointmentRequestError');
+        const openWhatsAppLink = document.getElementById('appointmentOpenWhatsApp');
+        const copyButton = document.getElementById('appointmentCopyMessage');
+        const editButton = document.getElementById('appointmentEditData');
+        let preparedMessage = '';
         const WHATSAPP_NUMBER = '5493425004018';
 
         function localDateString(date = new Date()) {
@@ -178,8 +182,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
                 block: 'nearest'
             });
-            window.open(url, '_blank', 'noopener,noreferrer');
+            preparedMessage = message;
+            if (openWhatsAppLink) openWhatsAppLink.href = url;
+            const opened = window.open(url, '_blank', 'noopener,noreferrer');
             appointmentForm.hidden = true;
+            if (!opened) {
+                statusText.textContent = 'Preparamos tu solicitud, pero el navegador pudo haber bloqueado WhatsApp. Usá "Abrir WhatsApp" o copiá el mensaje. El turno todavía no está confirmado: quedará confirmado cuando Piel de Mar responda tu mensaje.';
+            }
+        });
+
+        // Respaldo cuando WhatsApp no se abre: el mensaje vive solo en memoria y nunca se renderiza ni se guarda.
+        if (copyButton) {
+            if (!navigator.clipboard?.writeText) {
+                copyButton.hidden = true;
+            } else {
+                copyButton.addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText(preparedMessage);
+                        statusText.textContent = 'Mensaje copiado. Pegalo en una conversación de WhatsApp con Piel de Mar y envialo. El turno todavía no está confirmado: quedará confirmado cuando Piel de Mar responda tu mensaje.';
+                    } catch {
+                        statusText.textContent = 'No pudimos copiar el mensaje. Usá "Abrir WhatsApp" o volvé a "Editar mis datos".';
+                    }
+                });
+            }
+        }
+        editButton?.addEventListener('click', () => {
+            resetFeedback();
+            preparedMessage = '';
+            if (openWhatsAppLink) openWhatsAppLink.href = '#';
+            appointmentForm.hidden = false;
+            document.getElementById('appointmentName')?.focus();
         });
     }
 
@@ -239,12 +271,14 @@ document.addEventListener('DOMContentLoaded', () => {
         menuToggle?.classList.remove('active');
         navMenu?.classList.remove('active');
         menuToggle?.setAttribute('aria-expanded', 'false');
+        menuToggle?.setAttribute('aria-label', 'Abrir menú de navegación');
     }
 
     menuToggle?.addEventListener('click', () => {
         const isOpen = navMenu.classList.toggle('active');
         menuToggle.classList.toggle('active', isOpen);
         menuToggle.setAttribute('aria-expanded', String(isOpen));
+        menuToggle.setAttribute('aria-label', isOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación');
     });
 
     document.addEventListener('click', (event) => {

@@ -2190,7 +2190,8 @@ body:has(.navbar.visible) .whatsapp-float {
         padding: var(--spacing-md);
         gap: 0;
         transform: translateX(-100%);
-        transition: var(--transition-smooth);
+        visibility: hidden;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.6s;
         border-bottom: 1px solid rgba(148, 209, 216, 0.3);
         max-height: calc(100vh - var(--navbar-height));
         overflow-y: auto;
@@ -2198,6 +2199,8 @@ body:has(.navbar.visible) .whatsapp-float {
     }
     .nav-menu.active {
         transform: translateX(0);
+        visibility: visible;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s;
     }
     .nav-menu > li:not(.nav-social-mobile) {
         text-align: left;
@@ -2993,3 +2996,25 @@ body:has(.navbar.visible) .whatsapp-float {
 .resource-category-heading>div{min-width:0;flex:1}
 .resource-category-illustration{display:block;flex:0 0 clamp(100px,16vw,180px);width:clamp(100px,16vw,180px);height:auto;max-height:120px;object-fit:contain;border-radius:12px}
 @media(max-width:600px){.resource-category-heading{gap:.75rem}.resource-category-illustration{flex-basis:96px;width:96px;max-height:76px}}
+
+
+/* Respaldo del formulario de turnos si WhatsApp no se abre */
+.appointment-fallback {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+.appointment-fallback-help {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+.appointment-fallback-action {
+    margin-top: 0;
+    font-family: inherit;
+}
+.appointment-fallback-action[hidden] {
+    display: none;
+}
