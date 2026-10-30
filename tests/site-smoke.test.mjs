@@ -117,7 +117,17 @@ test('privacy policy exists, explains the WhatsApp flow and uses the confirmed c
 
 test('primary appointment CTAs route through the validated request form', () => {
   assert.match(html, /href="#consulta"[\s\S]{0,250}class="btn-intro btn-intro-final"/);
-  assert.match(html, /href="#consulta"[\s\S]{0,200}class="whatsapp-float"/);
+});
+
+test('floating button opens WhatsApp directly and the menu links to the on-page resources section', () => {
+  assert.match(html, /<a\s+href="https:\/\/wa\.me\/5493425004018\?text=[^"]*"\s+class="whatsapp-float"\s+target="_blank"\s+rel="noopener noreferrer"/);
+  assert.match(html, /<li><a href="#recursos" class="nav-link">Recursos<\/a><\/li>/);
+  assert.doesNotMatch(html, /class="nav-link"[^>]*target="_blank"/);
+});
+
+test('contact information is not repeated in a second summary block', () => {
+  assert.doesNotMatch(html, /contact-summary|Información práctica/);
+  assert.equal([...html.matchAll(/<address>/g)].length, 1);
 });
 
 test('appointment flow does not call an API or persist personal data', () => {

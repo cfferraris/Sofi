@@ -58,7 +58,7 @@ after(async () => {
   if (server) await new Promise((resolveServer) => server.close(resolveServer));
 });
 
-test('resource library is navigable, responsive and accessible', async () => {
+test('resource library is a collapsible accordion that shows only the chosen section', async () => {
   const browser = await chromium.launch({ headless: true });
 
   try {
@@ -68,73 +68,62 @@ test('resource library is navigable, responsive and accessible', async () => {
     ]) {
       const context = await browser.newContext({ viewport, reducedMotion: 'reduce' });
       const page = await context.newPage();
-
       await page.goto(`${baseURL}/recursos.html`, { waitUntil: 'domcontentloaded' });
 
       assert.equal(await page.title(), 'Recursos | Piel de Mar');
-      assert.equal(await page.locator('.resources-sidebar nav a').count(), 6);
-      assert.equal(await page.locator('.resource-category').count(), 6);
-      assert.equal(await page.locator('.resource-tile').count(), 18);
-      assert.equal(await page.locator('.resource-category-illustration').count(), 6);
-      assert.equal(await page.locator('.resource-category-illustration use').count(), 6);
-      assert.equal(await page.locator('.resource-thumb').count(), 0);
+      assert.equal(await page.locator('details.library-section').count(), 6);
+      assert.equal(await page.locator('details.library-section[open]').count(), 0, 'all sections start collapsed');
+      assert.equal(await page.locator('.library-item:visible').count(), 0, 'no resource is visible until a section is chosen');
+      assert.equal(await page.locator('.library-thumb:visible').count(), 0);
 
-      const spriteResponse = await page.request.get(`${baseURL}/assets/recursos/miniaturas.svg`);
-      assert.equal(spriteResponse.status(), 200, 'the resource thumbnail sprite must load');
-      assert.match(spriteResponse.headers()['content-type'] || '', /image\/svg\+xml/);
-      const spriteMarkup = await spriteResponse.text();
-      const symbolIds = [...spriteMarkup.matchAll(/<symbol id="([^"]+)"/g)].map((match) => match[1]);
-      assert.equal(symbolIds.length, 6, 'the sprite must define one illustration per category');
-      const referencedSymbols = await page.locator('.resource-category-illustration use').evaluateAll((elements) =>
-        elements.map((element) => new URL(element.getAttribute('href'), location.href).hash.slice(1)),
-      );
-      assert.equal(new Set(referencedSymbols).size, 6, 'every category must use a distinct illustration');
-      assert.deepEqual(
-        referencedSymbols.filter((id) => !symbolIds.includes(id)),
-        [],
-        'every category illustration must reference a symbol in the sprite',
-      );
+      // Abrir una sección muestra solo sus 3 recursos, cada uno con su imagen, y mantiene el detalle cerrado.
+      await page.locator('#desarrollo > summary').click();
+      assert.equal(await page.locator('details.library-section[open]').count(), 1);
+      assert.equal(await page.locator('#desarrollo .library-item:visible').count(), 3);
+      assert.equal(await page.locator('#desarrollo .library-thumb:visible').count(), 3);
+      assert.equal(await page.locator('.library-detail:visible').count(), 0, 'details stay hidden until clicked');
 
-      for (const id of [
-        'desarrollo',
-        'crianza',
-        'regulacion',
-        'juego',
-        'lecturas',
-        'guias',
-      ]) {
-        await page.locator(`.resources-sidebar a[href="#${id}"]`).click();
-        await page.waitForFunction((sectionId) => location.hash === `#${sectionId}`, id);
-        assert.ok(await page.locator(`#${id}`).isVisible());
+      // Un recurso se abre con un clic y se cierra con otro.
+      await page.locator('#desarrollo-lectura > summary').click();
+      assert.equal(await page.locator('#desarrollo-lectura .library-detail').isVisible(), true);
+      assert.equal(await page.locator('.library-detail:visible').count(), 1);
+      await page.locator('#desarrollo-lectura > summary').click();
+      assert.equal(await page.locator('#desarrollo-lectura .library-detail').isVisible(), false);
+
+      // Elegir otra sección colapsa la anterior.
+      await page.locator('#juego > summary').click();
+      assert.equal(await page.locator('details.library-section[open]').count(), 1);
+      assert.equal(await page.locator('#desarrollo').evaluate((el) => el.open), false);
+      assert.equal(await page.locator('#juego').evaluate((el) => el.open), true);
+
+      // Teclado: Enter abre y cierra la sección enfocada.
+      await page.locator('#guias > summary').focus();
+      await page.keyboard.press('Enter');
+      assert.equal(await page.locator('#guias').evaluate((el) => el.open), true);
+
+      // El material descargable es un enlace directo.
+      assert.equal(await page.locator('#guias a[download]').getAttribute('href'), 'assets/recursos/registro-semanal.txt');
+      const sprite = await page.request.get(`${baseURL}/assets/recursos/miniaturas.svg`);
+      assert.equal(sprite.status(), 200);
+
+      // Los enlaces de la página principal abren la sección (y el recurso) indicados.
+      await page.goto(`${baseURL}/recursos.html#crianza`, { waitUntil: 'domcontentloaded' });
+      await page.waitForFunction(() => document.querySelector('#crianza').open);
+      assert.equal(await page.locator('details.library-section[open]').count(), 1);
+      await page.goto(`${baseURL}/recursos.html#regulacion-juego`, { waitUntil: 'domcontentloaded' });
+      await page.waitForFunction(() => document.querySelector('#regulacion-juego')?.open);
+      assert.equal(await page.locator('#regulacion').evaluate((el) => el.open), true);
+
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      assert.ok(overflow <= 0, `horizontal overflow: ${overflow}px`);
+
+      for (const open of [false, true]) {
+        if (open) await page.locator('#desarrollo > summary').click();
+        const accessibility = await new AxeBuilder({ page })
+          .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+          .analyze();
+        assert.deepEqual(accessibility.violations.map((violation) => violation.id), []);
       }
-
-      const overflow = await page.evaluate(() => ({
-        scrollWidth: document.documentElement.scrollWidth,
-        clientWidth: document.documentElement.clientWidth,
-        offenders: [...document.querySelectorAll('body *')]
-          .map((element) => ({
-            tag: element.tagName,
-            cls: typeof element.className === 'string' ? element.className : '',
-            id: element.id,
-            left: Math.round(element.getBoundingClientRect().left),
-            right: Math.round(element.getBoundingClientRect().right),
-            width: Math.round(element.getBoundingClientRect().width),
-          }))
-          .filter((element) => element.right > innerWidth + 1 || element.left < -1)
-          .slice(0, 20),
-      }));
-
-      assert.equal(
-        overflow.scrollWidth > overflow.clientWidth,
-        false,
-        JSON.stringify(overflow),
-      );
-
-      const accessibility = await new AxeBuilder({ page })
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-        .analyze();
-
-      assert.deepEqual(accessibility.violations.map((violation) => violation.id), []);
       await context.close();
     }
   } finally {

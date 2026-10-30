@@ -145,7 +145,7 @@
                 <li><a href="#piel-de-mar" class="nav-link">Piel de Mar</a></li>
                 <li><a href="#tu-hijo-y-vos" class="nav-link">Tu hij@ y vos</a></li>
                 <li><a href="#servicios" class="nav-link">Servicios</a></li>
-                <li><a href="recursos.html" class="nav-link" target="_blank" rel="noopener noreferrer">Recursos</a></li>
+                <li><a href="#recursos" class="nav-link">Recursos</a></li>
                 <li><a href="#consulta" class="nav-link">Agendar</a></li>
                 <li><a href="#contacto" class="nav-link">Contacto</a></li>
             <li class="nav-social-mobile">
@@ -544,11 +544,8 @@
 
                     <div class="consultation-content">
                         <div class="consultation-card appointment-card">
-                            <div class="consultation-icon" aria-hidden="true">
-                                <i data-lucide="calendar-check"></i>
-                            </div>
                             <h3 id="consulta-heading">Solicitá un turno</h3>
-                            <p>Completá tus datos y elegí una fecha y un horario de preferencia. Te vamos a derivar a WhatsApp para que revises y envíes la solicitud.</p>
+                            <p class="appointment-lead">Presencial en Esperanza o virtual. Preparamos el mensaje y lo enviás por WhatsApp; el turno queda sujeto a confirmación de Piel de Mar.</p>
 
                             <form id="appointmentRequestForm" class="appointment-form">
                                 <div class="appointment-field">
@@ -558,40 +555,36 @@
 
                                 <div class="appointment-field">
                                     <label for="appointmentInsurance">Obra social o cobertura</label>
-                                    <input id="appointmentInsurance" name="insurance" type="text" maxlength="120" placeholder="Si no tenés, escribí “Particular”" required>
+                                    <input id="appointmentInsurance" name="insurance" type="text" maxlength="120" placeholder="Si no tenés, “Particular”" required>
+                                </div>
+
+                                <div class="appointment-field appointment-field-wide">
+                                    <label for="appointmentReason">Motivo de la consulta</label>
+                                    <textarea id="appointmentReason" name="reason" rows="2" maxlength="500" aria-describedby="appointmentReasonHelp" required></textarea>
+                                    <small id="appointmentReasonHelp">Breve y sin diagnósticos ni datos clínicos.</small>
                                 </div>
 
                                 <div class="appointment-field">
-                                    <label for="appointmentReason">Motivo de la consulta</label>
-                                    <textarea id="appointmentReason" name="reason" rows="3" maxlength="500" aria-describedby="appointmentReasonHelp" required></textarea>
-                                    <small id="appointmentReasonHelp">Contanos brevemente qué necesitás. Evitá incluir diagnósticos u otros detalles clínicos sensibles.</small>
+                                    <label for="appointmentDate">Fecha deseada</label>
+                                    <input id="appointmentDate" name="date" type="date" aria-describedby="appointmentDateHelp" required>
+                                    <small id="appointmentDateHelp">Lunes a viernes, desde mañana.</small>
                                 </div>
 
-                                <div class="appointment-field appointment-field-row">
-                                    <div>
-                                        <label for="appointmentDate">Fecha deseada</label>
-                                        <input id="appointmentDate" name="date" type="date" aria-describedby="appointmentDateHelp" required>
-                                        <small id="appointmentDateHelp">Atendemos de lunes a viernes. Elegí una fecha a partir de mañana; el horario queda sujeto a confirmación.</small>
-                                    </div>
-                                    <div>
-                                        <label for="appointmentTime">Franja y horario</label>
-                                        <input type="hidden" id="appointmentPeriod" name="period" value="">
-                                        <select id="appointmentTime" name="time" required aria-describedby="appointmentTimeHelp">
-                                            <option value="">Elegí mañana o tarde</option>
-                                            <option value="morning">Mañana</option>
-                                            <option value="afternoon">Tarde</option>
-                                        </select>
-                                        <small id="appointmentTimeHelp">Primero elegí una franja; después seleccioná uno de los horarios disponibles.</small>
-                                    </div>
+                                <div class="appointment-field">
+                                    <label for="appointmentTime">Franja y horario</label>
+                                    <input type="hidden" id="appointmentPeriod" name="period" value="">
+                                    <select id="appointmentTime" name="time" required aria-describedby="appointmentTimeHelp">
+                                        <option value="">Elegí mañana o tarde</option>
+                                        <option value="morning">Mañana</option>
+                                        <option value="afternoon">Tarde</option>
+                                    </select>
+                                    <small id="appointmentTimeHelp">Elegí franja y después horario.</small>
                                 </div>
 
-                                <div class="appointment-privacy">
-                                    <p>Los datos se incorporarán al mensaje de WhatsApp solo cuando decidas enviarlo. Evitá incluir información clínica innecesaria. Consultá nuestra <a href="privacidad.html" target="_blank" rel="noopener noreferrer">política de privacidad</a>.</p>
-                                    <label class="appointment-consent" for="appointmentConsent">
-                                        <input id="appointmentConsent" name="consent" type="checkbox" required>
-                                        <span>Acepto que, si envío el mensaje por WhatsApp, Piel de Mar use estos datos para gestionar mi solicitud y responderme. Entiendo que el turno queda sujeto a confirmación.</span>
-                                    </label>
-                                </div>
+                                <label class="appointment-consent" for="appointmentConsent">
+                                    <input id="appointmentConsent" name="consent" type="checkbox" required>
+                                    <span>Acepto que Piel de Mar use estos datos, solo si envío el mensaje por WhatsApp, para gestionar mi solicitud. <a href="privacidad.html" target="_blank" rel="noopener noreferrer">Política de privacidad</a></span>
+                                </label>
 
                                 <button type="submit" class="btn primary appointment-submit">Preparar solicitud por WhatsApp</button>
                             </form>
@@ -607,11 +600,6 @@
                                 <a class="btn primary appointment-resource-action" href="recursos.html" target="_blank" rel="noopener noreferrer">Ver recursos gratuitos</a>
                             </div>
                             <p id="appointmentRequestError" class="appointment-error" role="alert" hidden></p>
-
-                            <p class="consultation-note">
-                                <i data-lucide="info" aria-hidden="true"></i>
-                                Podés solicitar una consulta presencial en Esperanza o virtual por videollamada. La fecha y el horario quedan sujetos a confirmación.
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -646,7 +634,7 @@
                                 <i data-lucide="message-circle"></i>
                             </div>
                             <div class="contact-content">
-                                <p>La forma más rápida de contactarnos</p>
+                                <p>Escribinos por WhatsApp, la forma más rápida</p>
                                 <a href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20informaci%C3%B3n%20sobre%20Piel%20de%20Mar"
                                    target="_blank"
                                    rel="noopener noreferrer"
@@ -689,13 +677,6 @@
 
                     </div>
 
-                    <aside class="contact-summary-card" aria-labelledby="contact-summary-heading">
-                        <h3 id="contact-summary-heading">Información práctica</h3>
-                        <div class="contact-summary-item"><i data-lucide="phone" aria-hidden="true"></i><div><strong>Teléfono</strong><a href="https://wa.me/5493425004018" target="_blank" rel="noopener noreferrer">+54 9 3425 004018</a></div></div>
-                        <div class="contact-summary-item"><i data-lucide="map-pin" aria-hidden="true"></i><div><strong>Dirección</strong><span>Cullen 1619, Esperanza, Santa Fe</span></div></div>
-                        <div class="contact-summary-item"><i data-lucide="clock" aria-hidden="true"></i><div><strong>Horarios</strong><span>Lunes a viernes, de 8:00 a 12:00 y de 16:00 a 20:00 hs</span></div></div>
-                    </aside>
-
                 </div>
             </div>
         </section>
@@ -718,10 +699,12 @@
     </footer>
 
     <!-- BOTÓN FLOTANTE DE WHATSAPP -->
-    <a 
-        href="#consulta"
+    <a
+        href="https://wa.me/5493425004018?text=Hola!%20Quisiera%20informaci%C3%B3n%20sobre%20Piel%20de%20Mar"
         class="whatsapp-float"
-        aria-label="Agendar consulta por WhatsApp"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Escribinos por WhatsApp (se abre en una pestaña nueva)"
     >
         <i data-lucide="message-circle"></i>
     </a>
