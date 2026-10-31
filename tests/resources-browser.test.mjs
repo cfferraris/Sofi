@@ -150,11 +150,33 @@ test('embeds create their iframe only after the resource is opened', async () =>
     await page.locator('#guia-video > summary').click();
     const video = page.locator('#guia-video iframe');
     await video.waitFor({ state: 'attached' });
-    assert.match(await video.getAttribute('src'), /^https:\/\/www\.youtube-nocookie\.com\/embed\/geRfpZ474Ms\?/);
+    assert.match(await video.getAttribute('src'), /^https:\/\/www\.youtube-nocookie\.com\/embed\/LTK3kR_JToY\?/);
     const box = await video.boundingBox();
     assert.ok(box.width >= 600, `video should be large, got ${box.width}px`);
     assert.equal(await page.locator('#guia-video a[href*="youtube.com"]').count(), 0);
     assert.ok(Math.abs(box.width / box.height - 16 / 9) < 0.05);
+  } finally {
+    await browser.close();
+  }
+});
+
+test('readings use the same stage as videos and scroll inside when long', async () => {
+  const browser = await chromium.launch();
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    await page.route(/youtube-nocookie\.com/, (route) => route.fulfill({ status: 200, contentType: 'text/html', body: '<p>ok</p>' }));
+    await page.goto(`${baseURL}/recursos.html`);
+    await page.locator('#guias > summary').click();
+    await page.locator('#guia-video > summary').click();
+    const video = await page.locator('#guia-video iframe').boundingBox();
+    await page.locator('#desarrollo > summary').click();
+    await page.locator('#desarrollo-lectura > summary').click();
+    const reading = page.locator('#desarrollo-lectura .library-reading');
+    await reading.evaluate((el) => { el.innerHTML = '<p>texto largo</p>'.repeat(200); });
+    const box = await reading.boundingBox();
+    assert.ok(Math.abs(box.width - video.width) < 2 && Math.abs(box.height - video.height) < 2, 'same stage size as the video');
+    assert.equal(await reading.getAttribute('tabindex'), '0');
+    assert.ok(await reading.evaluate((el) => el.scrollHeight > el.clientHeight), 'long text scrolls inside the box');
   } finally {
     await browser.close();
   }

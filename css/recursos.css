@@ -263,15 +263,16 @@ a.library-action:hover {
 }
 
 /* Recurso abierto: ocupa todo el ancho y el contenido es el protagonista */
-.library-item[open]:has(.library-embed) {
+.library-item[open] {
     grid-column: 1 / -1;
 }
-.library-item:has(.library-embed)[open] > .library-detail {
+.library-item[open] > .library-detail {
     padding: clamp(0.5rem, 2vw, 1.25rem);
 }
 .library-embed {
     display: grid;
     justify-items: center;
+    width: 100%;
 }
 .library-embed iframe {
     display: block;
@@ -312,12 +313,50 @@ a.library-action:hover {
 }
 
 /* Con un juego o video abierto se oculta la ilustración para que el contenido quede a la vista */
-.library-item:has(.library-embed)[open] > summary .library-thumb {
+.library-item[open] > summary .library-thumb {
     display: none;
 }
-.library-item:has(.library-embed)[open] > summary {
+.library-item[open] > summary {
     padding-bottom: 0.25rem;
 }
 .library-item {
     scroll-margin-top: 96px;
+}
+
+/* Lecturas: mismo espacio que el video, con scroll interno si el texto es largo */
+.library-detail {
+    display: grid;
+    justify-items: center;
+}
+.library-reading {
+    box-sizing: border-box;
+    width: min(100%, calc(72vh * 16 / 9));
+    aspect-ratio: 16 / 9;
+    overflow: auto;
+    padding: clamp(0.75rem, 2vw, 1.5rem);
+    background: #fff;
+    border-radius: 12px;
+    line-height: 1.7;
+    overscroll-behavior: contain;
+}
+.library-reading:focus-visible {
+    outline: 3px solid var(--profundo);
+    outline-offset: 2px;
+}
+.library-reading p {
+    margin: 0 0 0.9rem;
+}
+.library-reading p:last-child {
+    margin-bottom: 0;
+}
+.library-embed-error {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+    color: #7a2e2e;
+}
+@media (max-width: 700px) {
+    .library-reading {
+        aspect-ratio: auto;
+        height: 60vh;
+    }
 }

@@ -30,7 +30,7 @@
     // Contenido de terceros (juegos, videos): el <iframe> se crea recién cuando el recurso se abre.
     // Solo se aceptan estos orígenes; deben coincidir con frame-src de la CSP.
     const ALLOWED_EMBEDS = {
-        'wordwall.net': { allow: 'fullscreen' },
+        'wordwall.net': { allow: 'fullscreen', sandbox: false },
         'www.youtube-nocookie.com': { allow: 'fullscreen; encrypted-media; picture-in-picture' }
     };
     function loadEmbed(box) {
@@ -44,10 +44,18 @@
         frame.title = box.dataset.embedTitle || 'Contenido incrustado';
         frame.allow = rule.allow;
         frame.setAttribute('allowfullscreen', '');
-        frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-presentation');
+        if (rule.sandbox !== false) frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-presentation');
         frame.referrerPolicy = 'strict-origin-when-cross-origin';
         frame.loading = 'lazy';
         box.dataset.embedLoaded = 'true';
+        document.addEventListener('securitypolicyviolation', (event) => {
+            if (event.violatedDirective.startsWith('frame-src') && event.blockedURI.startsWith(url.origin) && !box.querySelector('.library-embed-error')) {
+                const msg = document.createElement('p');
+                msg.className = 'library-embed-error';
+                msg.textContent = 'No se pudo cargar este contenido en el sitio (bloqueado por la política de seguridad).';
+                box.append(msg);
+            }
+        });
         box.prepend(frame);
     }
     document.querySelectorAll('details.library-item').forEach((item) => {
