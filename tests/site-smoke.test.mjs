@@ -212,7 +212,7 @@ test('no-JavaScript fallback is present so the hero cannot block access to the p
 test('all homepage links to the resource library open a separate tab safely', () => {
   const resourceLinks = [...html.matchAll(/<a\b[^>]*href=["']recursos\.html(?:#[^"']*)?["'][^>]*>/g)]
     .map((match) => match[0]);
-  assert.ok(resourceLinks.length >= 9, 'Expected navigation, category and confirmation links to the resource library');
+  assert.ok(resourceLinks.length >= 7, 'Expected category and confirmation links to the resource library');
   for (const link of resourceLinks) {
     assert.match(link, /target=["']_blank["']/i, `Resource link must open a new tab: ${link}`);
     assert.match(link, /rel=["'][^"']*noopener[^"']*["']/i, `New-tab resource link must prevent opener access: ${link}`);

@@ -106,6 +106,7 @@
    VARIABLES CSS - FASE 1 MEJORADAS
    ======================================== */
 :root {
+    color-scheme: only light;
     /* Colores */
     --profundo: #054954;
     --oceano: #24436a;
