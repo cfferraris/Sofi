@@ -3146,3 +3146,133 @@ body:has(.navbar.visible) .whatsapp-float {
         grid-template-columns: minmax(0, 1fr);
     }
 }
+
+/* ========================================
+   RONDA DE AJUSTES: portada, carrusel discreto, iconos de contacto
+   ======================================== */
+
+/* La portada empieza debajo del menú fijo, para que nada quede tapado */
+.main-content #piel-de-mar {
+    padding-top: var(--navbar-height);
+    min-height: 100vh;
+    min-height: 100svh;
+    box-sizing: border-box;
+    align-items: center;
+    scroll-margin-top: 0;
+}
+.intro-slider-container {
+    height: clamp(440px, calc(100svh - var(--navbar-height) - 80px), 660px);
+}
+
+/* Flechas laterales: suaves, de vidrio, sin sombras ni saltos */
+.intro-slider-btn {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: none;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0.75;
+    transition: opacity 0.25s ease, background-color 0.25s ease;
+}
+.intro-slider-btn i {
+    width: 18px;
+    height: 18px;
+    color: #fff;
+}
+.intro-slider-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%);
+    box-shadow: none;
+    opacity: 1;
+}
+.intro-slider-btn:disabled {
+    opacity: 0.25;
+}
+
+/* Puntos inferiores: sin cápsula, finos y translúcidos */
+.intro-slider-dots {
+    bottom: 16px;
+    padding: 0;
+    gap: 2px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+.intro-slider-dot {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+}
+.intro-slider-dot::before {
+    width: 6px;
+    height: 6px;
+    border: 0;
+    background: rgba(255, 255, 255, 0.55);
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+.intro-slider-dot:hover::before {
+    background: rgba(255, 255, 255, 0.85);
+    transform: none;
+}
+.intro-slider-dot.active {
+    width: 32px;
+    flex-basis: 32px;
+}
+.intro-slider-dot.active::before {
+    width: 18px;
+    height: 6px;
+    border-radius: 3px;
+    background: #fff;
+}
+
+/* Móvil: el carrusel es el protagonista (ancho completo, alto de casi toda la pantalla) y sin flechas */
+@media (max-width: 768px) {
+    .intro-slider-btn {
+        display: none;
+    }
+    .intro-slider-wrapper {
+        padding-inline: 0;
+    }
+    .intro-slider-container {
+        height: clamp(460px, calc(100svh - var(--navbar-height) - 40px), 760px);
+        border-radius: 0;
+    }
+    .main-content #piel-de-mar {
+        align-items: flex-start;
+    }
+    .intro-slider-dots {
+        bottom: 12px;
+    }
+}
+
+/* Iconos de contacto: mismo color y hover que los iconos del resto del sitio */
+.contact-icon {
+    background: linear-gradient(135deg, var(--agua) 0%, rgba(148, 209, 216, 0.5) 100%);
+}
+.contact-icon i {
+    color: var(--profundo);
+}
+.contact-card:hover .contact-icon {
+    transform: scale(1.1) rotate(5deg);
+    background: linear-gradient(135deg, var(--agua) 0%, var(--tiza) 100%);
+}
+.contact-card:hover .contact-icon i {
+    color: var(--tiza);
+}
+/* WhatsApp: verde menta del sitio, con el mismo comportamiento */
+.contact-icon.whatsapp {
+    background: linear-gradient(135deg, #7cc9a6 0%, rgba(124, 201, 166, 0.5) 100%);
+}
+.contact-icon.whatsapp i {
+    color: var(--profundo);
+}
+.contact-card:hover .contact-icon.whatsapp {
+    background: linear-gradient(135deg, #7cc9a6 0%, var(--tiza) 100%);
+}
+.contact-card:hover .contact-icon.whatsapp i {
+    color: var(--tiza);
+}
