@@ -150,8 +150,10 @@ test('embeds create their iframe only after the resource is opened', async () =>
     await page.locator('#guia-video > summary').click();
     const video = page.locator('#guia-video iframe');
     await video.waitFor({ state: 'attached' });
-    assert.equal(await video.getAttribute('src'), 'https://www.youtube-nocookie.com/embed/geRfpZ474Ms');
+    assert.match(await video.getAttribute('src'), /^https:\/\/www\.youtube-nocookie\.com\/embed\/geRfpZ474Ms\?/);
     const box = await video.boundingBox();
+    assert.ok(box.width >= 600, `video should be large, got ${box.width}px`);
+    assert.equal(await page.locator('#guia-video a[href*="youtube.com"]').count(), 0);
     assert.ok(Math.abs(box.width / box.height - 16 / 9) < 0.05);
   } finally {
     await browser.close();

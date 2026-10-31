@@ -59,8 +59,8 @@ test('third-party embeds are lazy, allow-listed and covered by the page CSP', ()
   assert.doesNotMatch(csp, /unsafe-inline|unsafe-eval/);
   const sources = [...resources.matchAll(/data-embed-src="([^"]+)"/g)].map((m) => new URL(m[1].replace(/&amp;/g, '&')).hostname);
   assert.deepEqual(sources.sort(), ['wordwall.net', 'www.youtube-nocookie.com']);
-  for (const m of resources.matchAll(/<div class="library-embed[^>]*>[\s\S]*?<\/div>/g)) {
+  for (const m of resources.matchAll(/<div class="library-embed[^>]*>/g)) {
     assert.match(m[0], /data-embed-title="[^"]+"/);
-    assert.match(m[0], /library-embed-fallback" href="https:[^"]+" target="_blank" rel="noopener noreferrer"/);
   }
+  assert.doesNotMatch(resources, /library-embed-fallback|href="https:\/\/(?:www\.youtube\.com|wordwall\.net)/, 'content stays on the site');
 });

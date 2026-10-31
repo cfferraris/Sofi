@@ -44,18 +44,19 @@
         frame.title = box.dataset.embedTitle || 'Contenido incrustado';
         frame.allow = rule.allow;
         frame.setAttribute('allowfullscreen', '');
-        frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-presentation');
+        frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-presentation');
         frame.referrerPolicy = 'strict-origin-when-cross-origin';
         frame.loading = 'lazy';
         box.dataset.embedLoaded = 'true';
         box.prepend(frame);
-        const note = box.querySelector('.library-embed-note');
-        if (note) note.remove();
     }
     document.querySelectorAll('details.library-item').forEach((item) => {
         const box = item.querySelector('.library-embed[data-embed-src]');
         if (!box) return;
-        item.addEventListener('toggle', () => { if (item.open) loadEmbed(box); });
+        item.addEventListener('toggle', () => { if (!item.open) return;
+            loadEmbed(box);
+            window.requestAnimationFrame(() => item.scrollIntoView({ block: 'start', behavior: reducedMotion ? 'auto' : 'smooth' }));
+        });
         if (item.open) loadEmbed(box);
     });
 
