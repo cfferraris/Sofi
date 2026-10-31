@@ -51,3 +51,16 @@ test('every resource shows its own section illustration and starts collapsed', (
   assert.doesNotMatch(resources, /<details[^>]*\sopen[\s>]/, 'sections and resources must start collapsed');
   assert.doesNotMatch(resources, /style=|<style/i);
 });
+
+test('third-party embeds are lazy, allow-listed and covered by the page CSP', () => {
+  assert.doesNotMatch(resources, /<iframe/i, 'iframes are created on demand, not in the markup');
+  const csp = resources.match(/Content-Security-Policy" content="([^"]+)"/)[1];
+  assert.match(csp, /frame-src https:\/\/wordwall\.net https:\/\/www\.youtube-nocookie\.com(;|$)/);
+  assert.doesNotMatch(csp, /unsafe-inline|unsafe-eval/);
+  const sources = [...resources.matchAll(/data-embed-src="([^"]+)"/g)].map((m) => new URL(m[1].replace(/&amp;/g, '&')).hostname);
+  assert.deepEqual(sources.sort(), ['wordwall.net', 'www.youtube-nocookie.com']);
+  for (const m of resources.matchAll(/<div class="library-embed[^>]*>[\s\S]*?<\/div>/g)) {
+    assert.match(m[0], /data-embed-title="[^"]+"/);
+    assert.match(m[0], /library-embed-fallback" href="https:[^"]+" target="_blank" rel="noopener noreferrer"/);
+  }
+});

@@ -130,3 +130,30 @@ test('resource library is a collapsible accordion that shows only the chosen sec
     await browser.close();
   }
 });
+
+test('embeds create their iframe only after the resource is opened', async () => {
+  const browser = await chromium.launch();
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+    await page.route(/wordwall\.net|youtube-nocookie\.com/, (route) => route.fulfill({ status: 200, contentType: 'text/html', body: '<p>ok</p>' }));
+    await page.goto(`${baseURL}/recursos.html`);
+    assert.equal(await page.locator('iframe').count(), 0);
+    await page.locator('#juego > summary').click();
+    assert.equal(await page.locator('iframe').count(), 0, 'section open alone does not load the game');
+    await page.locator('#juego-memoria > summary').click();
+    const game = page.locator('#juego-memoria iframe');
+    await game.waitFor({ state: 'attached' });
+    assert.equal(await game.count(), 1);
+    assert.match(await game.getAttribute('src'), /^https:\/\/wordwall\.net\/es\/embed\//);
+    assert.ok((await game.getAttribute('title')).length > 5);
+    await page.locator('#guias > summary').click();
+    await page.locator('#guia-video > summary').click();
+    const video = page.locator('#guia-video iframe');
+    await video.waitFor({ state: 'attached' });
+    assert.equal(await video.getAttribute('src'), 'https://www.youtube-nocookie.com/embed/geRfpZ474Ms');
+    const box = await video.boundingBox();
+    assert.ok(Math.abs(box.width / box.height - 16 / 9) < 0.05);
+  } finally {
+    await browser.close();
+  }
+});

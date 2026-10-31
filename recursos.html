@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-src https://wordwall.net https://www.youtube-nocookie.com; upgrade-insecure-requests">
 <title>Recursos | Piel de Mar</title>
 <meta name="description" content="Biblioteca de recursos de Piel de Mar: lecturas, juegos, actividades y guías.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -166,15 +167,20 @@
         <span class="library-chevron" aria-hidden="true"></span>
       </summary>
       <div class="library-grid">
-        <details class="library-item" id="juego-clasificar">
+        <details class="library-item" id="juego-memoria">
           <summary>
             <svg class="library-thumb" viewBox="0 0 180 120" width="180" height="120" aria-hidden="true" focusable="false"><use href="assets/recursos/miniaturas.svg#juego-estimulacion"></use></svg>
-            <span class="library-kind">JUEGO</span>
-            <h3>Clasificar y encontrar</h3>
-            <span class="library-desc">Agrupar objetos cotidianos por color, forma o tamaño.</span>
+            <span class="library-kind">JUEGO INTERACTIVO</span>
+            <h3>Juego de memoria</h3>
+            <span class="library-desc">Encontrá las parejas. Para jugar en familia.</span>
             <span class="library-action"><span class="when-closed">Jugar</span><span class="when-open">Cerrar</span></span>
           </summary>
-          <div class="library-detail"><p>Usá objetos seguros y cambiá el criterio para que el niño descubra la regla.</p></div>
+          <div class="library-detail">
+            <div class="library-embed library-embed-game" data-embed-src="https://wordwall.net/es/embed/249d868b54114e368d331a0f0ce3911d?themeId=1&amp;templateId=8&amp;fontStackId=0" data-embed-title="Juego de memoria (se carga desde Wordwall)">
+              <p class="library-embed-note">El juego se carga desde Wordwall al abrir este recurso.</p>
+              <a class="library-embed-fallback" href="https://wordwall.net/es/resource/249d868b54114e368d331a0f0ce3911d" target="_blank" rel="noopener noreferrer">Abrir el juego en Wordwall</a>
+            </div>
+          </div>
         </details>
         <details class="library-item" id="juego-circuito">
           <summary>
@@ -255,15 +261,20 @@
           </div>
           <a class="library-action" href="assets/recursos/registro-semanal.txt" download>Descargar</a>
         </article>
-        <details class="library-item" id="guia-calma">
+        <details class="library-item" id="guia-video">
           <summary>
             <svg class="library-thumb" viewBox="0 0 180 120" width="180" height="120" aria-hidden="true" focusable="false"><use href="assets/recursos/miniaturas.svg#guias-materiales"></use></svg>
-            <span class="library-kind">FICHA</span>
-            <h3>Rincón de calma</h3>
-            <span class="library-desc">Ideas para crear un espacio de pausa sin usarlo como castigo.</span>
-            <span class="library-action"><span class="when-closed">Ver ficha</span><span class="when-open">Cerrar</span></span>
+            <span class="library-kind">VIDEO</span>
+            <h3>Video de prueba</h3>
+            <span class="library-desc">Video de la guía, para ver sin salir del sitio.</span>
+            <span class="library-action"><span class="when-closed">Ver video</span><span class="when-open">Cerrar</span></span>
           </summary>
-          <div class="library-detail"><p>Elegí un espacio seguro con pocos estímulos y elementos apropiados para ayudar a regular.</p></div>
+          <div class="library-detail">
+            <div class="library-embed library-embed-video" data-embed-src="https://www.youtube-nocookie.com/embed/geRfpZ474Ms" data-embed-title="Video de la guía (se carga desde YouTube)">
+              <p class="library-embed-note">El video se carga desde YouTube al abrir este recurso.</p>
+              <a class="library-embed-fallback" href="https://www.youtube.com/watch?v=geRfpZ474Ms" target="_blank" rel="noopener noreferrer">Ver el video en YouTube</a>
+            </div>
+          </div>
         </details>
         <details class="library-item" id="guia-plan">
           <summary>

@@ -51,7 +51,7 @@ Render las aplica desde *Settings → Headers* del servicio estático `Sofi`. Si
 | Cabecera | Valor esperado |
 |---|---|
 | `X-Robots-Tag` | `noindex, follow` solo en staging. **Quitarla al lanzar el dominio final.** |
-| `Content-Security-Policy` | Debe ser igual o más permisiva que la `<meta>` del HTML: `script-src 'self'; style-src 'self'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube.com`. Ya no hace falta `unpkg.com` ni `unsafe-inline`. |
+| `Content-Security-Policy` | Debe ser igual o más permisiva que la `<meta>` del HTML: `script-src 'self'; style-src 'self'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube.com https://wordwall.net https://www.youtube-nocookie.com`. `recursos.html` lleva su propia `<meta>` CSP con `frame-src https://wordwall.net https://www.youtube-nocookie.com` (juego y video incrustados); si la cabecera de Render fija un `frame-src`, debe incluir esos dos orígenes o el navegador los bloqueará. Ya no hace falta `unpkg.com` ni `unsafe-inline`. |
 | `Strict-Transport-Security` | `max-age=31536000` (agregar `includeSubDomains` solo si todo el dominio es HTTPS) |
 | `X-Content-Type-Options` | `nosniff` |
 | `X-Frame-Options` | `DENY` |
