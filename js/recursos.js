@@ -43,7 +43,6 @@
         frame.src = url.href;
         frame.title = box.dataset.embedTitle || 'Contenido incrustado';
         frame.allow = rule.allow;
-        frame.setAttribute('allowfullscreen', '');
         if (rule.sandbox !== false) frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-presentation');
         frame.referrerPolicy = 'strict-origin-when-cross-origin';
         frame.loading = 'lazy';
