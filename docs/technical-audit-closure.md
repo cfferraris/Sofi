@@ -60,6 +60,9 @@ El PR permanece abierto y en borrador. No se fusiona sin autorización explícit
 - **Metadatos:** canonical y Open Graph en `recursos.html` y `privacidad.html`.
 - **CI:** se retiraron 5 workflows de un solo uso con permiso de escritura. `finalize-browser-tests` reescribía `package.json` y quitaba la prueba de turnos de `test:e2e`.
 - **Testimonios:** se retiró la sección vacía «Opiniones de las familias» y su JavaScript. Reincorporarla solo con testimonios reales y autorizados.
+- **Ronda de ajustes de UX:** el menú «Recursos» lleva a la sección del home; el botón flotante abre WhatsApp; el formulario de turnos es compacto (visible entero en escritorio; en celular de 360 px aún requiere un poco de scroll); el contacto no repite datos; el home muestra 6 recursos, uno por sección de la biblioteca.
+- **Biblioteca de recursos:** secciones colapsadas, un recurso por vez, ilustración de la sección en cada ítem y en el encabezado, lecturas con panel de scroll interno y juego/video incrustados al abrir (Wordwall y YouTube con `youtube-nocookie`). La CSP de Render debe permitir `https://wordwall.net` y `https://www.youtube-nocookie.com` en `frame-src`. Textos de los recursos: borrador para revisión de la profesional.
+- **Modo oscuro forzado en móviles:** `color-scheme: only light` para evitar que Samsung Internet oscurezca los tonos arena (sin verificar en dispositivo).
 
 ### Pendientes
 

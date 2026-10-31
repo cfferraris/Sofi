@@ -41,8 +41,9 @@ test('every resource shows its own section illustration and starts collapsed', (
   const used = new Set();
   for (const [, , body] of sections) {
     const ids = [...body.matchAll(/miniaturas\.svg#([^"]+)"/g)].map((match) => match[1]);
-    assert.equal(ids.length, 3, 'three resources per section, each with the section image');
-    assert.equal(new Set(ids).size, 1, 'all resources of a section share its illustration');
+    assert.equal(ids.length, 4, 'section header image plus three resources, each with the section image');
+    assert.match(body, /<svg class="library-num"/, 'section header uses the illustration instead of a number');
+    assert.equal(new Set(ids).size, 1, 'header and resources of a section share its illustration');
     assert.ok(symbols.includes(ids[0]));
     used.add(ids[0]);
   }

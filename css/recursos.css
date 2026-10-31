@@ -123,15 +123,12 @@
 }
 .library-num {
     grid-area: num;
-    display: grid;
-    place-items: center;
-    width: 3rem;
+    display: block;
+    width: 4.5rem;
     height: 3rem;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--agua) 0%, rgba(148, 209, 216, 0.6) 100%);
-    color: var(--profundo);
-    font-family: var(--font-principal);
-    font-size: 1.15rem;
+    border-radius: 12px;
+    background: var(--arena);
+    overflow: hidden;
 }
 .library-section-kicker {
     grid-area: kicker;
