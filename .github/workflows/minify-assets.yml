@@ -1,0 +1,54 @@
+name: Minify production assets
+
+on:
+  push:
+    branches:
+      - audit/fix-site-baseline
+    paths:
+      - '.github/workflows/minify-assets.yml'
+      - 'css/styles.css'
+      - 'js/main.js'
+  workflow_dispatch:
+
+concurrency:
+  group: site-generated-assets
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  minify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out authorized branch
+        uses: actions/checkout@v4
+        with:
+          ref: audit/fix-site-baseline
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Minify CSS and JavaScript
+        run: |
+          npx --yes esbuild@0.25.11 css/styles.css --minify --outfile=css/styles.min.css
+          npx --yes esbuild@0.25.11 js/main.js --minify --outfile=js/main.min.js
+      - name: Point the site to minified assets
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = 'index.html';
+          let html = fs.readFileSync(path, 'utf8');
+          html = html.replace('href="css/styles.css"', 'href="css/styles.min.css"');
+          html = html.replace('src="js/main.js"', 'src="js/main.min.js"');
+          fs.writeFileSync(path, html);
+          NODE
+      - name: Commit generated production assets
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+actions@users.noreply.github.com'
+          git add css/styles.min.css js/main.min.js index.html
+          if git diff --cached --quiet; then echo 'No changes to commit'; exit 0; fi
+          git commit -m 'perf: serve minified CSS and JavaScript'
+          git push origin HEAD:audit/fix-site-baseline

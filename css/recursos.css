@@ -1,0 +1,378 @@
+/* Biblioteca de recursos — continúa la estética del sitio (paleta, tipografías y tarjetas redondeadas).
+   Depende de las variables y fuentes de styles.css. Sin estilos en línea. */
+.library-page {
+    margin: 0;
+    background: var(--tiza);
+    color: var(--oceano);
+    font-family: var(--font-secundaria);
+    line-height: 1.6;
+}
+.library-page *,
+.library-page *::before,
+.library-page *::after {
+    box-sizing: border-box;
+}
+
+/* Encabezado: misma banda arena que la navegación del sitio */
+.library-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: var(--navbar-height);
+    padding: 0.5rem clamp(1rem, 4vw, 3rem);
+    background: rgba(233, 222, 203, 0.97);
+    border-bottom: 1px solid rgba(148, 209, 216, 0.4);
+    backdrop-filter: blur(10px);
+}
+.library-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--profundo);
+    text-decoration: none;
+    font-family: var(--font-principal);
+    font-size: 1.35rem;
+}
+.library-brand img {
+    display: block;
+}
+.library-back {
+    padding: 0.55rem 1.3rem;
+    color: var(--oceano);
+    text-decoration: none;
+    border: 2px solid var(--agua);
+    border-radius: 50px;
+    transition: var(--transition-fast);
+}
+.library-back:hover {
+    background: var(--agua);
+    color: var(--profundo);
+}
+.library-page a:focus-visible,
+.library-page summary:focus-visible {
+    outline: 3px solid var(--oceano);
+    outline-offset: 3px;
+    border-radius: 12px;
+}
+
+/* Portada de la biblioteca */
+.library {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem) 4rem;
+}
+.library-intro {
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+    text-align: center;
+}
+.library-kicker {
+    max-width: none;
+    margin: 0;
+    text-align: center;
+    color: #3b4d51;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+}
+.library-intro h1 {
+    margin: 0.25rem 0 0.5rem;
+    color: var(--profundo);
+    font-family: var(--font-principal);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    line-height: 1.1;
+}
+.library-intro p:last-child {
+    max-width: 52ch;
+    margin: 0 auto;
+}
+
+/* Secciones: acordeón, solo una abierta */
+.library-sections {
+    display: grid;
+    gap: 0.9rem;
+}
+.library-section {
+    scroll-margin-top: calc(var(--navbar-height) + 12px);
+    background: #fff;
+    border: 1px solid rgba(148, 209, 216, 0.35);
+    border-radius: 22px;
+    box-shadow: 0 4px 20px rgba(5, 73, 84, 0.08);
+}
+.library-section[open] {
+    box-shadow: 0 8px 30px rgba(5, 73, 84, 0.12);
+}
+.library-section > summary {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+        "num kicker chevron"
+        "num title chevron";
+    column-gap: 1rem;
+    align-items: center;
+    padding: 1rem clamp(1rem, 3vw, 1.6rem);
+    cursor: pointer;
+    list-style: none;
+}
+.library-section > summary::-webkit-details-marker,
+.library-item > summary::-webkit-details-marker {
+    display: none;
+}
+.library-num {
+    grid-area: num;
+    display: block;
+    width: 4.5rem;
+    height: 3rem;
+    border-radius: 12px;
+    background: var(--arena);
+    overflow: hidden;
+}
+.library-section-kicker {
+    grid-area: kicker;
+    color: #3b4d51;
+    font-size: 0.9rem;
+}
+.library-section > summary h2 {
+    grid-area: title;
+    margin: 0;
+    color: var(--profundo);
+    font-family: var(--font-principal);
+    font-weight: 400;
+    font-size: clamp(1.6rem, 3.6vw, 2.2rem);
+    line-height: 1.15;
+}
+.library-chevron {
+    grid-area: chevron;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-right: 2px solid var(--profundo);
+    border-bottom: 2px solid var(--profundo);
+    transform: rotate(45deg);
+    transition: transform 0.25s ease;
+}
+.library-section[open] > summary .library-chevron {
+    transform: rotate(-135deg);
+}
+
+/* Recursos de cada sección */
+.library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    align-items: start;
+    gap: 1rem;
+    padding: 0.25rem clamp(1rem, 3vw, 1.6rem) clamp(1rem, 3vw, 1.6rem);
+}
+.library-item {
+    display: flex;
+    flex-direction: column;
+    background: var(--tiza);
+    border: 1px solid rgba(148, 209, 216, 0.4);
+    border-radius: 18px;
+    overflow: hidden;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.library-item:hover {
+    box-shadow: 0 6px 22px rgba(5, 73, 84, 0.12);
+    transform: translateY(-2px);
+}
+.library-item > summary,
+.library-item-top {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.75rem 0.75rem 1rem;
+    list-style: none;
+}
+.library-item > summary {
+    cursor: pointer;
+}
+.library-item-static {
+    justify-content: space-between;
+}
+.library-item-static .library-action {
+    margin: 0 0.75rem 1rem;
+}
+.library-thumb {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    margin-bottom: 0.4rem;
+    border-radius: 12px;
+}
+.library-kind {
+    padding-inline: 0.25rem;
+    color: #3b4d51;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+}
+.library-item h3 {
+    margin: 0;
+    padding-inline: 0.25rem;
+    color: var(--profundo);
+    font-family: var(--font-principal);
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 1.2;
+}
+.library-desc {
+    padding-inline: 0.25rem;
+    font-size: 0.93rem;
+    line-height: 1.5;
+}
+.library-action {
+    align-self: flex-start;
+    margin: 0.4rem 0 0 0.25rem;
+    padding: 0.45rem 1.2rem;
+    color: var(--oceano);
+    font-weight: 500;
+    text-decoration: none;
+    border: 2px solid var(--agua);
+    border-radius: 50px;
+    background: transparent;
+    transition: var(--transition-fast);
+}
+.library-item:hover .library-action,
+a.library-action:hover {
+    background: var(--agua);
+    color: var(--profundo);
+}
+.library-item .when-open,
+.library-item[open] .when-closed {
+    display: none;
+}
+.library-item[open] .when-open {
+    display: inline;
+}
+.library-detail {
+    margin: 0 0.75rem 0.75rem;
+    padding: 0.9rem 1rem;
+    background: var(--arena);
+    border-radius: 12px;
+}
+.library-detail p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Recurso abierto: ocupa todo el ancho y el contenido es el protagonista */
+.library-item[open] {
+    grid-column: 1 / -1;
+}
+.library-item[open] > .library-detail {
+    padding: clamp(0.5rem, 2vw, 1.25rem);
+}
+.library-embed {
+    display: grid;
+    justify-items: center;
+    width: 100%;
+}
+.library-embed iframe {
+    display: block;
+    border: 0;
+    border-radius: 12px;
+    background: var(--tiza);
+}
+.library-embed-video iframe {
+    width: min(100%, calc(72vh * 16 / 9));
+    aspect-ratio: 16 / 9;
+}
+.library-embed-game iframe {
+    width: min(100%, calc(76vh * 500 / 380));
+    aspect-ratio: 500 / 380;
+}
+.library-embed noscript p {
+    margin: 0;
+}
+
+.library-disclaimer {
+    margin: 2rem auto 0;
+    max-width: 62ch;
+    color: #526568;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .library-chevron,
+    .library-item,
+    .library-back,
+    .library-action {
+        transition: none;
+    }
+    .library-item:hover {
+        transform: none;
+    }
+}
+
+/* Con un juego o video abierto se oculta la ilustración para que el contenido quede a la vista */
+.library-item[open] > summary .library-thumb {
+    display: none;
+}
+.library-item[open] > summary {
+    padding-bottom: 0.25rem;
+}
+.library-item {
+    scroll-margin-top: 96px;
+}
+
+/* Lecturas: mismo espacio que el video, con scroll interno si el texto es largo */
+.library-detail {
+    display: grid;
+    justify-items: center;
+}
+.library-reading {
+    box-sizing: border-box;
+    width: min(100%, calc(72vh * 16 / 9));
+    aspect-ratio: 16 / 9;
+    overflow: auto;
+    padding: clamp(0.75rem, 2vw, 1.5rem);
+    background: #fff;
+    border-radius: 12px;
+    line-height: 1.7;
+    overscroll-behavior: contain;
+}
+.library-reading:focus-visible {
+    outline: 3px solid var(--profundo);
+    outline-offset: 2px;
+}
+.library-reading p {
+    margin: 0 0 0.9rem;
+}
+.library-reading p:last-child {
+    margin-bottom: 0;
+}
+.library-embed-error {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+    color: #7a2e2e;
+}
+@media (max-width: 700px) {
+    .library-reading {
+        aspect-ratio: auto;
+        height: 60vh;
+    }
+}
+
+.library-reading h4 {
+    margin: 1.4rem 0 0.5rem;
+    font-family: var(--font-principal);
+    font-weight: 400;
+    font-size: 1.35rem;
+    line-height: 1.25;
+    color: var(--profundo);
+}
+.library-reading > :first-child {
+    margin-top: 0;
+}
+.library-reading ul {
+    margin: 0 0 0.9rem;
+    padding-left: 1.2rem;
+}
+.library-reading li {
+    margin-bottom: 0.35rem;
+}

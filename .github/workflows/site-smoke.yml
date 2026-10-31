@@ -1,0 +1,48 @@
+name: Static site and WhatsApp appointment tests
+
+on:
+  push:
+    branches:
+      - main
+      - "audit/**"
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: npm run check
+      - name: Run static site and WhatsApp flow tests
+        run: npm test
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --no-save --package-lock=false playwright @axe-core/playwright
+          npx playwright install --with-deps chromium
+      - name: Run desktop and mobile browser tests
+        run: npm run test:e2e
+      - name: Audit published site without submitting forms
+        if: success() && github.event_name == 'push'
+        run: node tests/production-audit.mjs
+      - name: Verify deployed appointment flow without sending WhatsApp
+        if: always() && github.event_name == 'push'
+        run: node tests/production-flow-audit.mjs
+      - name: Upload published-site audit report
+        if: always() && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-audit-${{ github.sha }}
+          path: artifacts/*.json
+          if-no-files-found: warn

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+<symbol id="desarrollo-infantil" viewBox="0 0 180 120">
+<rect width="180" height="120" rx="12" fill="#e7eeea"/>
+<path d="M18 95C37 70 49 82 62 56S88 29 104 49s28 23 58-5" fill="none" stroke="#94b8ae" stroke-width="2"/>
+<circle cx="52" cy="47" r="19" fill="#d5e4de"/><circle cx="52" cy="42" r="7" fill="#386e68"/><path d="M39 60q13-17 26 0" fill="#386e68"/>
+<circle cx="101" cy="69" r="24" fill="#f3e8d6"/><path d="M89 71l8 8 17-20" fill="none" stroke="#386e68" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M130 89h28M136 80h20" stroke="#789b91" stroke-width="3" stroke-linecap="round"/>
+</symbol>
+<symbol id="crianza-respetuosa" viewBox="0 0 180 120">
+<rect width="180" height="120" rx="12" fill="#f0e8df"/>
+<path d="M25 85c4-22 20-35 39-35 12 0 22 8 26 20 5-17 19-27 34-24 16 3 25 18 27 39" fill="#e0c8b2"/>
+<path d="M45 82c5-17 16-25 28-23 9 2 15 9 17 19 3-13 13-22 25-21 13 1 22 11 25 25" fill="none" stroke="#926f5a" stroke-width="3" stroke-linecap="round"/>
+<path d="M67 42c0-9 7-15 15-15s15 6 15 15M95 42c0-9 7-15 15-15s15 6 15 15" fill="none" stroke="#926f5a" stroke-width="3" stroke-linecap="round"/>
+<path d="M82 54q10 8 20 0" fill="none" stroke="#926f5a" stroke-width="2.5" stroke-linecap="round"/>
+</symbol>
+<symbol id="regulacion-emocional" viewBox="0 0 180 120">
+<rect width="180" height="120" rx="12" fill="#e5ecef"/>
+<circle cx="90" cy="60" r="38" fill="#d0dfe4"/>
+<path d="M58 64q0-30 32-30t32 30q0 20-22 27l-10 12-10-12Q58 84 58 64z" fill="#f8f5ed" stroke="#527c8a" stroke-width="2.5"/>
+<path d="M73 63q7 6 14 0t14 0t14 0" fill="none" stroke="#527c8a" stroke-width="3" stroke-linecap="round"/>
+<path d="M29 29q10-10 20 0M131 91q10-10 20 0" fill="none" stroke="#91b2bc" stroke-width="3" stroke-linecap="round"/>
+</symbol>
+<symbol id="juego-estimulacion" viewBox="0 0 180 120">
+<rect width="180" height="120" rx="12" fill="#f0eadc"/>
+<path d="M27 88h126" stroke="#b6a88d" stroke-width="2" stroke-linecap="round"/>
+<circle cx="55" cy="45" r="15" fill="#9dbbb0"/><rect x="79" y="30" width="29" height="29" rx="5" fill="#d8b99c"/><path d="M131 31l17 29h-34z" fill="#8fa9c1"/>
+<path d="M48 79l12-11 12 11M91 73v15M83 81h16M129 73l9 9" fill="none" stroke="#5b7f78" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="lecturas-explicaciones" viewBox="0 0 180 120">
+<rect width="180" height="120" rx="12" fill="#e8e8f0"/>
+<path d="M38 31q22-8 50 5v56q-28-13-50-5z" fill="#f8f6ef" stroke="#6c7394" stroke-width="2.5" stroke-linejoin="round"/>
+<path d="M88 36q25-10 53-5v56q-28-5-53 5z" fill="#f8f6ef" stroke="#6c7394" stroke-width="2.5" stroke-linejoin="round"/>
+<path d="M49 47h26M49 57h26M49 67h22M100 47h27M100 57h27M100 67h21" stroke="#a1a7c2" stroke-width="2.5" stroke-linecap="round"/>
+</symbol>
+<symbol id="guias-materiales" viewBox="0 0 180 120">
+<rect width="180" height="120" rx="12" fill="#e7eee8"/>
+<rect x="49" y="22" width="79" height="82" rx="5" fill="#fbf8f0" stroke="#688779" stroke-width="2.5"/>
+<path d="M65 42h45M65 54h45M65 66h28" stroke="#a0b8a8" stroke-width="3" stroke-linecap="round"/>
+<path d="M66 82l7 7 14-16" fill="none" stroke="#477468" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M132 36l12 12M144 36l-12 12" stroke="#c3a78d" stroke-width="2.5" stroke-linecap="round"/>
+</symbol>
+</svg>

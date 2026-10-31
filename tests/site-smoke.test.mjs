@@ -1,0 +1,247 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const htmlPath = resolve(root, 'index.html');
+const jsPath = resolve(root, 'js/main.js');
+const cssPath = resolve(root, 'css/styles.css');
+
+const html = readFileSync(htmlPath, 'utf8');
+const js = readFileSync(jsPath, 'utf8');
+const css = readFileSync(cssPath, 'utf8');
+
+test('all local HTML src/href assets resolve with exact case', () => {
+  const refs = [...html.matchAll(/\b(?:src|href)=["']([^"']+)["']/g)]
+    .map((match) => match[1])
+    .filter((ref) => ref && !/^(?:https?:|mailto:|tel:|#|data:|javascript:)/i.test(ref));
+
+  const missing = refs.filter((ref) => !existsSync(resolve(root, decodeURIComponent(ref.split(/[?#]/)[0]))));
+  assert.deepEqual([...new Set(missing)], [], `Missing local HTML references: ${[...new Set(missing)].join(', ')}`);
+});
+
+test('all local CSS url() assets resolve with exact case', () => {
+  const refs = [...css.matchAll(/url\(\s*["']?([^"')]+)["']?\s*\)/g)]
+    .map((match) => match[1].trim())
+    .filter((ref) => ref && !/^(?:https?:|data:|#)/i.test(ref));
+
+  const missing = refs.filter((ref) => !existsSync(resolve(dirname(cssPath), decodeURIComponent(ref.split(/[?#]/)[0]))));
+  assert.deepEqual([...new Set(missing)], [], `Missing local CSS references: ${[...new Set(missing)].join(', ')}`);
+});
+
+test('HTML ids are unique and internal links have targets', () => {
+  const ids = [...html.matchAll(/\bid=["']([^"']+)["']/g)].map((match) => match[1]);
+  const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
+  const idSet = new Set(ids);
+  const targets = [...html.matchAll(/href=["']#([^"']+)["']/g)].map((match) => match[1]);
+  const missingTargets = targets.filter((target) => !idSet.has(target));
+
+  assert.deepEqual([...new Set(duplicates)], [], `Duplicate ids: ${[...new Set(duplicates)].join(', ')}`);
+  assert.deepEqual([...new Set(missingTargets)], [], `Missing anchor targets: ${[...new Set(missingTargets)].join(', ')}`);
+});
+
+test('intro slider controls target the intro slider only', () => {
+  assert.match(js, /introNextBtn\.disabled\s*=\s*introCurrentIndex\s*>=\s*introSlides\.length\s*-\s*1/);
+  assert.doesNotMatch(js, /[^o]nextBtn\.disabled\s*=\s*introCurrentIndex/);
+});
+
+test('footer year is initialized by the external script allowed by CSP', () => {
+  assert.match(html, /id=["']currentYear["']/);
+  assert.match(js, /currentYear\.textContent\s*=\s*String\(new Date\(\)\.getFullYear\(\)\)/);
+  assert.doesNotMatch(html, /<script>\s*window\.addEventListener\(['"]load['"]/);
+});
+
+test('referenced local icon path matches the versioned filename case', () => {
+  assert.ok(existsSync(resolve(root, 'assets/icons/Instagram.svg')));
+  assert.doesNotMatch(html, /assets\/icons\/instagram\.svg/);
+});
+
+test('intro slider is manual-only and does not auto-rotate', () => {
+  assert.match(js, /introRegion\.setAttribute\('data-autoplay', 'off'\)/);
+  assert.doesNotMatch(js, /setInterval\s*\(/);
+  assert.doesNotMatch(html, /introAutoplayToggle|carouselAutoplayToggle|Pausar cambio automático/i);
+});
+
+test('intro slider keyboard navigation is scoped to its section', () => {
+  assert.match(js, /introRegion\?\.addEventListener\('keydown'/);
+  assert.doesNotMatch(js, /document\.addEventListener\('keydown', \(e\) => \{\s*\/\/ Solo responder si el slider está en viewport/);
+});
+
+test('appointment request form collects required fields and links to privacy policy', () => {
+  assert.ok(html.includes('id="appointmentRequestForm"'));
+  for (const id of ['appointmentName', 'appointmentInsurance', 'appointmentReason', 'appointmentDate', 'appointmentPeriod', 'appointmentTime', 'appointmentConsent']) {
+    assert.ok(html.includes('id="' + id + '"'), 'Missing appointment field: ' + id);
+  }
+  assert.match(html, /privacidad\.html/);
+  assert.match(html, /Preparar solicitud por WhatsApp/);
+  assert.match(html, /turno queda sujeto a confirmación/i);
+});
+
+test('submitted appointment form is actually hidden by the stylesheet', () => {
+  assert.match(css, /\.appointment-form\[hidden\]\s*\{\s*display:\s*none;\s*\}/);
+});
+
+test('appointment result shows only pending confirmation and free resources', () => {
+  assert.ok(html.includes('id="appointmentRequestResult"'));
+  assert.match(html, /Ver recursos gratuitos/i);
+  assert.doesNotMatch(html, /appointmentWhatsAppLink|appointmentMessagePreview|appointmentCopyButton/);
+  assert.match(js, /turno todavía no está confirmado/i);
+  assert.match(js, /window\.open\(url, '_blank'/);
+  assert.match(js, /https:\/\/wa\.me\/\$\{WHATSAPP_NUMBER\}\?text=\$\{encodeURIComponent\(message\)\}/);
+  assert.match(js, /únicamente cuando reciba una respuesta de Piel de Mar por WhatsApp/i);
+  assert.doesNotMatch(js, /appointmentMessagePreview|appointmentCopyButton|appointmentWhatsAppLink/);
+});
+
+test('appointment selector keeps period and time in the same control', () => {
+  assert.match(js, /renderTimeOptions\(timeInput\.value\)/);
+  assert.match(js, /renderPeriodOptions\(\)/);
+  assert.match(js, /selectedPeriod\.times\.includes\(payload\.time\)/);
+  assert.match(html, /<input[^>]*type="hidden"[^>]*id="appointmentPeriod"/);
+  assert.match(html, /id="appointmentTime"/);
+  assert.doesNotMatch(html, /<label for="appointmentPeriod"/);
+  assert.doesNotMatch(html, /id="appointmentTime"[^>]*disabled/);
+  assert.match(js, /morning:\s*\{[\s\S]*?'08:00'[\s\S]*?'11:30'/);
+  assert.match(js, /afternoon:\s*\{[\s\S]*?'16:00'[\s\S]*?'19:30'/);
+});
+
+test('privacy policy exists, explains the WhatsApp flow and uses the confirmed contact channel', () => {
+  assert.ok(existsSync(resolve(root, 'privacidad.html')));
+  const privacy = readFileSync(resolve(root, 'privacidad.html'), 'utf8');
+  assert.match(privacy, /prepara un mensaje para WhatsApp/i);
+  assert.match(privacy, /wa\.me\/5493425004018/);
+  assert.doesNotMatch(privacy, /contacto@pieldemar\.com|mailto:/i);
+  assert.doesNotMatch(privacy, /se registra en una base de datos privada/i);
+});
+
+test('primary appointment CTAs route through the validated request form', () => {
+  assert.match(html, /href="#consulta"[\s\S]{0,250}class="btn-intro btn-intro-final"/);
+});
+
+test('floating button opens WhatsApp directly and the menu links to the on-page resources section', () => {
+  assert.match(html, /<a\s+href="https:\/\/wa\.me\/5493425004018\?text=[^"]*"\s+class="whatsapp-float"\s+target="_blank"\s+rel="noopener noreferrer"/);
+  assert.match(html, /<li><a href="#recursos" class="nav-link">Recursos<\/a><\/li>/);
+  assert.doesNotMatch(html, /class="nav-link"[^>]*target="_blank"/);
+});
+
+test('contact information is not repeated in a second summary block', () => {
+  assert.doesNotMatch(html, /contact-summary|Información práctica/);
+  assert.equal([...html.matchAll(/<address>/g)].length, 1);
+});
+
+test('appointment flow does not call an API or persist personal data', () => {
+  assert.doesNotMatch(js, /fetch\s*\(|localStorage|sessionStorage/);
+  assert.ok(!js.includes('appointments.json'));
+  assert.ok(!existsSync(resolve(root, 'server.js')));
+  assert.ok(!existsSync(resolve(root, 'render.yaml')));
+});
+
+test('CSP explicitly permits only the script sources used by the page', () => {
+  const match = html.match(/<meta\s+http-equiv=["']Content-Security-Policy["']\s+content="([\s\S]*?)"\s*>/i);
+  assert.ok(match, 'Missing Content-Security-Policy meta');
+  const policy = match[1].replace(/\s+/g, ' ').trim();
+  assert.match(policy, /(?:^|; )default-src 'self'(?:;|$)/);
+  assert.match(policy, /(?:^|; )script-src 'self'(?:;|$)/);
+  assert.match(policy, /(?:^|; )style-src 'self'(?:;|$)/);
+  assert.doesNotMatch(policy, /unsafe-inline|unsafe-eval|unpkg\.com/);
+  assert.doesNotMatch(html, /<script[^>]+src=["']https?:/i, 'no third-party scripts');
+  assert.doesNotMatch(html, /<style[\s>]|\sstyle=/i, 'no inline styles under the strict CSP');
+});
+
+test('JSON-LD is valid structured data and remains separate from executable JavaScript', () => {
+  const match = html.match(/<script\s+type=["']application\/ld\+json["']>([\s\S]*?)<\/script>/i);
+  assert.ok(match, 'Missing JSON-LD structured data block');
+  assert.doesNotThrow(() => JSON.parse(match[1]), 'JSON-LD must remain valid JSON');
+  assert.doesNotMatch(match[1], /<\/script/i);
+});
+
+test('navbar social links are visible and use the exact icon asset paths', () => {
+  for (const icon of ['facebook.svg', 'Instagram.svg', 'youtube.svg', 'twitch.svg', 'x.svg']) {
+    assert.ok(existsSync(resolve(root, 'assets/icons/' + icon)), 'Missing social icon: ' + icon);
+    assert.ok(html.includes('assets/icons/' + icon), 'Navbar must reference social icon: ' + icon);
+  }
+  assert.match(html, /class="social-links" aria-label="Redes sociales"/);
+  assert.match(html, /class="social-links-mobile"/);
+  assert.doesNotMatch(html, /assets\/icons\/instagram\.svg/);
+});
+
+test('keyboard focus indicators use a high-contrast dual ring', () => {
+  assert.doesNotMatch(css, /outline: [23]px solid var\(--agua\);/);
+  assert.equal(
+    [...css.matchAll(/outline: 3px solid var\(--profundo\); box-shadow: 0 0 0 2px var\(--arena\);/g)].length,
+    3,
+    'Global, intro-slider and appointment focus indicators must use the accessible dual ring'
+  );
+});
+
+test('inactive slider and carousel dots have solid high-contrast boundaries', () => {
+  assert.doesNotMatch(css, /background:\s*rgba\(5,\s*73,\s*84,\s*0\.25\)/);
+  assert.doesNotMatch(css, /background:\s*rgba\(148,\s*209,\s*216,\s*0\.4\)/);
+  assert.equal([...css.matchAll(/border: 2px solid var\(--profundo\);/g)].length, 2,
+    'Both sets of inactive interactive indicators must have a solid dark boundary');
+});
+
+test('navigation and slider controls use native semantics', () => {
+  assert.doesNotMatch(html, /role=["'](?:menubar|menuitem|none|tablist|tab)["']/);
+  assert.equal([...js.matchAll(/setAttribute\('aria-pressed'/g)].length, 2,
+    'Intro slider indicators must expose their pressed state');
+  assert.doesNotMatch(js, /setAttribute\('role', 'tab'\)|aria-selected/);
+});
+
+test('unverified email, social profiles and family testimonials are not published as verified facts', () => {
+  assert.doesNotMatch(html, /contacto@pieldemar\.com|mailto:/i);
+  assert.doesNotMatch(html, /sameAs/);
+  assert.match(html, /aria-label="Redes sociales"/);
+  assert.doesNotMatch(html, /María G\.|Tomás, 3 años|Lucía y Martín|Emma, 5 años|Carolina R\.|Lucas, 4 años|Valentina M\.|Sofía, 2 años|Roberto y Ana|Mateo, 4 años/);
+  assert.match(html, /Política de privacidad/);
+});
+
+test('HTML and CSS avoid !important overrides', () => {
+  assert.doesNotMatch(html, /!important/i);
+  assert.doesNotMatch(css, /!important/i);
+});
+
+test('no-JavaScript fallback is present so the hero cannot block access to the page', () => {
+  assert.match(html, /<noscript>\s*<link rel="stylesheet" href="css\/noscript\.css">\s*<\/noscript>/);
+  const noscriptCss = readFileSync(resolve(root, 'css/noscript.css'), 'utf8');
+  assert.match(noscriptCss, /#hero\s*\{\s*display:\s*none\s*;/);
+  assert.match(noscriptCss, /#navbar, #mainContent[\s\S]*?visibility:\s*visible\s*;/);
+});
+
+test('all homepage links to the resource library open a separate tab safely', () => {
+  const resourceLinks = [...html.matchAll(/<a\b[^>]*href=["']recursos\.html(?:#[^"']*)?["'][^>]*>/g)]
+    .map((match) => match[0]);
+  assert.ok(resourceLinks.length >= 7, 'Expected category and confirmation links to the resource library');
+  for (const link of resourceLinks) {
+    assert.match(link, /target=["']_blank["']/i, `Resource link must open a new tab: ${link}`);
+    assert.match(link, /rel=["'][^"']*noopener[^"']*["']/i, `New-tab resource link must prevent opener access: ${link}`);
+  }
+});
+
+
+test('XML sitemap includes the public homepage, resource library and privacy policy', () => {
+  const sitemapPath = resolve(root, 'sitemap.xml');
+  assert.ok(existsSync(sitemapPath), 'Missing sitemap.xml');
+  const sitemap = readFileSync(sitemapPath, 'utf8');
+  assert.ok(sitemap.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'), 'Sitemap must use the standard sitemap namespace');
+  for (const url of [
+    'https://www.pieldemar.com/',
+    'https://www.pieldemar.com/recursos.html',
+    'https://www.pieldemar.com/privacidad.html'
+  ]) {
+    assert.ok(sitemap.includes('<loc>' + url + '</loc>'), 'Sitemap is missing public page: ' + url);
+  }
+  assert.ok(!/sofi-ywgo\.onrender\.com|noindex/i.test(sitemap), 'Staging URLs or noindex directives must not enter the public sitemap');
+});
+
+
+test('P1: public content remains accessible without app-style ARIA and without third-party scripts', () => {
+  assert.doesNotMatch(html, /role=["'](?:menubar|menuitem|none|tablist|tab)["']/);
+  assert.match(html, /<nav\b[^>]*aria-label=["']Navegación principal["']/);
+  assert.doesNotMatch(html, /unpkg\.com|lucide@/i);
+  assert.match(js, /const LUCIDE_ICONS = \{/);
+  assert.match(html, /<noscript>\s*<link rel="stylesheet" href="css\/noscript\.css">/);
+  assert.match(html, /<script\s+type=["']application\/ld\+json["']>/);
+  assert.doesNotMatch(html, /<script>(?!\s*type=["']application\/ld\+json["'])/i);
+});

@@ -1,0 +1,141 @@
+from pathlib import Path
+import re
+from urllib.parse import quote
+from PIL import Image
+
+ROOT = Path(__file__).resolve().parents[1]
+INDEX = ROOT / 'index.html'
+STYLES = ROOT / 'css' / 'styles.css'
+TARGETS = [
+    'Zona Gris.png',
+    'familia en consullta.png',
+    'Cierre.png',
+    'Niño sobre estimulado.png',
+    'ayuda.png',
+    'Regulacion.png',
+    'Duda.png',
+    'Ubicacion.png',
+    'logos/LogoPrincipal/Verde.png',
+    'logos/Isotipo2/Azul.png',
+    'fondos/Pat_01_01.png',
+]
+IMAGE_DIR = ROOT / 'assets' / 'img'
+rows = []
+responsive_rows = []
+html = INDEX.read_text(encoding='utf-8')
+css = STYLES.read_text(encoding='utf-8')
+
+for name in TARGETS:
+    source = IMAGE_DIR / name
+    if not source.exists():
+        matches = list(IMAGE_DIR.rglob(Path(name).name))
+        if len(matches) != 1:
+            raise FileNotFoundError(f'Expected exactly one image for {name!r}; found {len(matches)}')
+        source = matches[0]
+    with Image.open(source) as opened:
+        original_size = opened.size
+        image = opened.copy()
+        # The hero logo is displayed at ~220 px wide on mobile; 800 px preserves
+        # sharpness on high-density screens without shipping a 1499 px raster.
+        if source.name == 'Verde.png' and 'LogoPrincipal' in source.parts:
+            bounds = (440, 320)
+        elif source.name == 'Azul.png' and 'Isotipo2' in source.parts:
+            # Navbar icon is rendered at ~40 px; 160 px preserves sharpness on 3x screens.
+            bounds = (160, 160)
+        else:
+            bounds = (1600, 1200)
+        # Convertir ANTES de reducir: en modo paleta Pillow reduce con vecino más cercano (bordes dentados).
+        # Los PNG de paleta (modo P) pueden traer transparencia en `info`; convertirlos a RGB
+        # la descarta y deja un recuadro de color detrás de los logos.
+        if image.mode not in ('RGB', 'RGBA'):
+            has_alpha = 'A' in image.getbands() or 'transparency' in image.info
+            image = image.convert('RGBA' if has_alpha else 'RGB')
+        image.thumbnail(bounds, Image.Resampling.LANCZOS)
+        output = source.with_suffix('.webp')
+        if 'logos' in source.parts:
+            # Logos aprobados: sin pérdida y conservando el canal alfa.
+            image.save(output, 'WEBP', lossless=True, method=6)
+        else:
+            image.save(output, 'WEBP', quality=82, method=6, optimize=True)
+        optimized_bytes = output.stat().st_size
+        original_bytes = source.stat().st_size
+        use_webp = optimized_bytes < original_bytes
+        if not use_webp:
+            output.unlink(missing_ok=True)
+        else:
+            old_ref = source.relative_to(ROOT).as_posix()
+            new_ref = output.relative_to(ROOT).as_posix()
+            if name == 'logos/Isotipo2/Azul.png':
+                # Use the compact WebP for the navbar image without changing PNG favicon/touch-icon links.
+                html = html.replace(f'src="{old_ref}"', f'src="{new_ref}"')
+            else:
+                html = html.replace(old_ref, new_ref)
+            css_old_ref = '../' + old_ref
+            css_new_ref = '../' + new_ref
+            if name != 'logos/Isotipo2/Azul.png':
+                css = css.replace(css_old_ref, css_new_ref)
+
+            # Add an 800 px responsive candidate for the eight editorial images.
+            # The full-size WebP remains available for larger viewports and as fallback.
+            if name not in ('logos/LogoPrincipal/Verde.png', 'fondos/Pat_01_01.png'):
+                variant = image.copy()
+                variant.thumbnail((800, 800), Image.Resampling.LANCZOS)
+                variant_path = source.with_name(source.stem + '-800.webp')
+                variant.save(variant_path, 'WEBP', quality=82, method=6, optimize=True)
+                if variant_path.stat().st_size < output.stat().st_size and variant.width < image.width:
+                    variant_ref = variant_path.relative_to(ROOT).as_posix()
+                    variant_url = quote(variant_ref, safe='/:')
+                    full_url = quote(new_ref, safe='/:')
+                    sizes = '(max-width: 768px) 100vw, 50vw' if source.name in ('familia en consullta.png', 'Ubicacion.png') else '100vw'
+                    # Replace existing responsive attributes instead of appending duplicates.
+                    # The optimizer runs after its own generated commits, so this must be idempotent.
+                    source_pattern = re.compile(r'(<img\b[^>]*\bsrc="' + re.escape(new_ref) + r'"[^>]*>)')
+                    def replace_responsive_attributes(match):
+                        tag = re.sub(r'\s+srcset="[^"]*"', '', match.group(1))
+                        tag = re.sub(r'\s+sizes="[^"]*"', '', tag)
+                        return tag[:-1] + f' srcset="{variant_url} {variant.width}w, {full_url} {image.width}w" sizes="{sizes}">'
+                    html, matches = source_pattern.subn(replace_responsive_attributes, html)
+                    if matches != 1:
+                        raise ValueError(f'Expected one image tag for {new_ref!r}; found {matches}')
+                    responsive_rows.append((name, output.stat().st_size, variant_path.stat().st_size, image.width, variant.width))
+                else:
+                    variant_path.unlink(missing_ok=True)
+        rows.append((name, original_bytes, optimized_bytes if use_webp else None, original_size, image.size, use_webp))
+
+INDEX.write_text(html, encoding='utf-8')
+STYLES.write_text(css, encoding='utf-8')
+total_before = sum(row[1] for row in rows)
+total_after = sum(row[2] if row[5] else row[1] for row in rows)
+lines = [
+    '# Image optimization report',
+    '',
+    'Generated by scripts/optimize_images.py during GitHub Actions.',
+    'Original raster files are retained. WebP derivatives are used only when smaller than their source.',
+    'The hero logo is capped at 440 × 320, the navbar isotipo at 160 × 160, and other images at 1600 × 1200. Aspect ratio is preserved.',
+    'Conversion: Pillow WebP quality 82, method 6. Logos: lossless with alpha preserved.',
+    '',
+    '| Image | Original | WebP | Original dimensions | Output dimensions | Site uses WebP |',
+    '|---|---:|---:|---:|---:|:---:|',
+]
+for name, before, after, old_dims, new_dims, used in rows:
+    webp = f'{after:,} B' if after is not None else 'not retained (not smaller)'
+    lines.append(f'| {name} | {before:,} B | {webp} | {old_dims[0]}×{old_dims[1]} | {new_dims[0]}×{new_dims[1]} | {"yes" if used else "no"} |')
+if responsive_rows:
+    lines.extend([
+        '',
+        '## Responsive WebP variants',
+        '',
+        'The HTML uses srcset so browsers can select an 800 px variant on narrower displays and retain the full-size WebP for larger displays.',
+        '',
+        '| Image | Full WebP | 800w variant | Widths |',
+        '|---|---:|---:|---:|',
+    ])
+    for name, full_bytes, variant_bytes, full_width, variant_width in responsive_rows:
+        lines.append(f'| {name} | {full_bytes:,} B | {variant_bytes:,} B | {variant_width}px / {full_width}px |')
+    responsive_saved = sum(full - variant for _, full, variant, _, _ in responsive_rows)
+    lines.extend(['', f'**Potential reduction when the 800 px candidate is selected:** {responsive_saved:,} B across the eight editorial images.'])
+saved = total_before - total_after
+percent = (saved / total_before * 100) if total_before else 0
+lines.extend(['', f'**Total source size:** {total_before:,} B', f'**Total served size for these {len(rows)} images after conversion:** {total_after:,} B', f'**Estimated reduction:** {saved:,} B ({percent:.1f}%).', '', 'This report measures file bytes, not Lighthouse or Core Web Vitals. Those require a browser-based performance run against the deployed build.'])
+(ROOT / 'docs' / 'image-optimization-report.md').write_text('\n'.join(lines) + '\n', encoding='utf-8')
+print('\n'.join(lines))

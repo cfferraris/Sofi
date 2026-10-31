@@ -1,0 +1,14 @@
+{
+  "name": "piel-de-mar-static-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test tests/site-smoke.test.mjs tests/resources-redesign.test.mjs",
+    "check": "node --check js/main.js",
+    "test:e2e": "node --test tests/site-browser.test.mjs tests/resources-browser.test.mjs tests/appointment-browser.test.mjs"
+  }
+}

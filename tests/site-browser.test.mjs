@@ -1,0 +1,282 @@
+import test, { before, after } from 'node:test';
+import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import { readFile, stat } from 'node:fs/promises';
+import { extname, resolve, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { chromium } from 'playwright';
+import AxeBuilder from '@axe-core/playwright';
+
+const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
+const mimeTypes = {
+  '.css': 'text/css; charset=utf-8',
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'text/javascript; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.svg': 'image/svg+xml',
+  '.ttf': 'font/ttf',
+  '.woff': 'font/woff',
+  '.woff2': 'font/woff2',
+  '.webp': 'image/webp'
+};
+
+let server;
+let baseURL;
+
+before(async () => {
+  server = createServer(async (request, response) => {
+    try {
+      const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+      const requested = pathname === '/' ? '/index.html' : pathname;
+      const filePath = resolve(root, `.${requested}`);
+      if (filePath !== root && !filePath.startsWith(root + sep)) {
+        response.writeHead(403).end('Forbidden');
+        return;
+      }
+      const info = await stat(filePath);
+      if (!info.isFile()) {
+        response.writeHead(404).end('Not found');
+        return;
+      }
+      const body = await readFile(filePath);
+      response.writeHead(200, {
+        'Content-Type': mimeTypes[extname(filePath).toLowerCase()] || 'application/octet-stream',
+        'X-Content-Type-Options': 'nosniff',
+        'Cache-Control': 'no-store'
+      });
+      response.end(body);
+    } catch {
+      response.writeHead(404).end('Not found');
+    }
+  });
+
+  await new Promise((resolveListen, reject) => {
+    server.once('error', reject);
+    server.listen(0, '127.0.0.1', resolveListen);
+  });
+  baseURL = `http://127.0.0.1:${server.address().port}`;
+});
+
+after(async () => {
+  if (server) await new Promise((resolveClose) => server.close(resolveClose));
+});
+
+test('appointment flow works on desktop and mobile without sending WhatsApp messages', async () => {
+  const browser = await chromium.launch({ headless: true });
+  const failures = [];
+
+  try {
+    for (const viewport of [
+      { name: 'desktop', width: 1365, height: 900 },
+      { name: 'mobile', width: 390, height: 844 }
+    ]) {
+      const context = await browser.newContext({
+        viewport: { width: viewport.width, height: viewport.height },
+        reducedMotion: 'reduce'
+      });
+      const page = await context.newPage();
+      page.on('pageerror', (error) => failures.push(`${viewport.name}: ${error.message}`));
+      await page.addInitScript(() => {
+        window.__openedWhatsAppUrl = null;
+        window.open = (url) => {
+          window.__openedWhatsAppUrl = String(url);
+          return { closed: false };
+        };
+      });
+
+      const response = await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+      assert.equal(response?.status(), 200, `${viewport.name}: homepage must respond with HTTP 200`);
+      assert.equal(await page.locator('#introAutoplayToggle, #carouselAutoplayToggle').count(), 0,
+        `${viewport.name}: autoplay pause controls must not be rendered`);
+
+      const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
+      assert.doesNotThrow(() => JSON.parse(jsonLd || ''), 'JSON-LD must parse in browser');
+
+      assert.equal(await page.locator('[role="menubar"], [role="menuitem"], [role="tablist"], [role="tab"]').count(), 0,
+        'Site navigation and carousel indicators must use native semantics');
+
+      await page.locator('#hero').click({ position: { x: 3, y: 3 } });
+      await page.waitForFunction(() => {
+        const hero = document.querySelector('#hero');
+        return hero && getComputedStyle(hero).display === 'none';
+      });
+
+      if (viewport.name === 'mobile') {
+        const menu = page.locator('#menuToggle');
+        await menu.click();
+        assert.equal(await menu.getAttribute('aria-expanded'), 'true');
+        const resourceLink = page.locator('#navMenu a[href="#recursos"]');
+        assert.equal(await resourceLink.getAttribute('target'), null);
+        await resourceLink.click();
+        await page.waitForFunction(() => location.hash === '#recursos');
+        assert.equal(await menu.getAttribute('aria-expanded'), 'false');
+      }
+
+      const form = page.locator('#appointmentRequestForm');
+      assert.equal(await form.evaluate((element) => element.checkValidity()), false,
+        `${viewport.name}: required fields must be validated`);
+
+      await page.locator('#appointmentName').fill('Prueba QA');
+      await page.locator('#appointmentInsurance').fill('Particular');
+      await page.locator('#appointmentReason').fill('Consulta de prueba automatizada');
+      const date = await page.locator('#appointmentDate').getAttribute('min');
+      assert.ok(date, 'Date input must have a minimum date');
+      const [dy, dm, dd] = date.split('-').map(Number);
+      const weekdayDate = new Date(Date.UTC(dy, dm - 1, dd));
+      while (weekdayDate.getUTCDay() === 0 || weekdayDate.getUTCDay() === 6) weekdayDate.setUTCDate(weekdayDate.getUTCDate() + 1);
+      await page.locator('#appointmentDate').fill(weekdayDate.toISOString().slice(0, 10));
+      await page.locator('#appointmentConsent').check();
+
+      const time = page.locator('#appointmentTime');
+      await time.selectOption('morning');
+      assert.equal(await time.locator('option[value="08:00"]').count(), 1,
+        'Morning selection must populate its time options');
+      await time.selectOption('08:00');
+      await time.selectOption('__change-period__');
+      await time.selectOption('afternoon');
+      assert.equal(await time.locator('option[value="08:00"]').count(), 0,
+        'Changing period must remove incompatible morning times');
+      await time.selectOption('16:00');
+
+      await page.locator('.appointment-submit').click();
+      await page.locator('#appointmentRequestResult').waitFor({ state: 'visible' });
+      assert.equal(await form.isHidden(), true,
+        `${viewport.name}: the form and its submit button must disappear after opening WhatsApp`);
+      assert.equal(await page.locator('.appointment-submit:visible').count(), 0,
+        `${viewport.name}: the WhatsApp submit button must not remain visible after submission`);
+
+      const status = await page.locator('#appointmentRequestStatus').innerText();
+      assert.match(status, /todavía no está confirmado/i);
+      assert.equal(await page.locator('#appointmentMessagePreview, #appointmentCopyButton, #appointmentWhatsAppLink').count(), 0,
+        'Result screen must not expose message preview/copy/WhatsApp controls');
+      assert.equal(await page.locator('#appointmentRequestResult a[href="recursos.html"]').count(), 1,
+        'Result screen must include the real free-resources destination');
+      assert.equal(await page.getByText('Hola, quiero solicitar un turno con Piel de Mar.', { exact: true }).count(), 0,
+        'Prepared WhatsApp message must not be rendered on the page');
+
+      const opened = await page.evaluate(() => window.__openedWhatsAppUrl);
+      assert.ok(opened, 'Form submission must attempt to open WhatsApp');
+      const url = new URL(opened);
+      assert.equal(url.hostname, 'wa.me');
+      assert.equal(url.pathname, '/5493425004018');
+      const message = url.searchParams.get('text') || '';
+      assert.match(message, /Nombre: Prueba QA/);
+      assert.match(message, /Obra social o cobertura: Particular/);
+      assert.match(message, /Motivo de la consulta: Consulta de prueba automatizada/);
+      assert.match(message, /Franja horaria: Tarde/);
+      assert.match(message, /Horario deseado: 16:00/);
+      assert.match(message, /turno queda confirmado únicamente cuando reciba una respuesta/i);
+
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+      assert.equal(overflow, false, `${viewport.name}: page must not overflow horizontally`);
+      await page.close();
+    }
+  } finally {
+    await browser.close();
+  }
+
+  assert.deepEqual(failures, [], 'No uncaught JavaScript errors should occur');
+});
+
+
+test('manual sliders do not render pause controls or auto-rotate', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    for (const reducedMotion of ['reduce', 'no-preference']) {
+      const page = await browser.newPage({
+        viewport: { width: 1365, height: 900 },
+        reducedMotion
+      });
+      await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(6500);
+      assert.equal(
+        await page.locator('#introAutoplayToggle, #carouselAutoplayToggle').count(),
+        0,
+        `Autoplay pause controls must not be rendered (${reducedMotion})`
+      );
+      assert.equal(
+        await page.getByText(/Pausar (cambio|rotación) automática/).count(),
+        0,
+        `Autoplay pause text must not appear (${reducedMotion})`
+      );
+      await page.close();
+    }
+  } finally {
+    await browser.close();
+  }
+});
+
+test('page remains accessible when JavaScript is disabled', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+    const page = await context.newPage();
+    await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+    assert.equal(await page.locator('#hero').evaluate((el) => getComputedStyle(el).display), 'none');
+    assert.equal(await page.locator('#navbar').evaluate((el) => getComputedStyle(el).visibility), 'visible');
+    assert.equal(await page.locator('#mainContent').evaluate((el) => getComputedStyle(el).visibility), 'visible');
+    await context.close();
+  } finally {
+    await browser.close();
+  }
+});
+
+test('home page and privacy policy have no automated WCAG 2.2 A/AA violations', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const context = await browser.newContext({ viewport: { width: 1365, height: 900 }, reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+    await page.locator('#hero').click({ position: { x: 3, y: 3 } });
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('#hero')).display === 'none');
+    const homeResults = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    assert.deepEqual(homeResults.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, html: n.html, summary: n.failureSummary })), help: v.help })),
+      [], 'Home page WCAG automated findings');
+
+    await page.goto(baseURL + '/privacidad.html', { waitUntil: 'domcontentloaded' });
+    const privacyResults = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    assert.deepEqual(privacyResults.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, html: n.html, summary: n.failureSummary })), help: v.help })),
+      [], 'Privacy page WCAG automated findings');
+  } finally {
+    await browser.close();
+  }
+});
+
+test('closed mobile menu is not keyboard reachable and the page keeps a visible h1 after the intro', async () => {
+  const browser = await chromium.launch({ headless: true });
+
+  try {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('#hero')).display === 'none');
+
+    assert.equal(await page.locator('main h1').count(), 1, 'el h1 debe vivir dentro de main');
+    assert.equal(await page.locator('#hero h1').count(), 0);
+
+    const closedVisibility = await page.locator('#navMenu').evaluate((el) => getComputedStyle(el).visibility);
+    assert.equal(closedVisibility, 'hidden');
+    for (let i = 0; i < 4; i += 1) {
+      await page.keyboard.press('Tab');
+      const insideMenu = await page.evaluate(() => Boolean(document.activeElement?.closest('#navMenu')));
+      assert.equal(insideMenu, false, 'el foco no debe entrar al menú cerrado');
+    }
+
+    await page.locator('#menuToggle').click();
+    assert.equal(await page.locator('#menuToggle').getAttribute('aria-label'), 'Cerrar menú de navegación');
+    assert.equal(await page.locator('#navMenu').evaluate((el) => getComputedStyle(el).visibility), 'visible');
+
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#menuToggle').getAttribute('aria-label'), 'Abrir menú de navegación');
+    await context.close();
+  } finally {
+    await browser.close();
+  }
+});

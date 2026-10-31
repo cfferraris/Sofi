@@ -1,0 +1,75 @@
+name: Live staging acceptance audit
+on:
+  push:
+    branches: [audit/fix-site-baseline]
+    paths:
+      - .github/workflows/live-staging-audit.yml
+      - tests/production-flow-audit.mjs
+      - docs/technical-audit-closure.md
+      - index.html
+      - privacidad.html
+      - css/**
+      - js/**
+      - recursos.html
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/live-staging-audit.yml
+      - tests/production-flow-audit.mjs
+      - docs/technical-audit-closure.md
+      - index.html
+      - privacidad.html
+      - css/**
+      - js/**
+      - recursos.html
+permissions:
+  contents: read
+concurrency:
+  group: live-staging-acceptance-${{ github.event_name }}
+  cancel-in-progress: true
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/fix-site-baseline
+      - name: Ensure staging-only X-Robots-Tag rule exists
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY || secrets.RENDER_API_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${RENDER_API_KEY:-}" ]; then
+            echo "::warning::No RENDER_API_KEY or RENDER_API_TOKEN secret is available; the staging noindex header must be configured in Render Dashboard."
+            exit 0
+          fi
+          api="https://api.render.com/v1/services/srv-d6488ksr85hc73bmgi90/headers"
+          headers="$(curl -fsS --max-time 20 -H "Authorization: Bearer $RENDER_API_KEY" -H "Accept: application/json" "$api?limit=100")"
+          if jq -e 'any(.[]; ((.header.name | ascii_downcase) == "x-robots-tag") and .header.path == "/*" and .header.value == "noindex, follow")' <<< "$headers" >/dev/null; then
+            echo "Staging-only X-Robots-Tag rule already exists."
+          else
+            curl -fsS --max-time 20 --request POST "$api" \
+              -H "Authorization: Bearer $RENDER_API_KEY" \
+              -H "Accept: application/json" \
+              -H "Content-Type: application/json" \
+              --data '{"path":"/*","name":"X-Robots-Tag","value":"noindex, follow"}'
+            echo "Added X-Robots-Tag: noindex, follow to the staging service only."
+          fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-save --package-lock=false playwright
+      - run: npx playwright install --with-deps chromium
+      - name: Verify staging headers, deployed assets and appointment flow
+        env:
+          STAGING_URL: https://sofi-ywgo.onrender.com/
+        run: node tests/production-flow-audit.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: piel-de-mar-live-staging-audit
+          path: artifacts/production-flow-audit.json
+          if-no-files-found: warn
+          retention-days: 30
